@@ -1,5 +1,11 @@
 # Value of Information/Discrimination
-A repository containing the codebase for calculating VoI and VoD. Adapted from Page's [VoI/VoD explainer](https://docs.google.com/document/d/16JchstHAuZY0iMxuYgWIMqBHdm4RBrY5mzPv64SPNkc/edit#).
+A repository containing the codebase for calculating VoI and VoD. 
+
+**MAJOR UPDATE - MAY 10, 2023**: The codebase has been updated to reflect advice from Benjamin Tereick and internal discussion. A rewrite of this README is forthcoming, but please see this new [formula sheet](https://docs.google.com/document/d/1DIiKe-mjDBL3iz326DHGS8vUODi-Pbq2Q5sjAJl2E6c/edit#) to see new iterations of VoI/VoD.
+
+----
+
+Below text adapted from Page's [VoI/VoD explainer](https://docs.google.com/document/d/16JchstHAuZY0iMxuYgWIMqBHdm4RBrY5mzPv64SPNkc/edit#).
 
 ## Value of Information
 
