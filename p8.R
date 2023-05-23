@@ -85,24 +85,24 @@ p8_composite <- p8_composite %>%
 
 # raw
 effect_c_raw_abs_newcols <- getProbComposite_p8("effect_c_raw_abs")
-effect_c_raw_abs_newcols <- effect_c_raw_abs_newcols %>%
-  ungroup() %>%
-  mutate(effect_c_rank_raw_mean = rank(-effect_c_raw_abs_mean, ties.method = "min", na.last = "keep")) %>%
-  mutate(effect_c_rank_raw_median = rank(-effect_c_raw_abs_median, ties.method = "min", na.last = "keep"))
 composite_sheet <- bindComposite_p8(composite_sheet, "effect_c_raw_abs_mean", effect_c_raw_abs_newcols)
+composite_sheet <- composite_sheet %>%
+  mutate(effect_c_raw_abs_mean_concerned_rank = rank(-effect_c_raw_abs_mean_concerned, ties.method = "min", na.last = "keep")) %>%
+  mutate(effect_c_raw_abs_mean_skeptical_rank = rank(-effect_c_raw_abs_mean_skeptical, ties.method = "min", na.last = "keep"))
 composite_sheet <- bindComposite_p8(composite_sheet, "effect_c_raw_abs_median", effect_c_raw_abs_newcols)
-composite_sheet <- bindComposite_p8(composite_sheet, "effect_c_rank_raw_mean", effect_c_raw_abs_newcols)
-composite_sheet <- bindComposite_p8(composite_sheet, "effect_c_rank_raw_median", effect_c_raw_abs_newcols)
+composite_sheet <- composite_sheet %>%
+  mutate(effect_c_raw_abs_median_concerned_rank = rank(-effect_c_raw_abs_median_concerned, ties.method = "min", na.last = "keep")) %>%
+  mutate(effect_c_raw_abs_median_skeptical_rank = rank(-effect_c_raw_abs_median_skeptical, ties.method = "min", na.last = "keep"))
 # standardized
 effect_c_standardized_abs_newcols <- getProbComposite_p8("effect_c_standardized_abs")
-effect_c_standardized_abs_newcols <- effect_c_standardized_abs_newcols %>%
-  ungroup() %>%
-  mutate(effect_c_rank_standardized_mean = rank(-effect_c_standardized_abs_mean, ties.method = "min", na.last = "keep")) %>%
-  mutate(effect_c_rank_standardized_median = rank(-effect_c_standardized_abs_median, ties.method = "min", na.last = "keep"))
 composite_sheet <- bindComposite_p8(composite_sheet, "effect_c_standardized_abs_mean", effect_c_standardized_abs_newcols)
+composite_sheet <- composite_sheet %>%
+  mutate(effect_c_standardized_abs_mean_concerned_rank = rank(-effect_c_standardized_abs_mean_concerned, ties.method = "min", na.last = "keep")) %>%
+  mutate(effect_c_standardized_abs_mean_skeptical_rank = rank(-effect_c_standardized_abs_mean_skeptical, ties.method = "min", na.last = "keep"))
 composite_sheet <- bindComposite_p8(composite_sheet, "effect_c_standardized_abs_median", effect_c_standardized_abs_newcols)
-composite_sheet <- bindComposite_p8(composite_sheet, "effect_c_rank_standardized_mean", effect_c_standardized_abs_newcols)
-composite_sheet <- bindComposite_p8(composite_sheet, "effect_c_rank_standardized_median", effect_c_standardized_abs_newcols)
+composite_sheet <- composite_sheet %>%
+  mutate(effect_c_standardized_abs_median_concerned_rank = rank(-effect_c_standardized_abs_median_concerned, ties.method = "min", na.last = "keep")) %>%
+  mutate(effect_c_standardized_abs_median_skeptical_rank = rank(-effect_c_standardized_abs_median_skeptical, ties.method = "min", na.last = "keep"))
 
 # VoI,
 # VoD (naive)

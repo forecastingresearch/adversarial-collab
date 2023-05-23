@@ -920,7 +920,7 @@ bindComposite_p8 <- function(composite_sheet, var_name, newcols) {
   skeptical <- newcols %>%
     filter(Camp == "Skeptical") %>%
     select(starts_with(var_name))
-  names(skeptical) <- paste0(names(concerned), "_skeptical")
+  names(skeptical) <- paste0(names(skeptical), "_skeptical")
   composite_sheet <- tibble(
     composite_sheet,
     skeptical
