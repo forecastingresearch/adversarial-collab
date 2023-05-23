@@ -44,15 +44,27 @@ cor_table <- cor_table[complete.cases(cor_table), ]
 
 C_ids <- unique(cor_table$C_id)
 
+PU_PC_correlation <- c()
+
 for (i in 1:length(C_ids)) {
   cor_tbl_id <- cor_table %>% filter(C_id == C_ids[i])
   correlate <- cor(cor_tbl_id$PU, cor_tbl_id$PC, method = "spearman")
+  PU_PC_correlation <- c(PU_PC_correlation, correlate)
 }
 
-write_sheet(composite_sheet, url, sheet = "Composite")
+composite_sheet <- composite_sheet %>% mutate(PU_PC_correlation = PU_PC_correlation)
 
 # P(U|C),
+puc_newcols <- getProbComposite_p8("PUC")
+composite_sheet <- bindComposite_p8(composite_sheet, "PUC", puc_newcols)
+
 # P(U|¬C),
+p8_composite <- p8_composite %>%
+  rowwise() %>%
+  mutate(punotc = punotc(pc = PC, puc = PUC, pu = PU))
+punotc_newcols <- getProbComposite_p8("punotc")
+composite_sheet <- bindComposite_p8(composite_sheet, "punotc", punotc_newcols)
+
 # Effect of C,
 # VoI,
 # VoD (naive)
@@ -68,3 +80,10 @@ write_sheet(composite_sheet, url, sheet = "Composite")
 #### impute raw to completion####
 
 #### Effect of C - pct changes####
+
+#### write sheet####
+names(composite_sheet) <- gsub("punotc", "P(U|¬C)", names(composite_sheet))
+names(composite_sheet) <- gsub("PUC", "P(U|C)", names(composite_sheet))
+names(composite_sheet) <- gsub("PU", "P(U)", names(composite_sheet))
+names(composite_sheet) <- gsub("PC", "P(C)", names(composite_sheet))
+write_sheet(composite_sheet, url, sheet = "Composite")
