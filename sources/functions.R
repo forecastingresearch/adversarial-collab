@@ -906,10 +906,10 @@ getProbComposite_p8 <- function(var_name) {
 
 bindComposite_p8 <- function(composite_sheet, var_name, newcols) {
   concerned <- newcols %>% filter(Camp == "Concerned")
-  composite_sheet[[paste0(var_name, "_concerned")]] <- concerned[var_name]
+  composite_sheet[[paste0(var_name, "_concerned")]] <- as.numeric(unlist(concerned[var_name]))
   names(composite_sheet)[length(composite_sheet)] <- paste0(var_name, "_concerned")
   skeptical <- newcols %>% filter(Camp == "Skeptical")
-  composite_sheet[[paste0(var_name, "_skeptical")]] <- skeptical[var_name]
+  composite_sheet[[paste0(var_name, "_skeptical")]] <- as.numeric(unlist(skeptical[var_name]))
   names(composite_sheet)[length(composite_sheet)] <- paste0(var_name, "_skeptical")
   return(composite_sheet)
 }

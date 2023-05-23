@@ -21,7 +21,7 @@ p8_composite <- read_sheet(url, "Raw")
 names(p8_composite) <- c("Name", "Camp", "PU", "C_id", "PC", "PUC")
 
 #### Get CID tags from P8 composite - Composite####
-cid_tags <- read_sheet(url, "Composite")
+cid_tags <- read_sheet(url, "Composite [old]")
 names(cid_tags) <- unlist(cid_tags[1, ])
 cid_tags <- cid_tags %>% select(Id, Tag)
 cid_tags$Id <- unlist(cid_tags$Id)
@@ -37,6 +37,7 @@ composite_sheet <- bindComposite_p8(composite_sheet, "PU", pu_newcols)
 # P(C),
 pc_newcols <- getProbComposite_p8("PC")
 composite_sheet <- bindComposite_p8(composite_sheet, "PC", pc_newcols)
+
 # U-c correlation,
 cor_table <- p8_composite %>% select(C_id, PU, PC)
 cor_table <- cor_table[complete.cases(cor_table), ]
@@ -47,6 +48,8 @@ for (i in 1:length(C_ids)) {
   cor_tbl_id <- cor_table %>% filter(C_id == C_ids[i])
   correlate <- cor(cor_tbl_id$PU, cor_tbl_id$PC, method = "spearman")
 }
+
+write_sheet(composite_sheet, url, sheet = "Composite")
 
 # P(U|C),
 # P(U|¬C),
