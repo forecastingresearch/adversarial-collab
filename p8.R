@@ -1,6 +1,6 @@
-#This document is in-progress.
+# This document is in-progress.
 
-####Setup####
+#### Setup####
 rm(list = ls())
 # replace with own dir
 yourHome <- "~/Documents/FRI"
@@ -13,24 +13,24 @@ gs4_auth()
 setwd(paste0(yourHome, "/voi-vod"))
 source("sources/functions.R")
 
-####Import from P8 composite - Raw####
-url = "***REMOVED***/edit#gid=1396622057"
-p8_composite = 
-  
-####Get CID tags from P8 composite - Composite####
-  
-####Initialize composite sheet with Id and Tag####
+#### Import from P8 composite - Raw####
+url <- "***REMOVED***/edit#gid=1396622057"
+# p8_composite =
 
-####Add columns for composite sheet, grouped by Concerned/Skeptical - P(U), P(C), P(U|C), P(U|¬C), Effect of C, VoI, VoD (naive)
+#### Get CID tags from P8 composite - Composite####
 
-####Effect of C - plain rank and standardized rank####
+#### Initialize composite sheet with Id and Tag####
 
-####VoD naive - standardized, ranked####
+#### Add columns for composite sheet, grouped by Concerned/Skeptical - P(U), P(C), P(U|C), P(U|¬C), Effect of C, VoI, VoD (naive)
 
-####Reproduce "other quant analyses from doc in notes####
+#### Effect of C - plain rank and standardized rank####
 
-####bootstrapped standard errors####
+#### VoD naive - standardized, ranked####
 
-####impute raw to completion####
+#### Reproduce "other quant analyses from doc in notes####
 
-####Effect of C - pct changes####
+#### bootstrapped standard errors####
+
+#### impute raw to completion####
+
+#### Effect of C - pct changes####
