@@ -28,11 +28,26 @@ cid_tags$Id <- unlist(cid_tags$Id)
 cid_tags <- cid_tags[2:nrow(cid_tags), ]
 
 #### Initialize composite sheet with Id and Tag####
+composite_sheet <- cid_tags
 
 #### Add columns for composite sheet, grouped by Concerned/Skeptical...
 # P(U),
+pu_newcols <- getProbComposite_p8("PU")
+composite_sheet <- bindComposite_p8(composite_sheet, "PU", pu_newcols)
 # P(C),
+pc_newcols <- getProbComposite_p8("PC")
+composite_sheet <- bindComposite_p8(composite_sheet, "PC", pc_newcols)
 # U-c correlation,
+cor_table <- p8_composite %>% select(C_id, PU, PC)
+cor_table <- cor_table[complete.cases(cor_table), ]
+
+C_ids <- unique(cor_table$C_id)
+
+for (i in 1:length(C_ids)) {
+  cor_tbl_id <- cor_table %>% filter(C_id == C_ids[i])
+  correlate <- cor(cor_tbl_id$PU, cor_tbl_id$PC, method = "spearman")
+}
+
 # P(U|C),
 # P(U|¬C),
 # Effect of C,

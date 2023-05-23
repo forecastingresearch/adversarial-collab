@@ -897,3 +897,19 @@ geoMeanCalc <- function(x) {
   geoMean <- exp(mean(log(x), na.rm = TRUE))
   return(geoMean)
 }
+
+getProbComposite_p8 <- function(var_name) {
+  newcols <- aggregate(eval(parse(text = var_name)) ~ Camp + C_id, mean, data = p8_composite)
+  names(newcols) <- c("Camp", "C_id", var_name)
+  return(newcols)
+}
+
+bindComposite_p8 <- function(composite_sheet, var_name, newcols) {
+  concerned <- newcols %>% filter(Camp == "Concerned")
+  composite_sheet[[paste0(var_name, "_concerned")]] <- concerned[var_name]
+  names(composite_sheet)[length(composite_sheet)] <- paste0(var_name, "_concerned")
+  skeptical <- newcols %>% filter(Camp == "Skeptical")
+  composite_sheet[[paste0(var_name, "_skeptical")]] <- skeptical[var_name]
+  names(composite_sheet)[length(composite_sheet)] <- paste0(var_name, "_skeptical")
+  return(composite_sheet)
+}
