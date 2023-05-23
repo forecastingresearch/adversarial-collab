@@ -900,16 +900,27 @@ geoMeanCalc <- function(x) {
 
 getProbComposite_p8 <- function(var_name) {
   newcols <- aggregate(eval(parse(text = var_name)) ~ Camp + C_id, mean, data = p8_composite)
-  names(newcols) <- c("Camp", "C_id", var_name)
+  names(newcols) <- c("Camp", "C_id", paste0(var_name, "_mean"))
+  newcols2 <- aggregate(eval(parse(text = var_name)) ~ Camp + C_id, median, data = p8_composite)
+  names(newcols2) <- c("Camp", "C_id", paste0(var_name, "_median"))
+  newcols <- merge(newcols, newcols2)
   return(newcols)
 }
 
 bindComposite_p8 <- function(composite_sheet, var_name, newcols) {
-  concerned <- newcols %>% filter(Camp == "Concerned")
-  composite_sheet[[paste0(var_name, "_concerned")]] <- as.numeric(unlist(concerned[var_name]))
-  names(composite_sheet)[length(composite_sheet)] <- paste0(var_name, "_concerned")
-  skeptical <- newcols %>% filter(Camp == "Skeptical")
-  composite_sheet[[paste0(var_name, "_skeptical")]] <- as.numeric(unlist(skeptical[var_name]))
-  names(composite_sheet)[length(composite_sheet)] <- paste0(var_name, "_skeptical")
+  concerned <- newcols %>% 
+    filter(Camp == "Concerned") %>%
+    select(starts_with(var_name))
+  names(concerned) <- paste0(names(concerned), "_concerned")
+ composite_sheet <- tibble(composite_sheet,
+                          concerned)
+ 
+ skeptical <- newcols %>% 
+   filter(Camp == "Skeptical") %>%
+   select(starts_with(var_name))
+ names(skeptical) <- paste0(names(concerned), "_skeptical")
+ composite_sheet <- tibble(composite_sheet,
+                          skeptical)
+ 
   return(composite_sheet)
 }

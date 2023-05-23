@@ -66,6 +66,44 @@ punotc_newcols <- getProbComposite_p8("punotc")
 composite_sheet <- bindComposite_p8(composite_sheet, "punotc", punotc_newcols)
 
 # Effect of C,
+#raw
+p8_composite <- p8_composite %>%
+  rowwise() %>%
+  mutate(effect_c_raw = PUC - punotc)
+#standardized_raw
+max_effects = aggregate(abs(effect_c_raw) ~ Name, max, data=p8_composite)
+p8_composite <- p8_composite %>%
+  rowwise() %>%
+  mutate(max_effect = max_effects[max_effects$Name == Name,]$'abs(effect_c_raw)')
+p8_composite <- p8_composite %>%
+  mutate(effect_c_standardized = effect_c_raw/max_effect)
+#absolute
+p8_composite <- p8_composite %>%
+  rowwise() %>%
+  mutate(effect_c_raw_abs = abs(effect_c_raw)) %>%
+  mutate(effect_c_standardized_abs = abs(effect_c_standardized))
+
+#raw
+effect_c_raw_abs_newcols = getProbComposite_p8("effect_c_raw_abs")
+effect_c_raw_abs_newcols = effect_c_raw_abs_newcols %>%
+  ungroup() %>%
+  mutate(effect_c_rank_raw_mean = rank(-effect_c_raw_abs_mean, ties.method = "min", na.last = "keep")) %>%
+  mutate(effect_c_rank_raw_median = rank(-effect_c_raw_abs_median, ties.method = "min", na.last = "keep"))
+composite_sheet <- bindComposite_p8(composite_sheet, "effect_c_raw_abs_mean", effect_c_raw_abs_newcols)
+composite_sheet <- bindComposite_p8(composite_sheet, "effect_c_raw_abs_median", effect_c_raw_abs_newcols)
+composite_sheet <- bindComposite_p8(composite_sheet, "effect_c_rank_raw_mean", effect_c_raw_abs_newcols)
+composite_sheet <- bindComposite_p8(composite_sheet, "effect_c_rank_raw_median", effect_c_raw_abs_newcols)
+#standardized
+effect_c_standardized_abs_newcols = getProbComposite_p8("effect_c_standardized_abs")
+effect_c_standardized_abs_newcols = effect_c_standardized_abs_newcols %>%
+  ungroup() %>%
+  mutate(effect_c_rank_standardized_mean = rank(-effect_c_standardized_abs_mean, ties.method = "min", na.last = "keep")) %>%
+  mutate(effect_c_rank_standardized_median = rank(-effect_c_standardized_abs_median, ties.method = "min", na.last = "keep"))
+composite_sheet <- bindComposite_p8(composite_sheet, "effect_c_standardized_abs_mean", effect_c_standardized_abs_newcols)
+composite_sheet <- bindComposite_p8(composite_sheet, "effect_c_standardized_abs_median", effect_c_standardized_abs_newcols)
+composite_sheet <- bindComposite_p8(composite_sheet, "effect_c_rank_standardized_mean", effect_c_standardized_abs_newcols)
+composite_sheet <- bindComposite_p8(composite_sheet, "effect_c_rank_standardized_median", effect_c_standardized_abs_newcols)
+
 # VoI,
 # VoD (naive)
 
