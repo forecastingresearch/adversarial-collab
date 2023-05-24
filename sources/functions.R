@@ -910,21 +910,17 @@ getProbComposite_p8 <- function(var_name) {
 bindComposite_p8 <- function(composite_sheet, var_name, newcols) {
   concerned <- newcols %>%
     filter(Camp == "Concerned") %>%
-    select(starts_with(var_name))
-  names(concerned) <- paste0(names(concerned), "_concerned")
-  composite_sheet <- tibble(
-    composite_sheet,
-    concerned
-  )
+    select(C_id, starts_with(var_name))
+  names(concerned)[names(concerned) != "C_id"] <- paste0(names(concerned)[names(concerned) != "C_id"], "_concerned")
+  concerned$C_id <- as.character(concerned$C_id)
+  composite_sheet <- full_join(composite_sheet, concerned, by = join_by(Id == C_id))
 
   skeptical <- newcols %>%
     filter(Camp == "Skeptical") %>%
-    select(starts_with(var_name))
-  names(skeptical) <- paste0(names(skeptical), "_skeptical")
-  composite_sheet <- tibble(
-    composite_sheet,
-    skeptical
-  )
+    select(C_id, starts_with(var_name))
+  names(skeptical)[names(skeptical) != "C_id"] <- paste0(names(skeptical)[names(skeptical) != "C_id"], "_skeptical")
+  skeptical$C_id <- as.character(skeptical$C_id)
+  composite_sheet <- full_join(composite_sheet, skeptical, by = join_by(Id == C_id))
 
   return(composite_sheet)
 }
