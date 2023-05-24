@@ -28,6 +28,8 @@ names(p8_composite) <- c("Name", "Camp", "PU", "C_id", "PC", "PUC")
 
 cid_tags <- read_sheet(url, "Raw")
 cid_tags <- cid_tags %>% select(`C id`, Tag)
+names(cid_tags) <- c("Id", "Tag")
+cid_tags$Id <- as.character(cid_tags$Id)
 
 # cid_tags <- read_sheet(url, "Composite [old]")
 # names(cid_tags) <- unlist(cid_tags[1, ])
