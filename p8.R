@@ -104,7 +104,13 @@ composite_sheet <- composite_sheet %>%
   mutate(effect_c_standardized_abs_median_concerned_rank = rank(-effect_c_standardized_abs_median_concerned, ties.method = "min", na.last = "keep")) %>%
   mutate(effect_c_standardized_abs_median_skeptical_rank = rank(-effect_c_standardized_abs_median_skeptical, ties.method = "min", na.last = "keep"))
 
-# VoI,
+# VoI (naive),
+p8_composite <- p8_composite %>%
+  rowwise() %>%
+  mutate(VoI_naive = VoI_naive(pu = PU, puc = PUC, pc = PC, punotc = punotc))
+VoI_naive_newcols <- getProbComposite_p8("VoI_naive")
+composite_sheet <- bindComposite_p8(composite_sheet, "VoI_naive", VoI_naive_newcols)
+
 # VoD (naive)
 
 #### Effect of C - plain rank and standardized rank####
@@ -120,6 +126,7 @@ composite_sheet <- composite_sheet %>%
 #### Effect of C - pct changes####
 
 #### write sheet####
+names(composite_sheet) <- gsub("VoI_naive", "VoI (naive)", names(composite_sheet))
 names(composite_sheet) <- gsub("punotc", "P(U|¬C)", names(composite_sheet))
 names(composite_sheet) <- gsub("PUC", "P(U|C)", names(composite_sheet))
 names(composite_sheet) <- gsub("PU", "P(U)", names(composite_sheet))
