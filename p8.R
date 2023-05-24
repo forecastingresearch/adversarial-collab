@@ -132,3 +132,5 @@ names(composite_sheet) <- gsub("PUC", "P(U|C)", names(composite_sheet))
 names(composite_sheet) <- gsub("PU", "P(U)", names(composite_sheet))
 names(composite_sheet) <- gsub("PC", "P(C)", names(composite_sheet))
 write_sheet(composite_sheet, url, sheet = "Composite")
+
+#### Effect of C table ####
