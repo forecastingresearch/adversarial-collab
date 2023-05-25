@@ -118,13 +118,7 @@ p8_composite <- p8_composite %>%
 VoI_naive_avg_ind_rank_newcols <- getProbComposite_p8("VoI_naive_avg_ind_rank")
 composite_sheet <- bindComposite_p8(composite_sheet, "VoI_naive_avg_ind_rank", VoI_naive_avg_ind_rank_newcols)
 
-# VoD (naive)
-
-#### Effect of C - plain rank and standardized rank####
-
-#### VoD naive - standardized, ranked####
-
-#### Reproduce "other quant analyses from doc in notes####
+# VoD (naive)?
 
 #### bootstrapped standard errors####
 
@@ -138,6 +132,47 @@ names(composite_sheet) <- gsub("punotc", "P(U|¬C)", names(composite_sheet))
 names(composite_sheet) <- gsub("PUC", "P(U|C)", names(composite_sheet))
 names(composite_sheet) <- gsub("PU", "P(U)", names(composite_sheet))
 names(composite_sheet) <- gsub("PC", "P(C)", names(composite_sheet))
-write_sheet(composite_sheet, url, sheet = "Composite")
+# commenting writing out so as not to accidentally overwrite formatted changes
+# write_sheet(composite_sheet, url, sheet = "Composite")
 
 #### Effect of C table ####
+# concerned_positive = # effect_c_standardized > 0,
+# concerned_negative = # effect_c_standardized < 0,
+# concerned_zero = # effect_c_standardized == 0
+# etc...
+
+effect_positive <- aggregate(effect_c_standardized > 0 ~ Camp + C_id, sum, data = p8_composite)
+names(effect_positive) <- c("Camp", "C_id", "PositiveEffect")
+effect_negative <- aggregate(effect_c_standardized < 0 ~ Camp + C_id, sum, data = p8_composite)
+names(effect_negative) <- c("Camp", "C_id", "NegativeEffect")
+effect_zero <- aggregate(effect_c_standardized == 0 ~ Camp + C_id, sum, data = p8_composite)
+names(effect_zero) <- c("Camp", "C_id", "ZeroEffect")
+
+effects <- effect_positive %>%
+  left_join(effect_negative) %>%
+  left_join(effect_zero) %>%
+  rename("Id" = "C_id")
+effects$Id <- as.character(effects$Id)
+
+effects_concerned <- effects %>%
+  filter(Camp == "Concerned") %>%
+  rename("PositiveEffect_concerned" = "PositiveEffect") %>%
+  rename("NegativeEffect_concerned" = "NegativeEffect") %>%
+  rename("ZeroEffect_concerned" = "ZeroEffect") %>%
+  select(-Camp)
+effects_skeptical <- effects %>%
+  filter(Camp == "Skeptical") %>%
+  rename("PositiveEffect_skeptical" = "PositiveEffect") %>%
+  rename("NegativeEffect_skeptical" = "NegativeEffect") %>%
+  rename("ZeroEffect_skeptical" = "ZeroEffect") %>%
+  select(-Camp)
+
+composite_sheet <- composite_sheet %>%
+  left_join(effects_concerned) %>%
+  left_join(effects_skeptical)
+
+effect_tab <- composite_sheet %>%
+  select(Id, Tag, effect_c_standardized_abs_median_concerned, PositiveEffect_concerned, NegativeEffect_concerned, ZeroEffect_concerned, effect_c_standardized_abs_median_skeptical, PositiveEffect_skeptical, NegativeEffect_skeptical, ZeroEffect_skeptical) %>%
+  arrange(-effect_c_standardized_abs_median_concerned)
+
+# write_sheet(effect_tab, ss=url, sheet="Effect of C differences table")
