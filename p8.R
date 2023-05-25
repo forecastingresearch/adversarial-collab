@@ -104,7 +104,7 @@ composite_sheet <- composite_sheet %>%
   mutate(effect_c_standardized_abs_median_concerned_composite_rank = rank(-effect_c_standardized_abs_median_concerned, ties.method = "min", na.last = "keep")) %>%
   mutate(effect_c_standardized_abs_median_skeptical_composite_rank = rank(-effect_c_standardized_abs_median_skeptical, ties.method = "min", na.last = "keep"))
 
-# VoI (naive),
+##### VoI (naive),####
 p8_composite <- p8_composite %>%
   rowwise() %>%
   mutate(VoI_naive = VoI_naive(pu = PU, puc = PUC, pc = PC, punotc = punotc))
@@ -118,7 +118,36 @@ p8_composite <- p8_composite %>%
 VoI_naive_avg_ind_rank_newcols <- getProbComposite_p8("VoI_naive_avg_ind_rank")
 composite_sheet <- bindComposite_p8(composite_sheet, "VoI_naive_avg_ind_rank", VoI_naive_avg_ind_rank_newcols)
 
-# VoD (naive)?
+#composite level
+composite_sheet <- composite_sheet %>%
+  rowwise() %>%
+  mutate(VoI_naive_mean_concerned_COMPONENT = VoI_naive(pu=PU_mean_concerned, puc=PUC_mean_concerned, pc=PC_mean_concerned, punotc=punotc_mean_concerned)) %>% 
+  mutate(VoI_naive_median_concerned_COMPONENT = VoI_naive(pu=PU_median_concerned, puc=PUC_median_concerned, pc=PC_median_concerned, punotc=punotc_median_concerned)) %>%
+  mutate(VoI_naive_mean_skeptical_COMPONENT = VoI_naive(pu=PU_mean_skeptical, puc=PUC_mean_skeptical, pc=PC_mean_skeptical, punotc=punotc_mean_skeptical)) %>% 
+  mutate(VoI_naive_median_skeptical_COMPONENT = VoI_naive(pu=PU_median_skeptical, puc=PUC_median_skeptical, pc=PC_median_skeptical, punotc=punotc_median_skeptical)) %>%
+  ungroup()
+
+##### VoD (naive)#####
+#composite level
+composite_sheet <- composite_sheet %>%
+  rowwise() %>%
+  mutate(VoD_naive_mean = VoD_naive(pu_a = PU_mean_concerned,
+                                    pu_b = PU_mean_skeptical,
+                                    puc_a = PUC_mean_concerned,
+                                    puc_b = PUC_mean_skeptical,
+                                    pc_a = PC_mean_concerned,
+                                    pc_b = PC_mean_skeptical,
+                                    punotc_a = punotc_mean_concerned,
+                                    punotc_b = punotc_mean_skeptical)) %>%
+  mutate(VoD_naive_median = VoD_naive(pu_a = PU_median_concerned,
+                                    pu_b = PU_median_skeptical,
+                                    puc_a = PUC_median_concerned,
+                                    puc_b = PUC_median_skeptical,
+                                    pc_a = PC_median_concerned,
+                                    pc_b = PC_median_skeptical,
+                                    punotc_a = punotc_median_concerned,
+                                    punotc_b = punotc_median_skeptical)) %>%
+  ungroup()
 
 #### bootstrapped standard errors####
 
@@ -132,8 +161,8 @@ names(composite_sheet) <- gsub("punotc", "P(U|¬C)", names(composite_sheet))
 names(composite_sheet) <- gsub("PUC", "P(U|C)", names(composite_sheet))
 names(composite_sheet) <- gsub("PU", "P(U)", names(composite_sheet))
 names(composite_sheet) <- gsub("PC", "P(C)", names(composite_sheet))
-# commenting writing out so as not to accidentally overwrite formatted changes
-# write_sheet(composite_sheet, url, sheet = "Composite")
+# comment below line after writing so as not to accidentally overwrite formatted changes
+#write_sheet(composite_sheet, url, sheet = "Composite")
 
 #### Effect of C table ####
 # concerned_positive = # effect_c_standardized > 0,
