@@ -3,7 +3,7 @@
 #### Setup####
 rm(list = ls())
 # replace with own dir
-yourHome <- "~/Documents/FRI"
+yourHome <- "~/fri"
 library(googlesheets4)
 library(dplyr)
 library(qdap)
@@ -17,8 +17,8 @@ source("sources/functions.R")
 url <- "***REMOVED***/edit#gid=1396622057"
 
 # P8 composite sheet will be parsed as _decimals_ rather than 0-100 percentages.
-p8_composite <- read_sheet(url, "Raw")
-names(p8_composite) <- c("Name", "Camp", "PU", "C_id", "PC", "PUC")
+p8_composite <- read_sheet(url, "Raw") %>%
+  rename(PU = `P(U)`, PC = `P(C)`, PUC = `P(U|C)`)
 
 #### Get CID tags from P8 composite - Composite####
 cid_tags <- read_sheet(url, "Composite [old]")
@@ -26,6 +26,11 @@ names(cid_tags) <- unlist(cid_tags[1, ])
 cid_tags <- cid_tags %>% select(Id, Tag)
 cid_tags$Id <- unlist(cid_tags$Id)
 cid_tags <- cid_tags[2:nrow(cid_tags), ]
+
+# New dataframe just for Molly - merge p8_composite with cid_tags by `C id`
+molly_composite <- merge(p8_composite, cid_tags, by.x = "C id", by.y = "Id", all.x = TRUE)
+molly_composite <- molly_composite %>% rename(Pc = PC, PUc = PUC, ID = Tag, Person = Name)
+write.csv(molly_composite, "molly_composite.csv")
 
 #### Initialize composite sheet with Id and Tag####
 composite_sheet <- cid_tags

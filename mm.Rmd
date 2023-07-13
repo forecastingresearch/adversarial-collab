@@ -1,11 +1,13 @@
 
 ```{r}
-pSheet_final <- read.csv("pSheet_final_supers.csv", header = TRUE)
+pSheet_final <- read.csv("molly_composite.csv", header = TRUE)
 ```
 
 ```{r}
 library(tidyr)
 library(dplyr)
+setwd("~/fri/voi-vod")
+source("sources/functions.R")
 ```
 
 ```{r}
@@ -15,18 +17,23 @@ summaryResults_final <- pSheet_final %>%
 ```
 
 ```{r}
-# Reshape this so that each row is a question-person pair. Question is the ID, person is the letters before the first underscore
+if (FALSE) {  # This was for conditional tree data (pSheet_final_supers.csv)
+  # Reshape this so that each row is a question-person pair. Question is the ID, person is the letters before the first underscore
 
-reshapedData <- summaryResults_final %>% 
-  pivot_longer(cols = -ID, names_to = "variable", values_to = "value")
+  reshapedData <- summaryResults_final %>%
+    pivot_longer(cols = -ID, names_to = "variable", values_to = "value")
 
-# separate person from other variables
-reshapedData <- reshapedData %>% 
-  separate(variable, into = c("person", "measure"), sep = "_", extra = "merge") %>%
-  pivot_wider(names_from = measure, values_from = value)
+  # separate person from other variables
+  reshapedData <- reshapedData %>%
+    separate(variable, into = c("person", "measure"), sep = "_", extra = "merge") %>%
+    pivot_wider(names_from = measure, values_from = value)
 
-# view reshaped data
-head(reshapedData)
+  # view reshaped data
+  head(reshapedData)
+}
+
+reshapedData <- pSheet_final %>%
+  rename(person = Person)
 ```
 
 ```{r}
@@ -34,20 +41,28 @@ head(reshapedData)
 reshapedData <- reshapedData %>%
     mutate(direction = ifelse(PUc > PU, "up", ifelse(PUc == PU, "no change", "down")))
 ```
+```{r}
+# Add log VoI (KL Divergence) now if it's P8 data
+reshapedData <- reshapedData %>%
+  mutate(punotc = punotc(Pc, PUc, PU)) %>%
+  mutate(VoI_log = VoI_log(PU, PUc, Pc, punotc)) %>%
+  mutate(person = paste0(person, " (", Camp, ")"))
+```
 
 ```{r}
 # load necessary library
 library(ggplot2)
+library(scales)
 
 # create the plot
 ggplot(reshapedData, aes(x = ID, y = VoI_log, color = person, shape = direction)) +
   geom_point() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
-  scale_y_continuous(trans = pseudo_log_trans(base = 10)) +
+  scale_y_continuous(trans = pseudo_log_trans(base = 10), breaks = c(0, 0.01, 0.1), limits=c(0, 0.2)) +
   labs(x = "Question ID", y = "VOI_log", color = "Person", shape = "Direction") +
   scale_shape_manual(values = c("up" = 17, "down" = 25, "no change" = 8)) # 19 and 17 are the shapes for the points
 
-ggsave("VoI_log.png", width = 10, height = 6)
+ggsave("VoI_log.png", width = 10, height = 10)
 ```
 
 ```{r}
@@ -70,30 +85,31 @@ VoD_log_geomean <- function(dt, id1, id2) {
       punotc_b * log(punotc_b / punotc_a) + (1 - punotc_b) * log((1 - punotc_b) / (1 - punotc_a))) *
       sqrt(punotc_a * punotc_b)
   answer <- initDis * log(initDis / expDis) + (1 - initDis) * log((1 - initDis) / (1 - expDis)) + expDis * log(expDis / initDis) + (1 - expDis) * log((1 - expDis) / (1 - initDis))
-  return(answer[[1, 1]])
+  return(answer)
 }
 ```
 
 ```{r}
-CG30a <- reshapedData %>%
-    filter(ID == "CG30a") %>%
-    select(person, PU, PUc, Pc, punotc)
+if (FALSE) {
+  CG30a <- reshapedData %>%
+      filter(ID == "CG30a") %>%
+      select(person, PU, PUc, Pc, punotc)
 
-people <- unique(cg30a$person)
-numpeople <- length(people)
+  people <- unique(cg30a$person)
+  numpeople <- length(people)
 
-# create a symmetric adjacency matrix where each cell is the vod between the two people
-cg30a_vod <- matrix(0, nrow = numpeople, ncol = numpeople)
-rownames(cg30a_vod) <- cg30a$person
-colnames(cg30a_vod) <- cg30a$person
+  # create a symmetric adjacency matrix where each cell is the vod between the two people
+  cg30a_vod <- matrix(0, nrow = numpeople, ncol = numpeople)
+  rownames(cg30a_vod) <- cg30a$person
+  colnames(cg30a_vod) <- cg30a$person
 
-for (i in 1:(numpeople-1)) {
-    for (j in (i+1):numpeople) {
-        cg30a_vod[i, j] <- VoD_log_geomean(cg30a, people[i], people[j])
-        cg30a_vod[j, i] <- cg30a_vod[i, j]  # use the same value for the 'mirror' cell
-    }
+  for (i in 1:(numpeople-1)) {
+      for (j in (i+1):numpeople) {
+          cg30a_vod[i, j] <- VoD_log_geomean(cg30a, people[i], people[j])
+          cg30a_vod[j, i] <- cg30a_vod[i, j]  # use the same value for the 'mirror' cell
+      }
+  }
 }
-
 ```
 
 ```{r}
@@ -127,7 +143,7 @@ make_fiedler_ordered_heatmap <- function(mat, title) {
 
   # reorder the adjacency matrix
   mat_reordered <- mat[fiedler_ordering, fiedler_ordering]
-  
+
   # Start png device
   png(paste0("heatmap_", title, ".png"), width = 800, height = 800)
 
@@ -141,11 +157,15 @@ make_fiedler_ordered_heatmap <- function(mat, title) {
 ```
 
 ```{r}
-for (question in unique(reshapedData$ID)) {
+# Select the unique reshapedData IDs that aren't NA, exclude NA
+uniqueIDs <- unique(reshapedData$ID)
+uniqueIDs <- uniqueIDs[!is.na(uniqueIDs)]
+
+for (question in uniqueIDs) {
   questionData <- reshapedData %>%
     filter(ID == question) %>%
     select(person, PU, PUc, Pc, punotc)
-  
+
   people <- unique(questionData$person)
   numpeople <- length(people)
 
