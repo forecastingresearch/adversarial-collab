@@ -13,7 +13,7 @@ source("sources/functions.R")
 ```{r}
 summaryResults_final <- pSheet_final %>%
     # Own beliefs only (drop reciprocal questions & VOD)
-    select(-c(starts_with("S_"), starts_with("E_"), contains("VoD")))
+    select(-c(starts_with("S_"), starts_with("E_"), contains("VoD"), "X"))
 ```
 
 ```{r}

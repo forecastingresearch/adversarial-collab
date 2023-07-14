@@ -21,11 +21,11 @@ p8_composite <- read_sheet(url, "Raw") %>%
   rename(PU = `P(U)`, PC = `P(C)`, PUC = `P(U|C)`)
 
 #### Get CID tags from P8 composite - Composite####
-cid_tags <- read_sheet(url, "Composite [old]")
-names(cid_tags) <- unlist(cid_tags[1, ])
+cid_tags <- read_sheet(url, "Composite")
+#names(cid_tags) <- unlist(cid_tags[1, ])
 cid_tags <- cid_tags %>% select(Id, Tag)
 cid_tags$Id <- unlist(cid_tags$Id)
-cid_tags <- cid_tags[2:nrow(cid_tags), ]
+cid_tags <- cid_tags[1:nrow(cid_tags), ]
 
 # New dataframe just for Molly - merge p8_composite with cid_tags by `C id`
 molly_composite <- merge(p8_composite, cid_tags, by.x = "C id", by.y = "Id", all.x = TRUE)
