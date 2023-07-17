@@ -41,18 +41,39 @@ reshapedData <- pSheet_final %>%
 reshapedData <- reshapedData %>%
     mutate(direction = ifelse(PUc > PU, "up", ifelse(PUc == PU, "no change", "down")))
 ```
+
 ```{r}
 # Add log VoI (KL Divergence) now if it's P8 data
 reshapedData <- reshapedData %>%
+  rowwise() %>%
   mutate(punotc = punotc(Pc, PUc, PU)) %>%
   mutate(VoI_log = VoI_log(PU, PUc, Pc, punotc)) %>%
   mutate(person = paste0(person, " (", Camp, ")"))
 ```
 
 ```{r}
+# Why are there still NaN's in VoI_log? NA's are when they didn't answer the question (fine), but NaN's are perplexing
+inconsistent <- reshapedData %>% filter(is.nan(VoI_log)) %>%
+  select(person, Camp, ID, PU, Pc, PUc, punotc, VoI_log)
+
+write.csv(inconsistent, "inconsistent.csv", row.names = FALSE)
+
+claireWarning <- reshapedData %>%
+  filter(grepl("Claire", person), grepl("Warning shot", ID))
+
+claireWarning %>%
+  rowwise() %>%
+  mutate(punotc = punotc(Pc, PUc, PU)) %>%
+  mutate(VoI_log = VoI_log(PU, PUc, Pc, punotc))
+```
+
+```{r}
 # load necessary library
 library(ggplot2)
 library(scales)
+
+# What's the max VoI_log for just the skeptic camp?
+max(reshapedData$VoI_log[reshapedData$Camp == "Skeptical"], na.rm = TRUE)
 
 # Calculate medians (so we can order x axis by median VoI)
 central_tendency <- reshapedData %>%
@@ -61,17 +82,17 @@ central_tendency <- reshapedData %>%
             mean_voil = mean(VoI_log, na.rm = TRUE))
 
 # Order ID levels by median (or mean)
-reshapedData$ID <- factor(reshapedData$ID, levels = central_tendency$ID[order(central_tendency$mean_voil)])
+reshapedData$ID <- factor(reshapedData$ID, levels = central_tendency$ID[order(central_tendency$median_voil)])
 
 # create the plot
 ggplot(reshapedData, aes(x = ID, y = VoI_log, color = Camp, shape = direction)) +
   geom_point() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
-  scale_y_continuous(trans = pseudo_log_trans(base = 10), breaks = c(0, 0.01, 0.1), limits=c(0, 0.2)) +
+  scale_y_continuous(trans = pseudo_log_trans(base = 10), breaks = c(0, 0.0001, 0.001, 0.01), limits=c(0, 0.0075)) +
   labs(x = "Question ID", y = "VOI_log", color = "Person", shape = "Direction") +
   scale_shape_manual(values = c("up" = 17, "down" = 25, "no change" = 8)) # 19 and 17 are the shapes for the points
 
-ggsave("VoI_log_mean.png", width = 18, height = 10)
+ggsave("VoI_log.png", width = 18, height = 10)
 ```
 
 ```{r}
@@ -154,7 +175,7 @@ make_fiedler_ordered_heatmap <- function(mat, title) {
   mat_reordered <- mat[fiedler_ordering, fiedler_ordering]
 
   # Start png device
-  png(paste0("heatmap_", title, ".png"), width = 800, height = 800)
+  png(paste0("p8_heatmaps/heatmap_", title, ".png"), width = 800, height = 800)
 
   # create a heatmap
   pheatmap(mat_reordered, main = title)
@@ -195,4 +216,45 @@ for (question in uniqueIDs) {
 ```
 
 ```{r}
+# Group by question, get geomean log VoI for each question
+aggVoi <- reshapedData %>%
+  group_by(ID) %>%
+  summarise(geomean_voi = exp(mean(log(VoI_log), na.rm = TRUE)),
+            mean_voi = mean(VoI_log, na.rm = TRUE),
+            median_voi = median(VoI_log, na.rm = TRUE))
+```
+
+```{r}
+# Order ID levels
+print(aggVoi %>% arrange(median_voi), n = 40)
+```
+
+```{r}
+# How many NA's are there in reshapedData$VoI_log? NA's bad, should fix
+sum(is.na(reshapedData$VoI_log))
+sum(reshapedData$VoI_log == 0)
+```
+
+```{r}
+# Is it ever the case that PU is zero but PUc is not? That would be inconsistent
+reshapedData %>%
+  filter(PU == 0 & PUc != 0)
+```
+
+```{r}
+# Histogram of median log VoI's
+ggplot(aggVoi, aes(x = median_voi)) +
+  geom_histogram(binwidth = 0.00001) +
+  labs(x = "Median log VoI", y = "Count")
+
+ggsave("median_voi_hist.png", width = 10, height = 10)
+```
+
+```{r}
+# Histogram of mean log VoI's
+ggplot(aggVoi, aes(x = mean_voi)) +
+  geom_histogram(binwidth = 0.001) +
+  labs(x = "Mean log VoI", y = "Count")
+
+ggsave("mean_voi_hist.png", width = 10, height = 10)
 ```

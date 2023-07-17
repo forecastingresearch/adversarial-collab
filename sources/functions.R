@@ -10,6 +10,10 @@ VoI_naive <- function(pu, puc, pc, punotc) {
 }
 
 VoI_log <- function(pu, puc, pc, punotc) {
+  # If pu is zero, return 0
+  if (pu == 0) {
+    return(0)
+  }
   l_puc_pu <- puc * log(puc / pu) + (1 - puc) * log((1 - puc) / (1 - pu))
   l_punotc_pu <- punotc * log(punotc / pu) + (1 - punotc) * log((1 - punotc) / (1 - pu))
   answer <- l_puc_pu * pc + l_punotc_pu * (1 - pc)
