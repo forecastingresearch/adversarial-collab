@@ -37,21 +37,6 @@ reshapedData <- pSheet_final %>%
 ```
 
 ```{r}
-# Add direction of update
-reshapedData <- reshapedData %>%
-    mutate(direction = ifelse(PUc > PU, "up", ifelse(PUc == PU, "no change", "down")))
-```
-
-```{r}
-# Add log VoI (KL Divergence) now if it's P8 data
-reshapedData <- reshapedData %>%
-  rowwise() %>%
-  mutate(punotc = punotc(Pc, PUc, PU)) %>%
-  mutate(VoI_log = VoI_log(PU, PUc, Pc, punotc)) %>%
-  mutate(person = paste0(person, " (", Camp, ")"))
-```
-
-```{r}
 # Why are there still NaN's in VoI_log? NA's are when they didn't answer the question (fine), but NaN's are perplexing
 inconsistent <- reshapedData %>% filter(is.nan(VoI_log)) %>%
   select(person, Camp, ID, PU, Pc, PUc, punotc, VoI_log)
@@ -65,6 +50,32 @@ claireWarning %>%
   rowwise() %>%
   mutate(punotc = punotc(Pc, PUc, PU)) %>%
   mutate(VoI_log = VoI_log(PU, PUc, Pc, punotc))
+```
+
+```{r}
+# Add log VoI (KL Divergence) now if it's P8 data
+reshapedData <- reshapedData %>%
+  rowwise() %>%
+  mutate(punotc = punotc(Pc, PUc, PU))
+```
+
+```{r}
+# For rows with incoherent forecasts, make PU, Pc, PUc, punotc all NA
+reshapedData <- reshapedData %>%
+  mutate(PU = ifelse(PUc * Pc > PU, NA, PU))
+```
+
+```{r}
+reshapedData <- reshapedData %>%
+  filter(!is.na(PU)) %>%
+  mutate(VoI_log = VoI_log(PU, PUc, Pc, punotc)) %>%
+  mutate(person = paste0(person, " (", Camp, ")"))
+```
+
+```{r}
+# Add direction of update
+reshapedData <- reshapedData %>%
+    mutate(direction = ifelse(PUc > PU, "up", ifelse(PUc == PU, "no change", "down")))
 ```
 
 ```{r}
@@ -115,7 +126,7 @@ VoD_log_geomean <- function(dt, id1, id2) {
       punotc_b * log(punotc_b / punotc_a) + (1 - punotc_b) * log((1 - punotc_b) / (1 - punotc_a))) *
       sqrt(punotc_a * punotc_b)
   answer <- initDis * log(initDis / expDis) + (1 - initDis) * log((1 - initDis) / (1 - expDis)) + expDis * log(expDis / initDis) + (1 - expDis) * log((1 - expDis) / (1 - initDis))
-  return(answer)
+  return(answer[1,1])
 }
 ```
 
@@ -187,15 +198,13 @@ make_fiedler_ordered_heatmap <- function(mat, title) {
 ```
 
 ```{r}
-# Select the unique reshapedData IDs that aren't NA, exclude NA
+# Select the unique reshapedData IDs
 uniqueIDs <- unique(reshapedData$ID)
-uniqueIDs <- uniqueIDs[!is.na(uniqueIDs)]
 
 for (question in uniqueIDs) {
   questionData <- reshapedData %>%
     filter(ID == question) %>%
     select(person, PU, PUc, Pc, punotc)
-
   people <- unique(questionData$person)
   numpeople <- length(people)
 

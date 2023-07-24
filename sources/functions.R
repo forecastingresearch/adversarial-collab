@@ -11,6 +11,9 @@ VoI_naive <- function(pu, puc, pc, punotc) {
 
 VoI_log <- function(pu, puc, pc, punotc) {
   # If pu is zero, return 0
+  if (is.na(pu)) {
+    return(NA)
+  }
   if (pu == 0) {
     return(0)
   }
