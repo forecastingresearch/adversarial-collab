@@ -10,15 +10,17 @@ VoI_naive <- function(pu, puc, pc, punotc) {
 }
 
 VoI_log <- function(pu, puc, pc, punotc) {
-  # If pu is zero, return 0
   if (is.na(pu)) {
     return(NA)
   }
   if (pu == 0) {
     return(0)
   }
+  # KL divergence between P(U|c) and P(U)
   l_puc_pu <- puc * log(puc / pu) + (1 - puc) * log((1 - puc) / (1 - pu))
+  # KL divergence between P(U|¬c) and P(U)
   l_punotc_pu <- punotc * log(punotc / pu) + (1 - punotc) * log((1 - punotc) / (1 - pu))
+  # Weighted average of those two KL divergences
   answer <- l_puc_pu * pc + l_punotc_pu * (1 - pc)
   return(answer)
 }
