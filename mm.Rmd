@@ -97,35 +97,46 @@ write.csv(central_tendency, "median_individual_KL_and_naive.csv", row.names = FA
 
 ```{r}
 # First, rank questions by person. Then take average rank of each question
-rankings <- reshapedData %>%
-  group_by(ID) %>%
-  mutate(rank = rank(VoI_log, na.last = "keep", ties.method = "min")) %>%
-  group_by(ID) %>%
-  summarise(mean_rank = mean(rank, na.rm = TRUE),
-            mean_rank_skeptic = mean(rank[Camp == "Skeptical"], na.rm = TRUE),
-            mean_rank_concerned = mean(rank[Camp == "Concerned"], na.rm = TRUE)) %>%
-  arrange(mean_rank)
+df_log <- reshapedData %>%
+  group_by(person) %>%
+  mutate(rank = rank(-VoI_log, ties.method = "min", na.last = "keep"))
 
-write.csv(rankings, "mean_ranks_KL.csv", row.names = FALSE)
+# Take average rank per question
+avg_ranks_log <- df_log %>%
+  group_by(ID) %>%
+  summarize(avg_rank = mean(rank))
+
+write.csv(avg_ranks_log, "mean_ranks_KL.csv", row.names = FALSE)
 ```
 
 ```{r}
-# NAIVE VOI: First, rank questions by person. Then take average rank of each question
-rankings <- reshapedData %>%
-  group_by(ID) %>%
-  mutate(rank = rank(VoI_naive, na.last = "keep", ties.method = "min")) %>%
-  group_by(ID) %>%
-  summarise(mean_rank = mean(rank, na.rm = TRUE),
-            mean_rank_skeptic = mean(rank[Camp == "Skeptical"], na.rm = TRUE),
-            mean_rank_concerned = mean(rank[Camp == "Concerned"], na.rm = TRUE)) %>%
-  arrange(mean_rank)
-
-write.csv(rankings, "mean_ranks_naive.csv", row.names = FALSE)
+# Show me in rankings_log how many times each person said zero
+print(df_log %>%
+  filter(!is.na(VoI_log)) %>%
+  group_by(person) %>%
+  summarise(num_zeros = sum(VoI_log == 0)) %>%
+  arrange(num_zeros), n=25)
 ```
 
 ```{r}
-# Plot overlapping histograms of VoI_log for each question
-argh <- reshapedData
+# FOR NAIVE VOI
+# First, rank questions by person. Then take average rank of each question.
+df_naive <- reshapedData %>%
+  group_by(person) %>%
+  mutate(rank = rank(-VoI_naive, ties.method = "min", na.last = "keep"))
+
+# Take average rank per question
+avg_ranks_naive <- df_naive %>%
+  group_by(ID) %>%
+  summarize(avg_rank = mean(rank))
+
+write.csv(avg_ranks_naive, "mean_ranks_naive.csv", row.names = FALSE)
+```
+
+```{r}
+# Plot histogram of VoI_log for each question
+argh <- reshapedData %>%
+  filter(!is.nan(VoI_log))
 
 # Count 0s by ID
 zeros <- argh %>%
@@ -135,9 +146,9 @@ zeros <- argh %>%
 # Paste number of zeros onto ID
 argh <- merge(argh, zeros)
 argh <- argh %>% mutate(ID = paste0(ID, " (", zeros, " zeroes)"))
-df <- argh %>% 
+df <- argh %>%
   group_by(ID) %>%
-  summarise(med = median(VoI_log))
+  mutate(med = median(VoI_log))
 
 a <- ggplot(argh, aes(x = VoI_log, fill = Camp)) +
   geom_histogram(binwidth = 0.1, alpha = 0.5) +
@@ -333,4 +344,16 @@ ggplot(aggVoi, aes(x = mean_voi)) +
   labs(x = "Mean log VoI", y = "Count")
 
 ggsave("mean_voi_hist.png", width = 10, height = 10)
+```
+
+```{r}
+# Create a column in reshapedData that tells me whether >0.67 of the people updated in the same direction, and if so, which
+reshapedData <- reshapedData %>%
+  group_by(ID, direction) %>%
+  mutate(numDirection = n()) %>%
+  mutate(***REMOVED***Direction = ifelse(numDirection > 0.67 * n(), direction, "no ***REMOVED***")) %>%
+  mutate(median_KL = median(VoI_log, na.rm = TRUE))
+```
+
+```{r}
 ```

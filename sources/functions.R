@@ -16,6 +16,9 @@ VoI_log <- function(pu, puc, pc, punotc) {
   if (pu == 0) {
     return(0)
   }
+  if (puc == pu) {
+    return(0)
+  }
   # KL divergence between P(U|c) and P(U)
   l_puc_pu <- puc * log(puc / pu) + (1 - puc) * log((1 - puc) / (1 - pu))
   # KL divergence between P(U|¬c) and P(U)
