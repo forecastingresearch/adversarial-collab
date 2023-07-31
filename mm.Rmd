@@ -11,6 +11,14 @@ source("sources/functions.R")
 ```
 
 ```{r}
+# How many rows are there in each ID-Person combo?
+alpha <- pSheet_final %>%
+  group_by(ID, Person) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n))
+```
+
+```{r}
 summaryResults_final <- pSheet_final %>%
     # Own beliefs only (drop reciprocal questions & VOD)
     select(-c(starts_with("S_"), starts_with("E_"), contains("VoD"), "X"))
@@ -75,6 +83,10 @@ reshapedData <- reshapedData %>%
   mutate(person = paste0(person, " (", Camp, ")"))
 ```
 
+
+```{r}
+```
+
 ```{r}
 # Add direction of update
 reshapedData <- reshapedData %>%
@@ -96,17 +108,41 @@ write.csv(central_tendency, "median_individual_KL_and_naive.csv", row.names = FA
 ```
 
 ```{r}
+# AVERAGE RANK METHOD: FOR LOG VOI
 # First, rank questions by person. Then take average rank of each question
-df_log <- reshapedData %>%
+df <- reshapedData %>%
   group_by(person) %>%
-  mutate(rank = rank(-VoI_log, ties.method = "min", na.last = "keep"))
+  mutate(rank_KL = rank(-VoI_log, ties.method = "min", na.last = "keep"),
+         rank_naive = rank(-VoI_naive, ties.method = "min", na.last = "keep"))
+
+df_skeptic <- reshapedData %>%
+  filter(Camp == "Skeptical") %>%
+  group_by(person) %>%
+  mutate(rank_skeptic_KL = rank(-VoI_log, ties.method = "min", na.last = "keep"),
+         rank_skeptic_naive = rank(-VoI_naive, ties.method = "min", na.last = "keep")) %>%
+  select(person, ID, rank_skeptic_KL, rank_skeptic_naive)
+
+df_concerned <- reshapedData %>%
+  filter(Camp == "Concerned") %>%
+  group_by(person) %>%
+  mutate(rank_concerned_KL = rank(-VoI_log, ties.method = "min", na.last = "keep"),
+         rank_concerned_naive = rank(-VoI_naive, ties.method = "min", na.last = "keep")) %>%
+  select(person, ID, rank_concerned_KL, rank_concerned_naive)
+
+df <- merge(df, df_skeptic, by = c("ID", "person"), all.x = TRUE)
+df <- merge(df, df_concerned, by = c("ID", "person"), all.x = TRUE)
 
 # Take average rank per question
-avg_ranks_log <- df_log %>%
+avg_ranks <- df %>%
   group_by(ID) %>%
-  summarize(avg_rank = mean(rank))
+  summarize(avg_rank_KL = mean(rank_KL, na.rm = TRUE),
+            avg_rank_skeptic_KL = mean(rank_skeptic_KL, na.rm = TRUE),
+            avg_rank_concerned_KL = mean(rank_concerned_naive, na.rm = TRUE),
+            avg_rank_naive = mean(rank_naive, na.rm = TRUE),
+            avg_rank_skeptic_naive = mean(rank_skeptic_naive, na.rm = TRUE),
+            avg_rank_concerned_naive = mean(rank_concerned_naive, na.rm = TRUE))
 
-write.csv(avg_ranks_log, "mean_ranks_KL.csv", row.names = FALSE)
+write.csv(avg_ranks, "mean_ranks_KL_and_naive.csv", row.names = FALSE)
 ```
 
 ```{r}
@@ -116,21 +152,6 @@ print(df_log %>%
   group_by(person) %>%
   summarise(num_zeros = sum(VoI_log == 0)) %>%
   arrange(num_zeros), n=25)
-```
-
-```{r}
-# FOR NAIVE VOI
-# First, rank questions by person. Then take average rank of each question.
-df_naive <- reshapedData %>%
-  group_by(person) %>%
-  mutate(rank = rank(-VoI_naive, ties.method = "min", na.last = "keep"))
-
-# Take average rank per question
-avg_ranks_naive <- df_naive %>%
-  group_by(ID) %>%
-  summarize(avg_rank = mean(rank))
-
-write.csv(avg_ranks_naive, "mean_ranks_naive.csv", row.names = FALSE)
 ```
 
 ```{r}
@@ -229,7 +250,6 @@ if (FALSE) {
   }
 }
 ```
-
 
 ```{r}
 # Fiedler ordering & heatmap
@@ -348,12 +368,86 @@ ggsave("mean_voi_hist.png", width = 10, height = 10)
 
 ```{r}
 # Create a column in reshapedData that tells me whether >0.67 of the people updated in the same direction, and if so, which
-reshapedData <- reshapedData %>%
-  group_by(ID, direction) %>%
-  mutate(numDirection = n()) %>%
-  mutate(***REMOVED***Direction = ifelse(numDirection > 0.67 * n(), direction, "no ***REMOVED***")) %>%
-  mutate(median_KL = median(VoI_log, na.rm = TRUE))
+directions <- reshapedData %>%
+  group_by(ID, Camp) %>%
+  summarize(numUp = sum(direction == "up"), numDown = sum(direction == "down"), total = n()) %>%
+  # Determine ***REMOVED*** direction
+  mutate(***REMOVED***Direction =
+          ifelse(numUp > 0.67 * total, "up",
+                 ifelse(numDown > 0.67 * total, "down", "no ***REMOVED***")))
+
+M <- reshapedData %>%
+  group_by(ID, Camp) %>%
+  summarize(median_KL = median(VoI_log, na.rm = TRUE))
+
+directions2 <- merge(M, directions, by = c("ID", "Camp")) %>%
+  arrange(desc(median_KL))
+write.csv(directions2, "directions2.csv", row.names = FALSE)
+
+print(directions %>% select(ID, Camp, ***REMOVED***Direction), n = 60)
 ```
 
 ```{r}
+library(data.table)
+library(reshape2)
+
+prepost <- data.table(
+  # Make a dataframe with four columns: Camp, Initial forecast, Final forecast, and Reason for update. Camp is "Concerned" 11 times and "Skeptical" 11 times
+  Camp = c(rep("Concerned", 11), rep("Skeptical", 11)),
+  ID = 1:22,
+  Initial = c(65, 60, 35, 30, 30, 25, 22.9, 21, 10, 9, 4, 3, 1.5, .5, .4, .2, .1, .1, .1, .05, .000001, 0.0000001),
+  Final = c(55, 30, NA, NA, NA, 20, 17.5, 18, NA, NA, 2.4, 2, 1, NA, 1.1, .1, .12, .2, .02, .07, .0001, .0001)
+)
+
+# reshape prepost so that Initial and Final are in one column, and which is which is denoted by a new column InitFinal
+prepostMelt <- melt(prepost, id.vars = c("Camp", "ID"), variable.name = "InitFinal", value.name = "Value")
+
+# Create a custom color palette for IDs
+custom_color_palette <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00", "#FFFF33", "#A65628", "#F781BF", "#999999", "#FDBF6F", "#CAB2D6", "#6A3D9A", "#FB9A99", "#B15928", "#FDBF6F", "#B3DE69", "#FCCDE5", "#D9D9D9", "#FFFFB3", "#DEB887", "#FFD700", "#FF69B4")
+
+# Create the scatter plot with shapes for "Concerned" vs. "Skeptical" and color for ID
+g2 <- ggplot(data = prepost) +
+  geom_point(aes(x = "Initial", y = Initial, shape = Camp, color = as.factor(ID)), size = 3, position = position_dodge(width = 0.3)) +
+  geom_point(aes(x = "Final", y = Final, shape = Camp, color = as.factor(ID)), size = 3, position = position_dodge(width = 0.3)) +
+  labs(title = "Initial and Final P(doom) Forecasts",
+       x = "Forecast Type",
+       y = "Values") +
+  scale_x_discrete(labels = c("Initial" = "Initial Forecast", "Final" = "Final Forecast")) +
+  scale_y_log10() +  # Set y-axis to log scale
+  scale_color_manual(values = custom_color_palette) +  # Set the custom color palette
+  guides(color = FALSE)  # Remove the legend for ID
+
+
+ggsave("postpost2.png", g2, width = 6, height = 8)
+```
+
+```{r}
+dogData <- prepostMelt %>% filter(!is.na(Value))
+
+# Make box and whisker plots with dots for reshapedData$VoI_log by Camp and ID
+dog <- ggplot(dogData, aes(x = Camp, y = Value, color = InitFinal)) +
+  geom_boxplot() +
+  scale_y_log10(limits = c(1e-7, 66)) +
+  #scale_y_continuous(trans = pseudo_log_trans(base = 10), breaks = c(0, 0.0000001, 0.000001, 0.00001, 0.0001, 0.001, 0.01, 0.1), limits=c(0, max_voi)) +
+  labs(x = "Question ID", y = "VoI_log", color = "Camp")
+
+ggsave("boxplot.png", dog)
+
+library(ggrepel)
+
+# Calculate overall means
+means <- tapply(dogData$Value, dogData$Camp, mean)
+
+# Add mean lines
+dog + 
+  geom_hline(aes(yintercept=means['Concerned'], linetype="dotted"), color = "blue") +
+  geom_hline(aes(yintercept=means['Skeptical'], linetype="dotted"), color = "blue") +
+  geom_text_repel(data = subset(dogData, InitFinal == "Initial"), 
+                  aes(label = Value),
+                  size = 3, segment.color = 'grey50') +
+  geom_text_repel(data = subset(dogData, InitFinal == "Final"),
+                  aes(label = Value),
+                  size = 3, segment.color = 'grey50')
+
+ggsave("boxplot_labeled.png", dog2)
 ```
