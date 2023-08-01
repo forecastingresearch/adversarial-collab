@@ -407,8 +407,8 @@ custom_color_palette <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00",
 
 # Create the scatter plot with shapes for "Concerned" vs. "Skeptical" and color for ID
 g2 <- ggplot(data = prepost) +
-  geom_point(aes(x = "Initial", y = Initial, shape = Camp, color = as.factor(ID)), size = 3, position = position_dodge(width = 0.3)) +
-  geom_point(aes(x = "Final", y = Final, shape = Camp, color = as.factor(ID)), size = 3, position = position_dodge(width = 0.3)) +
+  geom_point(aes(x = "Initial", y = Initial, shape = Camp, color = as.factor(ID)), size = 3, position = position_dodge(width = 0.3), alpha = 0.6) +
+  geom_point(aes(x = "Final", y = Final, shape = Camp, color = as.factor(ID)), size = 3, position = position_dodge(width = 0.3), alpha = 0.6) +
   labs(title = "Initial and Final P(doom) Forecasts",
        x = "Forecast Type",
        y = "Values") +
@@ -419,6 +419,60 @@ g2 <- ggplot(data = prepost) +
 
 
 ggsave("postpost2.png", g2, width = 6, height = 8)
+```
+
+```{r}
+# Using prepost, get change in forecast (final - initial) for each ID, plot that
+prepost <- prepost %>%
+  # If Final is NA, replace it with initial?
+  mutate(Final = ifelse(is.na(Final), Initial, Final)) %>%
+  mutate(change = Final - Initial)
+
+# Create the scatter plot with shapes for "Concerned" vs. "Skeptical" and color for ID
+h <- ggplot(data = prepost) +
+  aes(x = Initial, y = change, shape = Camp) +
+  geom_point(size = 3, color = "royalblue2", alpha = 0.5) +
+  labs(title = "Change in P(doom) Forecasts",
+       x = "Initial Forecast",
+       y = "Change in Forecast") +
+  scale_color_manual(values = custom_color_palette)  # Set the custom color palette
+
+ggsave("change.png", h, width = 6, height = 6)
+```
+
+```{r}
+# Plot initial (x) vs final (y) forecasts, with shape for Camp
+g <- ggplot(data = prepost) +
+  aes(x = Initial, y = Final, shape = Camp) +
+  geom_point(size = 3, color = "royalblue2", alpha = 0.5) +
+  # Make both axes log scale
+  scale_x_log10(limits=c(1e-8, 60)) +
+  scale_y_log10(limits=c(1e-8, 60)) +
+  # Also plot an x = y line, dotted, green
+  geom_abline(intercept = 0, slope = 1, linetype = "dotted", color = "green") +
+  labs(title = "Initial and Final P(doom) Forecasts",
+       x = "Initial Forecast",
+       y = "Final Forecast") +
+  scale_color_manual(values = custom_color_palette)  # Set the custom color palette
+
+ggsave("prepost_new.png", g, width = 7, height = 6)
+```
+
+```{r}
+# Plot initial (x) vs final (y) forecasts, with shape for Camp
+g <- ggplot(data = prepost) +
+  aes(x = Initial, y = Final, shape = Camp) +
+  geom_point(size = 3, color = "royalblue2", alpha = 0.5) +
+  # Limit both axes to (1, 60)
+  coord_cartesian(xlim = c(1, 60), ylim = c(1, 60)) +
+  # Also plot an x = y line, dotted, green
+  geom_abline(intercept = 0, slope = 1, linetype = "dotted", color = "green") +
+  labs(title = "Initial and Final P(doom) Forecasts",
+       x = "Initial Forecast",
+       y = "Final Forecast") +
+  scale_color_manual(values = custom_color_palette)  # Set the custom color palette
+
+ggsave("prepost_new_zoom_2.png", g, width = 7, height = 6)
 ```
 
 ```{r}
