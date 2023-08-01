@@ -83,10 +83,6 @@ reshapedData <- reshapedData %>%
   mutate(person = paste0(person, " (", Camp, ")"))
 ```
 
-
-```{r}
-```
-
 ```{r}
 # Add direction of update
 reshapedData <- reshapedData %>%
@@ -318,7 +314,7 @@ for (question in uniqueIDs) {
       }
   }
 
-  make_fiedler_ordered_heatmap(vod_matrix, question)
+  #make_fiedler_ordered_heatmap(vod_matrix, question)
 }
 ```
 

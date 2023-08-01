@@ -28,9 +28,9 @@ VoI_log <- function(pu, puc, pc, punotc = NA) {
     return(0)
   }
   # KL divergence between P(U|c) and P(U)
-  l_puc_pu <- KL(puc, pu)
+  l_puc_pu <- KL(pu, puc)
   # KL divergence between P(U|¬c) and P(U)
-  l_punotc_pu <- KL(punotc, pu)
+  l_punotc_pu <- KL(pu, punotc)
   # Weighted... of those two KL divergences
   answer <- l_puc_pu * pc + l_punotc_pu * (1 - pc)
   return(answer)
