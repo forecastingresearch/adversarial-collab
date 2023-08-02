@@ -1,3 +1,5 @@
+library(docstring)
+
 #### Functions####
 punotc <- function(pc, puc, pu) {
   answer <- (pu - puc * pc) / (1 - pc)
@@ -10,11 +12,26 @@ VoI_naive <- function(pu, puc, pc, punotc) {
 }
 
 KL <- function(p, q) {
+  #' Compute KL divergence between p and q.
+  #' 
+  #' KL divergence can be thought of as as expected excess surprise. You think the
+  #' chance of U is p, but it's actually q. How surprised are you?
+  #'
+  #' @param p: Actual probability of P given some condition.
+  #' @param q: Initial probability of P.
+  #' 
+  #'@note KL divergence is not commutative.
   answer <- p * log(p / q) + (1 - p) * log((1 - p) / (1 - q))
   return(answer)
 }
 
 VoI_log <- function(pu, puc, pc, punotc = NA) {
+  #' Compute Log VoI, or expected KL divergence.
+  #' 
+  #' @param pu: P(U)
+  #' @param puc: P(U|c)
+  #' @param pc: P(c)
+  #' @param punotc: P(U|¬c)
   if (is.na(punotc)) {
     punotc = (pu - puc * pc) / (1 - pc)
   }
@@ -27,10 +44,13 @@ VoI_log <- function(pu, puc, pc, punotc = NA) {
   if (puc == pu) {
     return(0)
   }
+  if (punotc < 0) {
+    return(NA)  # incoherent
+  }
   # KL divergence between P(U|c) and P(U)
-  l_puc_pu <- KL(pu, puc)
+  l_puc_pu <- KL(puc, pu)
   # KL divergence between P(U|¬c) and P(U)
-  l_punotc_pu <- KL(pu, punotc)
+  l_punotc_pu <- KL(punotc, pu)
   # Weighted... of those two KL divergences
   answer <- l_puc_pu * pc + l_punotc_pu * (1 - pc)
   return(answer)
