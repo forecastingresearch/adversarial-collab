@@ -15,7 +15,7 @@ KL <- function(p, q) {
   #' Compute KL divergence between p and q.
   #' 
   #' KL divergence can be thought of as as expected excess surprise. You think the
-  #' chance of U is p, but it's actually q. How surprised are you?
+  #' chance of U is q, but it's actually p. How surprised are you?
   #'
   #' @param p: Actual probability of P given some condition.
   #' @param q: Initial probability of P.
@@ -137,25 +137,34 @@ VoD_naive <- function(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_b) 
 }
 
 VoD_log_mean <- function(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_b) {
-  initDis <- pu_a * log(pu_a / pu_b) + (1 - pu_a) * log((1 - pu_a) / (1 - pu_b)) +
-    pu_b * log(pu_b / pu_a) + (1 - pu_b) * log((1 - pu_b) / (1 - pu_a))
-  expDis <- (puc_a * log(puc_a / puc_b) + (1 - puc_a) * log((1 - puc_a) / (1 - puc_b)) +
-    puc_b * log(puc_b / puc_a) + (1 - puc_b) * log((1 - puc_b) / (1 - puc_a))) *
-    ((pc_a + pc_b) / 2) +
-    (punotc_a * log(punotc_a / punotc_b) + (1 - punotc_a) * log((1 - punotc_a) / (1 - punotc_b)) +
-      punotc_b * log(punotc_b / punotc_a) + (1 - punotc_b) * log((1 - punotc_b) / (1 - punotc_a))) *
-      (punotc_a + punotc_b) / 2
-  answer <- initDis * log(initDis / expDis) + (1 - initDis) * log((1 - initDis) / (1 - expDis)) + expDis * log(expDis / initDis) + (1 - expDis) * log((1 - expDis) / (1 - initDis))
+  # Initial disagreement 
+  initDis <- KL(pu_a, pu_b) + KL(pu_b, pu_a)
+  # Expected disagreement
+  expDis <- (KL(puc_a, puc_b) + KL(puc_b, puc_a)) * ((pc_a * pc_b) / 2) +
+    (KL(punotc_a, punotc_b) + KL(punotc_b, punotc_a)) * (1 - (pc_a * pc_b) / 2)
+  # Simple difference
+  answer <- initDis - expDis
   return(answer)
 }
 
 VoD_log_geomean <- function(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_b) {
+  #' VoD using KL divergence (log) and geometric mean for P(c)
+  #'
+  #' Take the initial difference in terms of symmetric KL divergence, and the
+  #' expected disagreement (KL between their P(U|c)s and their P(U|¬c)s, in
+  #' expectation), and subtract the latter from the former. Previously we took
+  #' the symmetric KL (SKL) between the initial SKL an the expected SKL.
+  #' 
+  #' @note Questions about this? Ask Molly or Ben Tereick.
+  #' @note This is currently the preferred VoD formulation.
+
   # Initial disagreement 
   initDis <- KL(pu_a, pu_b) + KL(pu_b, pu_a)
   # Expected disagreement
   expDis <- (KL(puc_a, puc_b) + KL(puc_b, puc_a)) * sqrt(pc_a * pc_b) +
     (KL(punotc_a, punotc_b) + KL(punotc_b, punotc_a)) * (1 - sqrt(pc_a * pc_b))
-  answer <- initDis * log(initDis / expDis) + (1 - initDis) * log((1 - initDis) / (1 - expDis)) + expDis * log(expDis / initDis) + (1 - expDis) * log((1 - expDis) / (1 - initDis))
+  # Simple difference
+  answer <- initDis - expDis
   return(answer)
 }
 
