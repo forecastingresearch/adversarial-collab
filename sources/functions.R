@@ -20,7 +20,7 @@ KL <- function(p, q) {
   #' @param p: Actual probability of P given some condition.
   #' @param q: Initial probability of P.
   #' 
-  #'@note KL divergence is not commutative.
+  #' @note KL divergence is not commutative.
   answer <- p * log(p / q) + (1 - p) * log((1 - p) / (1 - q))
   return(answer)
 }
@@ -150,14 +150,11 @@ VoD_log_mean <- function(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_
 }
 
 VoD_log_geomean <- function(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_b) {
-  initDis <- pu_a * log(pu_a / pu_b) + (1 - pu_a) * log((1 - pu_a) / (1 - pu_b)) +
-    pu_b * log(pu_b / pu_a) + (1 - pu_b) * log((1 - pu_b) / (1 - pu_a))
-  expDis <- (puc_a * log(puc_a / puc_b) + (1 - puc_a) * log((1 - puc_a) / (1 - puc_b)) +
-    puc_b * log(puc_b / puc_a) + (1 - puc_b) * log((1 - puc_b) / (1 - puc_a))) *
-    sqrt(pc_a * pc_b) +
-    (punotc_a * log(punotc_a / punotc_b) + (1 - punotc_a) * log((1 - punotc_a) / (1 - punotc_b)) +
-      punotc_b * log(punotc_b / punotc_a) + (1 - punotc_b) * log((1 - punotc_b) / (1 - punotc_a))) *
-      sqrt(punotc_a * punotc_b)
+  # Initial disagreement 
+  initDis <- KL(pu_a, pu_b) + KL(pu_b, pu_a)
+  # Expected disagreement
+  expDis <- (KL(puc_a, puc_b) + KL(puc_b, puc_a)) * sqrt(pc_a * pc_b) +
+    (KL(punotc_a, punotc_b) + KL(punotc_b, punotc_a)) * (1 - sqrt(pc_a * pc_b))
   answer <- initDis * log(initDis / expDis) + (1 - initDis) * log((1 - initDis) / (1 - expDis)) + expDis * log(expDis / initDis) + (1 - expDis) * log((1 - expDis) / (1 - initDis))
   return(answer)
 }

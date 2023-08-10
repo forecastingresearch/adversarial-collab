@@ -211,14 +211,11 @@ VoD_log_geomean <- function(dt, id1, id2) {
   punotc_a <- dt[dt$person == id1, "punotc"]
   punotc_b <- dt[dt$person == id2, "punotc"]
 
-  initDis <- pu_a * log(pu_a / pu_b) + (1 - pu_a) * log((1 - pu_a) / (1 - pu_b)) +
-    pu_b * log(pu_b / pu_a) + (1 - pu_b) * log((1 - pu_b) / (1 - pu_a))
-  expDis <- (puc_a * log(puc_a / puc_b) + (1 - puc_a) * log((1 - puc_a) / (1 - puc_b)) +
-    puc_b * log(puc_b / puc_a) + (1 - puc_b) * log((1 - puc_b) / (1 - puc_a))) *
-    sqrt(pc_a * pc_b) +
-    (punotc_a * log(punotc_a / punotc_b) + (1 - punotc_a) * log((1 - punotc_a) / (1 - punotc_b)) +
-      punotc_b * log(punotc_b / punotc_a) + (1 - punotc_b) * log((1 - punotc_b) / (1 - punotc_a))) *
-      sqrt(punotc_a * punotc_b)
+  # Initial disagreement 
+  initDis <- KL(pu_a, pu_b) + KL(pu_b, pu_a) 
+  # Expected disagreement
+  expDis <- (KL(puc_a, puc_b) + KL(puc_b, puc_a)) * sqrt(pc_a * pc_b) +
+    (KL(punotc_a, punotc_b) + KL(punotc_b, punotc_a)) * (1 - sqrt(pc_a * pc_b))
   answer <- initDis * log(initDis / expDis) + (1 - initDis) * log((1 - initDis) / (1 - expDis)) + expDis * log(expDis / initDis) + (1 - expDis) * log((1 - expDis) / (1 - initDis))
   return(answer[1,1])
 }
@@ -314,8 +311,71 @@ for (question in uniqueIDs) {
       }
   }
 
-  #make_fiedler_ordered_heatmap(vod_matrix, question)
+  make_fiedler_ordered_heatmap(vod_matrix, question)
 }
+```
+
+```{r}
+# PAIRWISE LOG GEOMEAN VOD
+
+# For each question (ID) in reshapedData, for each pair of people (person), calculate the VoD_log_geomean
+
+results <- list()
+
+# Split dataframe by ID
+split_data <- split(reshapedData, reshapedData$ID)
+
+for (id in unique(reshapedData$ID)) {
+  
+  dt_subset <- split_data[[as.character(id)]]
+  
+  # Identify all unique person combinations
+  people <- unique(dt_subset$person)
+  combinations <- combn(people, 2) # Gets all combinations of people taken 2 at a time
+  
+  # For each combination, compute the statistic
+  for (col in seq(1, ncol(combinations))) {
+    id1 <- combinations[1, col]
+    id2 <- combinations[2, col]
+    
+    statistic_value <- VoD_log_geomean(dt_subset, id1, id2)
+    
+    results[[paste(id, id1, id2, sep = "_")]] <- statistic_value
+  }
+  
+}
+
+# Convert the list of results to a dataframe if needed
+results_df <- data.frame(ID_pair = names(results), value = unlist(results))
+
+# Filter to only the rows that contain (Skeptical) AND (Concerned)
+results_df_cross_camp <- results_df %>%
+  filter(grepl("Skeptical", ID_pair) & grepl("Concerned", ID_pair))
+
+# Make a column ID that's ID_pair before the underscore
+results_df_cross_camp <- results_df_cross_camp %>%
+  mutate(ID = gsub("_.*", "", ID_pair))
+
+# Now give me variance of VoD_log_geomean for each question
+VoD_variance <- results_df_cross_camp %>%
+  group_by(ID) %>%
+  summarize(variance = var(value, na.rm = TRUE)) %>%
+  arrange(desc(variance))
+
+```
+
+```{r}
+# Spot-checking VoD on short-term GDP change
+gdp <- reshapedData %>% filter(grepl("Short-term", ID))
+# VoD ~ 0
+xander_v_vincent <- VoD_log_geomean(gdp, "Xander (Concerned)", "Vincent (Concerned)")
+# VoD ~ 4
+xander_v_quentin <- VoD_log_geomean(gdp, "Xander (Concerned)", "Quentin (Concerned)")
+# Very negative VoD
+ume_v_hank <- VoD_log_geomean(gdp, "Ume (Concerned)", "Hank (Skeptical)")
+ume_v_ash <- VoD_log_geomean(gdp, "Ume (Concerned)", "Ash (Skeptical)")
+ume_v_james <- VoD_log_geomean(gdp, "Ume (Concerned)", "James (Skeptical)")
+ume_v_claire <- VoD_log_geomean(gdp, "Ume (Concerned)", "Claire (Skeptical)")
 ```
 
 ```{r}
