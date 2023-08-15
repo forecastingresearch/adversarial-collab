@@ -362,11 +362,31 @@ VoD_variance <- results_df_cross_camp %>%
   summarize(variance = var(value, na.rm = TRUE)) %>%
   arrange(desc(variance))
 
-VoD_median <- results_df_cross_camp %>%
+VoD_quantiles <- results_df_cross_camp %>%
   group_by(ID) %>%
-  summarize(median = median(value, na.rm = TRUE)) %>%
+  summarize(median = median(value, na.rm = TRUE),
+  # Give me two more columns: 25th quantile and 75th quantile
+            quantile_25 = quantile(value, 0.25, na.rm = TRUE),
+            quantile_75 = quantile(value, 0.75, na.rm = TRUE)) %>%
+  mutate(IQR = quantile_75 - quantile_25,
+         platform = grepl("Platform", ID)) %>%
   arrange(desc(median)) %>%
-  select(ID, median)
+  select(ID, median, quantile_25, quantile_75, IQR, platform)
+
+# Make ID a factor, ordered by median
+VoD_quantiles$ID <- factor(VoD_quantiles$ID, levels = VoD_quantiles$ID[order(VoD_quantiles$median)])
+
+# Plot VoD_quantiles with x axis is ID (question) and plot box with quantile_25 and quantile_75
+ggplot(VoD_quantiles, aes(x = ID, y = median)) +
+  geom_boxplot() +
+  geom_errorbar(aes(ymin = quantile_25, ymax = quantile_75, color = platform), width = 0.2) +
+  labs(x = "Question ID", y = "VoD_log_geomean_easy", title = "VoD_log_geomean_easy for each question, quartiles") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+ggsave("VoD_log_geomean_easy.png", width = 15, height = 10)
+```
+
+```{r}
 ```
 
 ```{r}
