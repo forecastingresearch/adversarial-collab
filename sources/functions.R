@@ -21,7 +21,7 @@ KL <- function(p, q) {
   #' @param q: Initial probability of P.
   #' 
   #' @note KL divergence is not commutative.
-  answer <- p * log(p / q) + (1 - p) * log((1 - p) / (1 - q))
+  answer <- p * log10(p / q) + (1 - p) * log10((1 - p) / (1 - q))
   return(answer)
 }
 

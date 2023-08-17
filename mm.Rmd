@@ -8,6 +8,7 @@ library(tidyr)
 library(dplyr)
 setwd("~/fri/voi-vod")
 source("sources/functions.R")
+library(ggplot2)
 ```
 
 ```{r}
@@ -595,4 +596,19 @@ VoI_log(0.01, 0.1, 0.08)
 ```{r}
 VoI_log(0.01, 0.001, 0.08)
 VoI_log(0.01, 0.0001, 0.08)
+```
+
+```{r}
+ss = "(C2*log(C2/D2)+(1-C2)*log((1-C2)/(1-D2)))*B2 + (E2*log(E2/D2)+(1-E2)*log((1-E2)/(1-D2)))*(1-B2)"
+
+# In that string, replace C2 with PUc, D2 with PU, E2 with punotc, and B2 with Pc
+ss = gsub("C2", "PUc", ss)
+ss = gsub("D2", "PU", ss)
+ss = gsub("E2", "punotc", ss)
+ss = gsub("B2", "Pc", ss)
+
+CQ30 <- VoI_log(.000001, .00001, .0001)
+JC50 <- VoI_log(.0000001, .000004, .0001)
+LR70 <- VoI_log(.0000001, .0001, .001)
+CQ40 <- VoI_log(.0000001, .00001, .000001)
 ```
