@@ -85,6 +85,12 @@ reshapedData <- reshapedData %>%
 ```
 
 ```{r}
+exQuestion <- reshapedData %>% filter(grepl("AI coding", ID))
+
+VoD_log_gmod_easy(exQuestion, "Yael (Concerned)", "Ash (Skeptical)")
+```
+
+```{r}
 # Add direction of update
 reshapedData <- reshapedData %>%
     mutate(direction = ifelse(PUc > PU, "up", ifelse(PUc == PU, "no change", "down")))
@@ -208,18 +214,18 @@ ggsave("VoI_log.png", width = 18, height = 10)
 ```
 
 ```{r}
-VoD_log_geomean_easy <- function(dt, id1, id2) {
-  pu_a <- dt[dt$person == id1, "PU"]
-  pu_b <- dt[dt$person == id2, "PU"]
-  puc_a <- dt[dt$person == id1, "PUc"]
-  puc_b <- dt[dt$person == id2, "PUc"]
-  pc_a <- dt[dt$person == id1, "Pc"]
-  pc_b <- dt[dt$person == id2, "Pc"]
-  punotc_a <- dt[dt$person == id1, "punotc"]
-  punotc_b <- dt[dt$person == id2, "punotc"]
+VoD_log_gmod_easy <- function(dt, id1, id2) {
+  pu_a <- dt[dt$person == id1, "PU"] %>% pull
+  pu_b <- dt[dt$person == id2, "PU"] %>% pull
+  puc_a <- dt[dt$person == id1, "PUc"] %>% pull
+  puc_b <- dt[dt$person == id2, "PUc"] %>% pull
+  pc_a <- dt[dt$person == id1, "Pc"] %>% pull
+  pc_b <- dt[dt$person == id2, "Pc"] %>% pull
+  punotc_a <- dt[dt$person == id1, "punotc"] %>% pull
+  punotc_b <- dt[dt$person == id2, "punotc"] %>% pull
 
-  answer <- VoD_log_geomean(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_b)
-  return(answer[1,1])
+  answer <- VoD_log_gmod(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_b)
+  return(answer)
 }
 ```
 
@@ -239,7 +245,7 @@ if (FALSE) {
 
   for (i in 1:(numpeople-1)) {
       for (j in (i+1):numpeople) {
-          cg30a_vod[i, j] <- VoD_log_geomean_easy(cg30a, people[i], people[j])
+          cg30a_vod[i, j] <- VoD_log_gmod_easy(cg30a, people[i], people[j])
           cg30a_vod[j, i] <- cg30a_vod[i, j]  # use the same value for the 'mirror' cell
       }
   }
@@ -308,7 +314,7 @@ for (question in uniqueIDs) {
 
   for (i in 1:(numpeople-1)) {
       for (j in (i+1):numpeople) {
-          vod_matrix[i, j] <- VoD_log_geomean_easy(questionData, people[i], people[j])
+          vod_matrix[i, j] <- VoD_log_gmod_easy(questionData, people[i], people[j])
           vod_matrix[j, i] <- vod_matrix[i, j]  # use the same value for the 'mirror' cell
       }
   }
@@ -318,9 +324,9 @@ for (question in uniqueIDs) {
 ```
 
 ```{r}
-# PAIRWISE LOG GEOMEAN VOD
+# PAIRWISE LOG gmod VOD
 
-# For each question (ID) in reshapedData, for each pair of people (person), calculate the VoD (log, geomean)
+# For each question (ID) in reshapedData, for each pair of people (person), calculate the VoD (log, gmod)
 
 results <- list()
 
@@ -340,7 +346,7 @@ for (id in unique(reshapedData$ID)) {
     id1 <- combinations[1, col]
     id2 <- combinations[2, col]
     
-    statistic_value <- VoD_log_geomean_easy(dt_subset, id1, id2)
+    statistic_value <- VoD_log_gmod_easy(dt_subset, id1, id2)
     
     results[[paste(id, id1, id2, sep = "_")]] <- statistic_value
   }
@@ -357,7 +363,7 @@ results_df_cross_camp <- results_df %>%
 results_df_cross_camp <- results_df_cross_camp %>%
   mutate(ID = gsub("_.*", "", ID_pair))
 
-# Now give me variance of VoD_log_geomean_easy for each question
+# Now give me variance of VoD_log_gmod_easy for each question
 VoD_variance <- results_df_cross_camp %>%
   group_by(ID) %>%
   summarize(variance = var(value, na.rm = TRUE)) %>%
@@ -381,10 +387,10 @@ VoD_quantiles$ID <- factor(VoD_quantiles$ID, levels = VoD_quantiles$ID[order(VoD
 ggplot(VoD_quantiles, aes(x = ID, y = median)) +
   geom_boxplot() +
   geom_errorbar(aes(ymin = quantile_25, ymax = quantile_75, color = platform), width = 0.2) +
-  labs(x = "Question ID", y = "VoD_log_geomean_easy", title = "VoD_log_geomean_easy for each question, quartiles") +
+  labs(x = "Question ID", y = "VoD_log_gmod_easy", title = "VoD_log_gmod_easy for each question, quartiles") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
-ggsave("VoD_log_geomean_easy.png", width = 15, height = 10)
+ggsave("VoD_log_gmod_easy.png", width = 15, height = 10)
 ```
 
 ```{r}
@@ -394,21 +400,21 @@ ggsave("VoD_log_geomean_easy.png", width = 15, height = 10)
 # Spot-checking VoD on short-term GDP change
 gdp <- reshapedData %>% filter(grepl("Short-term", ID))
 # VoD ~ 0
-xander_v_vincent <- VoD_log_geomean_easy(gdp, "Xander (Concerned)", "Vincent (Concerned)")
+xander_v_vincent <- VoD_log_gmod_easy(gdp, "Xander (Concerned)", "Vincent (Concerned)")
 # VoD ~ 4
-xander_v_quentin <- VoD_log_geomean_easy(gdp, "Xander (Concerned)", "Quentin (Concerned)")
+xander_v_quentin <- VoD_log_gmod_easy(gdp, "Xander (Concerned)", "Quentin (Concerned)")
 # Very negative VoD
-ume_v_hank <- VoD_log_geomean_easy(gdp, "Ume (Concerned)", "Hank (Skeptical)")
-ume_v_ash <- VoD_log_geomean_easy(gdp, "Ume (Concerned)", "Ash (Skeptical)")
-ume_v_james <- VoD_log_geomean_easy(gdp, "Ume (Concerned)", "James (Skeptical)")
-ume_v_claire <- VoD_log_geomean_easy(gdp, "Ume (Concerned)", "Claire (Skeptical)")
+ume_v_hank <- VoD_log_gmod_easy(gdp, "Ume (Concerned)", "Hank (Skeptical)")
+ume_v_ash <- VoD_log_gmod_easy(gdp, "Ume (Concerned)", "Ash (Skeptical)")
+ume_v_james <- VoD_log_gmod_easy(gdp, "Ume (Concerned)", "James (Skeptical)")
+ume_v_claire <- VoD_log_gmod_easy(gdp, "Ume (Concerned)", "Claire (Skeptical)")
 ```
 
 ```{r}
-# Group by question, get geomean log VoI for each question
+# Group by question, get gmod log VoI for each question
 aggVoi <- reshapedData %>%
   group_by(ID) %>%
-  summarise(geomean_voi = exp(mean(log(VoI_log), na.rm = TRUE)),
+  summarise(gmod_voi = exp(mean(log(VoI_log), na.rm = TRUE)),
             mean_voi = mean(VoI_log, na.rm = TRUE),
             median_voi = median(VoI_log, na.rm = TRUE))
 ```
@@ -607,8 +613,9 @@ ss = gsub("D2", "PU", ss)
 ss = gsub("E2", "punotc", ss)
 ss = gsub("B2", "Pc", ss)
 
-CQ30 <- VoI_log(.000001, .00001, .0001)
-JC50 <- VoI_log(.0000001, .000004, .0001)
-LR70 <- VoI_log(.0000001, .0001, .001)
-CQ40 <- VoI_log(.0000001, .00001, .000001)
+CQ30 = VoI_log(1e-8, 1e-7, 1e-6)
+JC50 = VoI_log(1e-8, 4e-8, 1e-6)
+LR70 = VoI_log(1e-8, 1e-6, 1e-5)
+CQ40 = VoI_log(1e-8, 1e-7, 1e-8)
+HN50 = VoI_log(1e-8, 1e-8, 1e-1)
 ```

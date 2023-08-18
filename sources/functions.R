@@ -6,6 +6,18 @@ punotc <- function(pc, puc, pu) {
   return(answer)
 }
 
+geoMeanOfOddsCalc <- function(x) {
+  #' Import this from aggutils when that's ready
+  if (0 %in% x) {
+    x[x == 0] <- 1e-14
+  }
+  odds <- x / (1 - x)
+  geoMeanOfOdds <- exp(mean(log(odds)))
+  # Convert back to probability
+  geoMeanOfOdds <- geoMeanOfOdds / (geoMeanOfOdds + 1)
+  return(geoMeanOfOdds)
+}
+
 VoI_naive <- function(pu, puc, pc, punotc) {
   answer <- abs(pu - puc) * pc + abs(pu - punotc) * (1 - pc)
   return(answer)
@@ -51,7 +63,7 @@ VoI_log <- function(pu, puc, pc, punotc = NA) {
   l_puc_pu <- KL(puc, pu)
   # KL divergence between P(U|¬c) and P(U)
   l_punotc_pu <- KL(punotc, pu)
-  # Weighted... of those two KL divergences
+  # EV(KL divergence)
   answer <- l_puc_pu * pc + l_punotc_pu * (1 - pc)
   return(answer)
 }
@@ -147,13 +159,13 @@ VoD_log_mean <- function(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_
   return(answer)
 }
 
-VoD_log_geomean <- function(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_b) {
+VoD_log_gmod <- function(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_b) {
   #' VoD using KL divergence (log) and geometric mean for P(c)
   #'
   #' Take the initial difference in terms of symmetric KL divergence, and the
   #' expected disagreement (KL between their P(U|c)s and their P(U|¬c)s, in
   #' expectation), and subtract the latter from the former. Previously we took
-  #' the symmetric KL (SKL) between the initial SKL an the expected SKL.
+  #' the symmetric KL (SKL) between the initial SKL and the expected SKL.
   #' 
   #' @note Questions about this? Ask Molly or Ben Tereick.
   #' @note This is currently the preferred VoD formulation.
@@ -161,8 +173,8 @@ VoD_log_geomean <- function(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, puno
   # Initial disagreement 
   initDis <- KL(pu_a, pu_b) + KL(pu_b, pu_a)
   # Expected disagreement
-  expDis <- (KL(puc_a, puc_b) + KL(puc_b, puc_a)) * sqrt(pc_a * pc_b) +
-    (KL(punotc_a, punotc_b) + KL(punotc_b, punotc_a)) * (1 - sqrt(pc_a * pc_b))
+  expDis <- (KL(puc_a, puc_b) + KL(puc_b, puc_a)) * geoMeanOfOddsCalc(pc_a, pc_b) +
+    (KL(punotc_a, punotc_b) + KL(punotc_b, punotc_a)) * geoMeanOfOddsCalc(1-pc_a, 1-pc_b)
   # Simple difference
   answer <- initDis - expDis
   return(answer)
@@ -217,7 +229,7 @@ get_VoD <- function(prob_sheet, userIDs, comparison_model_prefixes) {
           punotc_a = as.numeric(get(paste0(id1, "_punotc"))),
           punotc_b = as.numeric(get(paste0(id2, "_punotc")))
         )) %>%
-        mutate(XX_VoD_log_geomean = VoD_log_geomean(
+        mutate(XX_VoD_log_gmod = VoD_log_gmod(
           pu_a = as.numeric(get(paste0(id1, "_PU"))),
           pu_b = as.numeric(get(paste0(id2, "_PU"))),
           puc_a = as.numeric(get(paste0(id1, "_PUc"))),
@@ -338,17 +350,17 @@ summaryResults <- function(pSheet_final) {
 
   summaryResults_final <- summaryResults_final %>%
     rowwise() %>%
-    mutate(VoD_log_geomeanMean = mean(abs(c_across(ends_with("VoD_log_geomean"))), na.rm = TRUE)) %>%
+    mutate(VoD_log_gmodMean = mean(abs(c_across(ends_with("VoD_log_gmod"))), na.rm = TRUE)) %>%
     ungroup()
 
   summaryResults_final <- summaryResults_final %>%
     rowwise() %>%
-    mutate(VoD_log_geomeanMedian = median(abs(c_across(ends_with("VoD_log_geomean"))), na.rm = TRUE)) %>%
+    mutate(VoD_log_gmodMedian = median(abs(c_across(ends_with("VoD_log_gmod"))), na.rm = TRUE)) %>%
     ungroup()
 
   summaryResults_final <- summaryResults_final %>%
     rowwise() %>%
-    mutate(VoD_log_geomeanGeo = geoMeanCalc(abs(c_across(ends_with("VoD_log_geomean"))))) %>%
+    mutate(VoD_log_gmodGeo = geoMeanCalc(abs(c_across(ends_with("VoD_log_gmod"))))) %>%
     ungroup()
 
   summaryResults_final <- summaryResults_final %>%
@@ -678,7 +690,7 @@ summaryResults_component <- function(pSheet_final) {
 
   summaryResults_final <- summaryResults_final %>%
     rowwise() %>%
-    mutate(VoD_log_geomeanMean = VoD_log_geomean(
+    mutate(VoD_log_gmodMean = VoD_log_gmod(
       pu_a = PU_mean_a,
       pu_b = PU_mean_b,
       puc_a = PUc_mean_a,
@@ -691,7 +703,7 @@ summaryResults_component <- function(pSheet_final) {
 
   summaryResults_final <- summaryResults_final %>%
     rowwise() %>%
-    mutate(VoD_log_geomeanMedian = VoD_log_geomean(
+    mutate(VoD_log_gmodMedian = VoD_log_gmod(
       pu_a = PU_median_a,
       pu_b = PU_median_b,
       puc_a = PUc_median_a,
@@ -704,7 +716,7 @@ summaryResults_component <- function(pSheet_final) {
 
   summaryResults_final <- summaryResults_final %>%
     rowwise() %>%
-    mutate(VoD_log_geomeanGeo = VoD_log_geomean(
+    mutate(VoD_log_gmodGeo = VoD_log_gmod(
       pu_a = PU_geomean_a,
       pu_b = PU_geomean_b,
       puc_a = PUc_geomean_a,
