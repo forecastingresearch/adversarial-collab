@@ -173,8 +173,8 @@ VoD_log_gmod <- function(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_
   # Initial disagreement 
   initDis <- KL(pu_a, pu_b) + KL(pu_b, pu_a)
   # Expected disagreement
-  expDis <- (KL(puc_a, puc_b) + KL(puc_b, puc_a)) * geoMeanOfOddsCalc(pc_a, pc_b) +
-    (KL(punotc_a, punotc_b) + KL(punotc_b, punotc_a)) * geoMeanOfOddsCalc(1-pc_a, 1-pc_b)
+  expDis <- (KL(puc_a, puc_b) + KL(puc_b, puc_a)) * geoMeanOfOddsCalc(c(pc_a, pc_b)) +
+    (KL(punotc_a, punotc_b) + KL(punotc_b, punotc_a)) * geoMeanOfOddsCalc(c(1-pc_a, 1-pc_b))
   # Simple difference
   answer <- initDis - expDis
   return(answer)
