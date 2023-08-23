@@ -4,6 +4,38 @@ pSheet_final <- read.csv("molly_composite.csv", header = TRUE)
 ```
 
 ```{r}
+# Get median PU for each camp
+medianPU <- pSheet_final %>%
+  group_by(Camp) %>%
+  summarize(medianPU = median(PU, na.rm = TRUE))
+
+pu_c = medianPU$medianPU[medianPU$Camp == "Concerned"]
+#puc_c = 1 - 1e-15
+puc_c = 1e-15
+pc_c = pu_c
+VoI_log_c = VoI_log(pu_c, puc_c, pc_c)
+
+pu_s = medianPU$medianPU[medianPU$Camp == "Skeptical"]
+#puc_s = 1 - 1e-15
+puc_s = 1e-15
+pc_s = pu_s
+VoI_log_s = VoI_log(pu_c, puc_c, pc_c)
+
+VoI_log_s = VoI_log(pu_s, puc_s, pc_s)
+VoI_log_c = VoI_log(pu_c, puc_c, pc_c)
+
+VoD_log_gmod_max = VoD_log_gmod(pu_s, pu_c, puc_s, puc_c, pc_s, pc_c, punotc(pc_s, puc_s, pu_s), punotc(pc_c, puc_c, pu_c))
+```
+
+f(p, i, c) = p * c + ((i - p * c)/(1-c)*log((i - p * c)/(1-c)/0.001) + (1-(i - 0.0172334 * c)/(1-c))*log((1-(i - p * c)/(1-c))/(1-0.001)))*(1-c)
+
+i might have made a mistake there
+
+p is P(U|c), c is P(c), i is P(U) (that's the starting point)
+
+If i is .235, can we find p and c that maximize f(p, i, c)?
+
+```{r}
 library(tidyr)
 library(dplyr)
 setwd("~/fri/voi-vod")
@@ -116,7 +148,10 @@ reshapedData <- reshapedData %>%
 # Rank questions by median VoI three ways: all forecasters; skeptic camp only; concerned camp only
 central_tendency <- reshapedData %>%
   group_by(ID) %>%
-  summarise(median_KL = median(VoI_log, na.rm = TRUE),
+  summarise(q50_KL = quantile(VoI_log, p = 0.5, type = 3, na.rm = TRUE),
+            q50_KL_skeptic = quantile(VoI_log[Camp == "Skeptical"], p = 0.5, type = 1, na.rm = TRUE),
+            q50_KL_concerned = quantile(VoI_log[Camp == "Concerned"], p = 0.5, type = 1, na.rm = TRUE),
+            median_KL = median(VoI_log, na.rm = TRUE),
             median_KL_skeptic = median(VoI_log[Camp == "Skeptical"], na.rm = TRUE),
             median_KL_concerned = median(VoI_log[Camp == "Concerned"], na.rm = TRUE),
             median_naive = median(VoI_naive, na.rm = TRUE),
@@ -127,18 +162,30 @@ write.csv(central_tendency, "median_individual_KL_and_naive.csv", row.names = FA
 ```
 
 ```{r}
-# Who are the median forecasters in each camp for each question? Filter reshapedData to those rows
-median_forecasters <- merge(central_tendency, reshapedData) %>%
-  group_by(ID) %>%
-  filter(VoI_log == median_KL_skeptic | VoI_log == median_KL_concerned) %>%
-  select(ID, person, Camp, VoI_log, PU, PUc, Pc, punotc) %>%
-  filter(VoI_log != 0)
+# Median forecasters - how many times is it zero (just checking)
+central_tendency %>% filter(q50_KL_concerned == 0)
+```
 
-# For the questions where there's two people, take the VoD_log_gmod between them
-median_forecasters <- median_forecasters %>%
+```{r}
+# Who are the median forecasters in each camp for each question? Filter reshapedData to those rows
+arj <- merge(central_tendency, reshapedData) %>%
+  select(ID, starts_with("q50_KL_"), person, Camp, PU, Pc, PUc, punotc, VoI_log, direction)
+
+# Filter arj to the rows within ID where VoI_log == median_KL_skeptic or median_KL_concerned
+arjj <- arj %>%
   group_by(ID) %>%
-  mutate(VoD_log_gmod = ifelse(n() == 2, VoD_log_gmod_easy(cur_data(), person[1], person[2]), NA)) %>%
-  arrange(VoD_log_gmod)
+  filter(VoI_log == q50_KL_skeptic | VoI_log == q50_KL_concerned) %>%
+  select(ID, person, Camp, VoI_log, PU, PUc, Pc, punotc) %>%
+  filter(VoI_log != 0) %>%
+  mutate(VoD_log_gmod = ifelse(n() >= 2, VoD_log_gmod_easy(cur_data(), person[1], person[2]), NA)) %>%
+  arrange(VoD_log_gmod, ID)
+
+# How many IDs in arjj have two or more people (VoD should be defined for 19 questions, I think?)
+arjj %>% group_by(ID) %>% filter(n() >= 2) %>% summarize(n = n())
+
+VoD_between_medians <- arjj %>%
+  select(ID, VoD_log_gmod) %>%
+  distinct()
 ```
 
 ```{r}
@@ -177,43 +224,6 @@ avg_ranks <- df %>%
             avg_rank_concerned_naive = mean(rank_concerned_naive, na.rm = TRUE))
 
 write.csv(avg_ranks, "mean_ranks_KL_and_naive.csv", row.names = FALSE)
-```
-
-```{r}
-# Show me in rankings_log how many times each person said zero
-print(df_log %>%
-  filter(!is.na(VoI_log)) %>%
-  group_by(person) %>%
-  summarise(num_zeros = sum(VoI_log == 0)) %>%
-  arrange(num_zeros), n=25)
-```
-
-```{r}
-# Plot histogram of VoI_log for each question
-argh <- reshapedData %>%
-  filter(!is.nan(VoI_log))
-
-# Count 0s by ID
-zeros <- argh %>%
-  group_by(ID) %>%
-  summarize(zeros = sum(VoI_log == 0))
-
-# Paste number of zeros onto ID
-argh <- merge(argh, zeros)
-argh <- argh %>% mutate(ID = paste0(ID, " (", zeros, " zeroes)"))
-df <- argh %>%
-  group_by(ID) %>%
-  mutate(med = median(VoI_log))
-
-a <- ggplot(argh, aes(x = VoI_log, fill = Camp)) +
-  geom_histogram(binwidth = 0.1, alpha = 0.5) +
-  scale_x_log10(limits = c(min_voi, max_voi)) +
-  facet_wrap(~ID, ncol = 4) +
-  geom_vline(data = df, aes(xintercept = med),
-          linetype = "dashed", color = "red") +
-  labs(x = "VoI_log", y = "Count", fill = "Camp")
-
-ggsave("plot.png", a, width=16, height=10)
 ```
 
 ```{r}
@@ -389,6 +399,8 @@ VoD_quantiles <- results_df_cross_camp %>%
   arrange(desc(median)) %>%
   select(ID, median, quantile_25, quantile_75, IQR, platform)
 
+VoD_quantiles <- merge(VoD_quantiles, VoD_between_medians, by = "ID")
+
 # Make ID a factor, ordered by median
 VoD_quantiles$ID <- factor(VoD_quantiles$ID, levels = VoD_quantiles$ID[order(VoD_quantiles$median)])
 
@@ -396,10 +408,12 @@ VoD_quantiles$ID <- factor(VoD_quantiles$ID, levels = VoD_quantiles$ID[order(VoD
 ggplot(VoD_quantiles, aes(x = ID, y = median)) +
   geom_boxplot() +
   geom_errorbar(aes(ymin = quantile_25, ymax = quantile_75, color = platform), width = 0.2) +
-  labs(x = "Question ID", y = "VoD_log_gmod_easy", title = "VoD_log_gmod_easy for each question, quartiles") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  labs(x = "Question ID", y = "Log VoD", title = "Log VoD Between Cross-Camp Pairs") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  # Plot VoD_log_gmod as green stars
+  geom_point(aes(y = VoD_log_gmod, color = 'green'), shape = 8, size = 3, show.legend = FALSE)
 
-ggsave("VoD_log_gmod_easy.png", width = 15, height = 10)
+ggsave("VoD_log_gmod_easy.png", width = 8, height = 8)
 ```
 
 ```{r}
@@ -415,6 +429,11 @@ compare_VoD <- merge(results_df_cross_camp_f, median_forecasters_f, by = "ID", a
   arrange(VoD_log_gmod) %>%
   rename(VoD_between_medians = VoD_log_gmod) %>%
   distinct()
+
+write.csv(compare_VoD, "compare_VoD.csv", row.names = FALSE)
+```
+
+```{r}
 ```
 
 ```{r}
