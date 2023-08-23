@@ -9,31 +9,42 @@ medianPU <- pSheet_final %>%
   group_by(Camp) %>%
   summarize(medianPU = median(PU, na.rm = TRUE))
 
+# CASE 1: C determines U
+
 pu_c = medianPU$medianPU[medianPU$Camp == "Concerned"]
-#puc_c = 1 - 1e-15
-puc_c = 1e-15
+puc_c = 1 - 1e-15
 pc_c = pu_c
-VoI_log_c = VoI_log(pu_c, puc_c, pc_c)
 
 pu_s = medianPU$medianPU[medianPU$Camp == "Skeptical"]
-#puc_s = 1 - 1e-15
-puc_s = 1e-15
+puc_s = 1 - 1e-15
 pc_s = pu_s
-VoI_log_s = VoI_log(pu_c, puc_c, pc_c)
 
 VoI_log_s = VoI_log(pu_s, puc_s, pc_s)
 VoI_log_c = VoI_log(pu_c, puc_c, pc_c)
 
+# (check)
+punotc_s = punotc(pc_s, puc_s, pu_s)
+punotc_c = punotc(pc_c, puc_c, pu_c)
+
+VoD_log_gmod_max = VoD_log_gmod(pu_s, pu_c, puc_s, puc_c, pc_s, pc_c, punotc(pc_s, puc_s, pu_s), punotc(pc_c, puc_c, pu_c))
+
+# CASE 2: ~C determines U
+
+puc_c = 1e-15
+pc_c = 1 - pu_c
+
+puc_s = 1e-15
+pc_s = 1 - pu_s
+
+VoI_log_c = VoI_log(pu_c, puc_c, pc_c)
+VoI_log_s = VoI_log(pu_s, puc_s, pc_s)
+
+# (check)
+punotc_s = punotc(pc_s, puc_s, pu_s)
+punotc_c = punotc(pc_c, puc_c, pu_c)
+
 VoD_log_gmod_max = VoD_log_gmod(pu_s, pu_c, puc_s, puc_c, pc_s, pc_c, punotc(pc_s, puc_s, pu_s), punotc(pc_c, puc_c, pu_c))
 ```
-
-f(p, i, c) = p * c + ((i - p * c)/(1-c)*log((i - p * c)/(1-c)/0.001) + (1-(i - 0.0172334 * c)/(1-c))*log((1-(i - p * c)/(1-c))/(1-0.001)))*(1-c)
-
-i might have made a mistake there
-
-p is P(U|c), c is P(c), i is P(U) (that's the starting point)
-
-If i is .235, can we find p and c that maximize f(p, i, c)?
 
 ```{r}
 library(tidyr)
@@ -242,10 +253,10 @@ ggplot(reshapedData, aes(x = ID, y = VoI_log, color = Camp, shape = direction)) 
   geom_point() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   scale_y_continuous(trans = pseudo_log_trans(base = 10), breaks = c(0, 0.0001, 0.001, 0.01), limits=c(0, 0.0075)) +
-  labs(x = "Question ID", y = "VOI_log", color = "Person", shape = "Direction") +
+  labs(x = "Question ID", y = "Log VoI", color = "Person", shape = "Direction") +
   scale_shape_manual(values = c("up" = 17, "down" = 25, "no change" = 8)) # 19 and 17 are the shapes for the points
 
-ggsave("VoI_log.png", width = 18, height = 10)
+ggsave("VoI_log.png", width = 8, height = 10)
 ```
 
 ```{r}
@@ -420,9 +431,9 @@ ggsave("VoD_log_gmod_easy.png", width = 8, height = 8)
 results_df_cross_camp_f <- results_df_cross_camp %>%
   select(ID, value) %>%
   group_by(ID) %>%
-  summarize(median_cross_camp_pairs = median(value, na.rm = TRUE))
+  summarize(median_cross_camp_pairs = quantile(value, type = 1, p = 0.5, na.rm = TRUE))
 
-median_forecasters_f <- median_forecasters %>%
+median_forecasters_f <- arjj %>%
   select(ID, VoD_log_gmod)
 
 compare_VoD <- merge(results_df_cross_camp_f, median_forecasters_f, by = "ID", all.x = TRUE) %>%
