@@ -252,11 +252,16 @@ reshapedData$ID <- factor(reshapedData$ID, levels = central_tendency$ID[order(ce
 ggplot(reshapedData, aes(x = ID, y = VoI_log, color = Camp, shape = direction)) +
   geom_point() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
-  scale_y_continuous(trans = pseudo_log_trans(base = 10), breaks = c(0, 0.0001, 0.001, 0.01), limits=c(0, 0.0075)) +
+  scale_y_continuous(trans = log10_trans(),
+                     breaks = trans_breaks("log10", function(x) 10^x),
+                     labels = trans_format("log10", math_format(10^.x))) +
+  geom_point(data = central_tendency, aes(x = ID, y = q50_KL_concerned), color = "#f8a06d", shape = 16, alpha = .3, size = 4, show.legend = FALSE) +
+  geom_point(data = central_tendency, aes(x = ID, y = q50_KL_skeptic), color = "#0072c4", shape = 16, alpha = .3, size = 4, show.legend = FALSE) +
+  #scale_y_continuous(trans = pseudo_log_trans(sigma = 1, base = 10), limits = c(0, 0.0075)) +
   labs(x = "Question ID", y = "Log VoI", color = "Person", shape = "Direction") +
   scale_shape_manual(values = c("up" = 17, "down" = 25, "no change" = 8)) # 19 and 17 are the shapes for the points
 
-ggsave("VoI_log.png", width = 8, height = 10)
+ggsave("VoI_log.png", width = 10, height = 9)
 ```
 
 ```{r}
@@ -420,9 +425,9 @@ ggplot(VoD_quantiles, aes(x = ID, y = median)) +
   geom_boxplot() +
   geom_errorbar(aes(ymin = quantile_25, ymax = quantile_75, color = platform), width = 0.2) +
   labs(x = "Question ID", y = "Log VoD", title = "Log VoD Between Cross-Camp Pairs") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) #+
   # Plot VoD_log_gmod as green stars
-  geom_point(aes(y = VoD_log_gmod, color = 'green'), shape = 8, size = 3, show.legend = FALSE)
+  #geom_point(aes(y = VoD_log_gmod, color = 'green'), shape = 8, size = 3, show.legend = FALSE)
 
 ggsave("VoD_log_gmod_easy.png", width = 8, height = 8)
 ```
@@ -445,6 +450,18 @@ write.csv(compare_VoD, "compare_VoD.csv", row.names = FALSE)
 ```
 
 ```{r}
+# Get component-wise VOI for each question
+compwise <- reshapedData %>%
+  group_by(ID, Camp) %>%
+  summarize(median(PU), median(PUc), median(Pc), median(punotc), median(VoI_log, na.rm=TRUE))
+
+cc <- as.data.frame(compwise) %>%
+  group_by(ID, Camp) %>%
+  mutate(componentWiseVoI = VoI_log(`median(PU)`, `median(PUc)`, `median(Pc)`, `median(punotc)`),
+         PUc_x_Pc_less_than_PU = `median(PUc)` * `median(Pc)` < `median(PU)`) %>%
+  mutate(punotc_check = punotc(`median(Pc)`, `median(PUc)`, `median(PU)`))
+
+write.csv(cc, "componentwise.csv", row.names = FALSE)
 ```
 
 ```{r}
