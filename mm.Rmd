@@ -105,8 +105,29 @@ reshapedData <- pSheet_final %>%
 ```
 
 ```{r}
+# Add log VoI (KL Divergence) now if it's P8 data
+reshapedData <- reshapedData %>%
+  rowwise() %>%
+  mutate(punotc = punotc(Pc, PUc, PU))
+```
+
+```{r}
+# For rows with incoherent forecasts, make PU NA (we'll drop these)
+reshapedData <- reshapedData %>%
+  mutate(PU = ifelse(PUc * Pc > PU, NA, PU))
+```
+
+```{r}
+reshapedData <- reshapedData %>%
+  mutate(VoI_log = VoI_log(PU, PUc, Pc, punotc)) %>%
+  mutate(VoI_naive = VoI_naive(PU, PUc, Pc, punotc)) %>%
+  mutate(person = paste0(person, " (", Camp, ")"))
+```
+
+```{r}
 # Why are there still NaN's in VoI_log? NA's are when they didn't answer the question (fine), but NaN's are perplexing
-inconsistent <- reshapedData %>% filter(is.nan(VoI_log)) %>%
+inconsistent <- reshapedData %>%
+  filter(is.nan(VoI_log)) %>%
   select(person, Camp, ID, PU, Pc, PUc, punotc, VoI_log)
 
 write.csv(inconsistent, "inconsistent.csv", row.names = FALSE)
@@ -122,25 +143,8 @@ claireWarning %>%
 ```
 
 ```{r}
-# Add log VoI (KL Divergence) now if it's P8 data
 reshapedData <- reshapedData %>%
-  rowwise() %>%
-  mutate(punotc = punotc(Pc, PUc, PU))
-```
-
-```{r}
-# For rows with incoherent forecasts, make PU, Pc, PUc, punotc all NA
-reshapedData <- reshapedData %>%
-  mutate(PU = ifelse(PUc * Pc > PU, NA, PU))
-```
-
-```{r}
-reshapedData <- reshapedData %>%
-  filter(!is.na(PU)) %>%
-  filter(punotc > 0) %>%
-  mutate(VoI_log = VoI_log(PU, PUc, Pc, punotc)) %>%
-  mutate(VoI_naive = VoI_naive(PU, PUc, Pc, punotc)) %>%
-  mutate(person = paste0(person, " (", Camp, ")"))
+  filter(!is.na(PU))  # cases where P(c) * P(U|c) > P(U) OR either P(c) or P(U|c) were NA
 ```
 
 ```{r}
@@ -246,22 +250,36 @@ library(scales)
 max(reshapedData$VoI_log[reshapedData$Camp == "Skeptical"], na.rm = TRUE)
 
 # Order ID levels by median (or mean)
-reshapedData$ID <- factor(reshapedData$ID, levels = central_tendency$ID[order(central_tendency$median_voil)])
+reshapedData$ID <- factor(reshapedData$ID, levels = central_tendency$ID[order(central_tendency$q50_KL)])
 
 # create the plot
-ggplot(reshapedData, aes(x = ID, y = VoI_log, color = Camp, shape = direction)) +
-  geom_point() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
-  scale_y_continuous(trans = log10_trans(),
-                     breaks = trans_breaks("log10", function(x) 10^x),
-                     labels = trans_format("log10", math_format(10^.x))) +
-  geom_point(data = central_tendency, aes(x = ID, y = q50_KL_concerned), color = "#f8a06d", shape = 16, alpha = .3, size = 4, show.legend = FALSE) +
-  geom_point(data = central_tendency, aes(x = ID, y = q50_KL_skeptic), color = "#0072c4", shape = 16, alpha = .3, size = 4, show.legend = FALSE) +
-  #scale_y_continuous(trans = pseudo_log_trans(sigma = 1, base = 10), limits = c(0, 0.0075)) +
-  labs(x = "Question ID", y = "Log VoI", color = "Person", shape = "Direction") +
-  scale_shape_manual(values = c("up" = 17, "down" = 25, "no change" = 8)) # 19 and 17 are the shapes for the points
+plotMe <- function(reshapedData) {
+  ggplot(reshapedData, aes(x = ID, y = VoI_log, color = Camp, shape = direction)) +
+    geom_point() +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+    scale_y_continuous(trans = log10_trans(),
+                      breaks = trans_breaks("log10", function(x) 10^x),
+                      labels = trans_format("log10", math_format(10^.x))) +
+    geom_point(data = central_tendency, aes(x = ID, y = q50_KL_concerned), color = "#f8a06d", shape = 16, alpha = .3, size = 4, show.legend = FALSE) +
+    geom_point(data = central_tendency, aes(x = ID, y = q50_KL_skeptic), color = "#0072c4", shape = 16, alpha = .3, size = 4, show.legend = FALSE) +
+    #scale_y_continuous(trans = pseudo_log_trans(sigma = 1, base = 10), limits = c(0, 0.0075)) +
+    labs(x = "Question ID", y = "Log VoI", color = "Person", shape = "Direction") +
+    scale_shape_manual(values = c("up" = 17, "down" = 25, "no change" = 8)) # 19 and 17 are the shapes for the points
+}
 
+plotMe(reshapedData)
 ggsave("VoI_log.png", width = 10, height = 9)
+
+# Ordered versions of same
+reshapedData$ID <- factor(reshapedData$ID, levels = central_tendency$ID[order(central_tendency$q50_KL_concerned)])
+
+plotMe(reshapedData)
+ggsave("VoI_log_ordered_concerned.png", width = 10, height = 9)
+
+reshapedData$ID <- factor(reshapedData$ID, levels = central_tendency$ID[order(central_tendency$q50_KL_skeptic)])
+
+plotMe(reshapedData)
+ggsave("VoI_log_ordered_skeptic.png", width = 10, height = 9)
 ```
 
 ```{r}
