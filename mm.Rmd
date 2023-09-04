@@ -52,6 +52,11 @@ library(dplyr)
 setwd("~/fri/voi-vod")
 source("sources/functions.R")
 library(ggplot2)
+library(xpt)
+
+library(ggplot2)
+library(scales)
+
 ```
 
 ```{r}
@@ -127,8 +132,9 @@ reshapedData <- reshapedData %>%
 ```{r}
 # Why are there still NaN's in VoI_log? NA's are when they didn't answer the question (fine), but NaN's are perplexing
 inconsistent <- reshapedData %>%
-  filter(is.nan(VoI_log)) %>%
-  select(person, Camp, ID, PU, Pc, PUc, punotc, VoI_log)
+  filter(is.nan(VoI_log) | is.na(PU)) %>%
+  select(person, Camp, ID, PU, Pc, PUc, punotc, VoI_log) %>%
+  arrange(ID)
 
 write.csv(inconsistent, "inconsistent.csv", row.names = FALSE)
 
@@ -144,13 +150,49 @@ claireWarning %>%
 
 ```{r}
 reshapedData <- reshapedData %>%
-  filter(!is.na(PU))  # cases where P(c) * P(U|c) > P(U) OR either P(c) or P(U|c) were NA
+  filter(!is.na(PU)) %>%  # cases where P(c) * P(U|c) > P(U) OR either P(c) or P(U|c) were NA
+  filter(!is.nan(VoI_log))
 ```
 
 ```{r}
-exQuestion <- reshapedData %>% filter(grepl("AI coding", ID))
+quantile50 <- function(x) {
+  return(quantile(x, p = 0.5, type = 1))
+}
 
-VoD_log_gmod_easy(exQuestion, "Yael (Concerned)", "Ash (Skeptical)")
+bresults <- reshapedData %>%
+  group_by(Camp, ID) %>%
+  summarize(median = quantile(VoI_log, p = 0.5, type = 1, na.rm = TRUE),
+            x = list(boot_results(VoI_log, statistic = "quantile50"))) %>%
+  unnest(x)
+```
+
+```{r}
+# Arrange by median for Camp "A"
+ordering <- bresults %>%
+  filter(Camp == "Concerned") %>%
+  arrange(median) %>%
+  pull(ID)
+
+bresults$ID <- factor(bresults$ID, levels = ordering)
+
+possum <- ggplot(bresults, aes(x = ID, y = median, group = Camp)) +
+  geom_point(aes(color = Camp)) +  # To show medians as points colored by Camp
+  geom_errorbar(aes(ymin = confint_lower, ymax = confint_upper, color = Camp, alpha = 0.5)) +
+  scale_y_continuous(trans = log10_trans(),
+                    breaks = trans_breaks("log10", function(x) 10^x),
+                    labels = trans_format("log10", math_format(10^.x))) +
+  labs(title = "Median VOI with Bootstrapped CIs",
+       y = "Log VOI",
+       x = "Question") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+
+ggsave("possum_concerned.png", width = 12, height = 10)
+```
+
+```{r}
+exQuestion <- reshapedData %>% filter(grepl("Progress", ID))
+
+VoD_log_gmod_easy(exQuestion, "James (Skeptical)", "Ash (Skeptical)")
 ```
 
 ```{r}
@@ -163,7 +205,7 @@ reshapedData <- reshapedData %>%
 # Rank questions by median VoI three ways: all forecasters; skeptic camp only; concerned camp only
 central_tendency <- reshapedData %>%
   group_by(ID) %>%
-  summarise(q50_KL = quantile(VoI_log, p = 0.5, type = 3, na.rm = TRUE),
+  summarise(q50_KL = quantile(VoI_log, p = 0.5, type = 1, na.rm = TRUE),
             q50_KL_skeptic = quantile(VoI_log[Camp == "Skeptical"], p = 0.5, type = 1, na.rm = TRUE),
             q50_KL_concerned = quantile(VoI_log[Camp == "Concerned"], p = 0.5, type = 1, na.rm = TRUE),
             median_KL = median(VoI_log, na.rm = TRUE),
@@ -242,10 +284,6 @@ write.csv(avg_ranks, "mean_ranks_KL_and_naive.csv", row.names = FALSE)
 ```
 
 ```{r}
-# load necessary library
-library(ggplot2)
-library(scales)
-
 # What's the max VoI_log for just the skeptic camp?
 max(reshapedData$VoI_log[reshapedData$Camp == "Skeptical"], na.rm = TRUE)
 
@@ -268,7 +306,7 @@ plotMe <- function(reshapedData) {
 }
 
 plotMe(reshapedData)
-ggsave("VoI_log.png", width = 10, height = 9)
+ggsave("VoI_log.png", width = 10, height = 8)
 
 # Ordered versions of same
 reshapedData$ID <- factor(reshapedData$ID, levels = central_tendency$ID[order(central_tendency$q50_KL_concerned)])
@@ -372,7 +410,7 @@ for (question in uniqueIDs) {
       }
   }
 
-  make_fiedler_ordered_heatmap(vod_matrix, question)
+  #make_fiedler_ordered_heatmap(vod_matrix, question)
 }
 ```
 
@@ -656,28 +694,94 @@ dogData <- prepostMelt %>% filter(!is.na(Value))
 dog <- ggplot(dogData, aes(x = Camp, y = Value, color = InitFinal)) +
   geom_boxplot() +
   scale_y_log10(limits = c(1e-7, 66)) +
-  #scale_y_continuous(trans = pseudo_log_trans(base = 10), breaks = c(0, 0.0000001, 0.000001, 0.00001, 0.0001, 0.001, 0.01, 0.1), limits=c(0, max_voi)) +
   labs(x = "Question ID", y = "VoI_log", color = "Camp")
 
 ggsave("boxplot.png", dog)
 
+# Calculate boxplot stats to identify outliers
+box_stats <- function(x) {
+  # Calculate the quartiles and IQR
+  quartiles <- quantile(x, probs = c(0.25, 0.75))
+  iqr <- diff(quartiles)
+  
+  # Calculate the whiskers' range
+  whiskers <- quartiles + 1.5 * c(-iqr, iqr)
+  
+  # Identify outliers
+  outliers <- x[x < whiskers[1] | x > whiskers[2]]
+  
+  # Identify median
+  median_val <- quantile(x, p = 0.5)
+  
+  return(data.frame(y = c(outliers, median_val), label = c(outliers, median_val)))
+}
+
+# Calculate the medians and outliers
+textData <- dogData %>%
+  group_by(Camp, InitFinal) %>%
+  do(box_stats(.$Value))
+
 library(ggrepel)
 
-# Calculate overall means
-means <- tapply(dogData$Value, dogData$Camp, mean)
-
-# Add mean lines
-dog + 
-  geom_hline(aes(yintercept=means['Concerned'], linetype="dotted"), color = "blue") +
-  geom_hline(aes(yintercept=means['Skeptical'], linetype="dotted"), color = "blue") +
-  geom_text_repel(data = subset(dogData, InitFinal == "Initial"), 
-                  aes(label = Value),
-                  size = 3, segment.color = 'grey50') +
-  geom_text_repel(data = subset(dogData, InitFinal == "Final"),
-                  aes(label = Value),
-                  size = 3, segment.color = 'grey50')
+dog2 <- dog +
+    stat_summary(
+      geom = "label",
+      data = textData,
+      aes(label = Round(..y.., 2)),
+      position = position_dodge2(width = 0.75, preserve = "single"),
+      vjust = 0.5,
+      size = 3,
+      fill = "white",
+      show.legend = FALSE
+    )
+  #geom_text_repel(
+  #  data = textData,
+  #  aes(y = y, label = round(label, 2)),
+  #  position = position_dodge2(width = 0.75, preserve = "single"),
+  #  vjust = 0.5,
+  #  size = 3,
+  #  fill = "white",
+  # segment.color = 'grey50'
+  #)
 
 ggsave("boxplot_labeled.png", dog2)
+```
+
+```{r}
+# Calculate medians for each group
+medians <- dogData %>%
+  group_by(Camp, InitFinal) %>%
+  summarise(Median = quantile(Value, 0.5, type = 1))
+
+# Create the ggplot
+dog <- ggplot(dogData, aes(x = Camp, y = Value, color = InitFinal)) +
+  # Box plot without whiskers
+  geom_boxplot(outlier.shape = NA, coef = 0) +
+  # Add individual points
+  geom_point(position = position_jitterdodge(jitter.width = 0.1)) +
+  # Log scale
+  scale_y_log10(limits = c(1e-7, 66)) +
+  # Add labels to the points
+  geom_text_repel(
+    aes(label = Value),
+    box.padding = 0.5,
+    point.padding = 0.5,
+    position = position_jitterdodge(jitter.width = 0.1),
+    max.overlaps = 4
+  ) +
+  # Add median labels
+    geom_text(
+    data = medians,
+    aes(y = Median, label = round(Median, 2), color = InitFinal),
+    vjust = -0.5,
+    position = position_dodge(0.6)
+  ) +
+  # Add labels and themes as you like
+  labs(x = "Camp", y = "P(AI Extinction by 2100)", color = "Init/Final")
+  # Add labels and themes as you like
+  labs(x = "Camp", y = "Value", color = "Init/Final")
+
+ggsave('dflkj.png', dog)
 ```
 
 ```{r}
