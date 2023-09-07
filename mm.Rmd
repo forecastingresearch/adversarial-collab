@@ -110,6 +110,16 @@ reshapedData <- pSheet_final %>%
 ```
 
 ```{r}
+# Aliases
+newnames <- read.csv("aliases.csv", header = TRUE)
+reshapedData <- merge(reshapedData, newnames, by.x = "person", by.y = "name", all.x = TRUE)
+# Drop "person" and rename alias to "person"
+reshapedData <- reshapedData %>%
+  select(-person) %>%
+  rename(person = alias)
+```
+
+```{r}
 # Add log VoI (KL Divergence) now if it's P8 data
 reshapedData <- reshapedData %>%
   rowwise() %>%
@@ -376,7 +386,7 @@ make_fiedler_ordered_heatmap <- function(mat, title) {
   mat_reordered <- mat[fiedler_ordering, fiedler_ordering]
 
   # Start png device
-  png(paste0("p8_heatmaps/heatmap_", title, ".png"), width = 800, height = 800)
+  png(paste0("p8_heatmaps/heatmap_anon_", title, ".png"), width = 800, height = 800)
 
   # create a heatmap
   pheatmap(mat_reordered, main = title)
@@ -410,7 +420,7 @@ for (question in uniqueIDs) {
       }
   }
 
-  #make_fiedler_ordered_heatmap(vod_matrix, question)
+  make_fiedler_ordered_heatmap(vod_matrix, question)
 }
 ```
 
