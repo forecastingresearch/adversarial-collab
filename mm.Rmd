@@ -166,14 +166,117 @@ reshapedData <- reshapedData %>%
 
 ```{r}
 quantile50 <- function(x) {
-  return(quantile(x, p = 0.5, type = 1))
+  return(quantile(x, p = 0.5, type = 1, na.rm = TRUE))
 }
 
 bresults <- reshapedData %>%
   group_by(Camp, ID) %>%
-  summarize(median = quantile(VoI_log, p = 0.5, type = 1, na.rm = TRUE),
+  summarize(median = quantile50(VoI_log),
             x = list(boot_results(VoI_log, statistic = "quantile50"))) %>%
   unnest(x)
+```
+
+```{r}
+# Bootstrapping but with consistent bootstraps across questions)
+
+library(dplyr)
+library(boot)
+library(purrr)
+
+# Simulate some data
+set.seed(123)
+
+# Pre-generate bootstrap indices
+R <- 1000
+boot_indices <- lapply(1:R, function(i) sample(1:11, 11, replace = TRUE))
+
+# Modify boot_results to use pre-generated bootstrap indices
+boot_results_modified <- function(data, indices, statistic) {
+  stat_fun <- match.fun(statistic)
+  
+  resampled_data <- data[indices, , drop = FALSE]
+  stat_val <- stat_fun(resampled_data$VoI_log)
+  
+  return(stat_val)
+}
+
+# Apply bootstrapping using pre-generated indices
+results <- reshapedData %>%
+  group_by(Camp, ID) %>%
+  summarize(
+    medians = list(
+      map(boot_indices, ~boot_results_modified(cur_data(), .x, "quantile50"))
+    )
+  ) %>%
+  unnest(medians)
+
+results$medians <- sapply(results$medians, `[[`, "50%")
+```
+
+```{r}
+# Make the matrix: Two matrix figures, one for each camp, where rows (i) are
+# questions and columns (j) are questions and each cell tells us % of the time
+# in the bootstrapped worlds that Qi is higher VOI than Qj.
+
+currCamp <- "Skeptical"
+
+# Function to compare medians between two IDs and count occurrences
+compare_medians <- function(id1, id2, data) {
+  medians_id1 <- data %>% filter(ID == id1) %>% pull(medians)
+  medians_id2 <- data %>% filter(ID == id2) %>% pull(medians)
+  sum(medians_id1 > medians_id2)
+}
+
+# Create an empty matrix to store results
+unique_IDs <- unique(results$ID)
+matrix_size <- length(unique_IDs)
+comparison_matrix <- matrix(0, nrow=matrix_size, ncol=matrix_size,
+                            dimnames=list(unique_IDs, unique_IDs))
+
+campResults <- results %>% filter(Camp == currCamp)
+
+# Fill in the matrix
+for (i in 1:matrix_size) {
+  for (j in 1:matrix_size) {
+    if (i != j) {
+      comparison_matrix[i, j] <- compare_medians(unique_IDs[i], unique_IDs[j], campResults)
+    }
+  }
+}
+
+comparison_matrix <- comparison_matrix / R * 100
+```
+
+```{r}
+# Make a nice heatmap of that comparison_matrix
+library(ggplot2)
+
+# Convert the matrix to a tidy format for ggplot2
+comparison_df <- as.data.frame(as.table(comparison_matrix))
+
+# Order by this camp's median
+ordering <- bresults %>%
+  filter(Camp == currCamp) %>%
+  arrange(median) %>%
+  pull(ID)
+
+comparison_df$Var1 <- factor(comparison_df$Var1, levels = ordering)
+comparison_df$Var2 <- factor(comparison_df$Var2, levels = ordering)
+
+# Create the heatmap
+heatmap_plot <- ggplot(comparison_df, aes(x = Var1, y = Var2, fill = Freq)) +
+  geom_tile() +
+  scale_fill_gradientn(colours = topo.colors(10)) + # You can choose your own color gradient
+  theme_minimal() +
+  labs(title = paste0("Comparison Heatmap for ", currCamp, " (R=", R, ")"),
+       x = "ID 1",
+       y = "ID 2",
+       fill = "ID1 VOI > ID2 VOI\n (% of samples)") +
+  coord_fixed(ratio = 1) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Display the heatmap
+print(heatmap_plot)
 ```
 
 ```{r}
