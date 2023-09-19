@@ -4,6 +4,18 @@ pSheet_final <- read.csv("molly_composite.csv", header = TRUE)
 ```
 
 ```{r}
+library(tidyr)
+library(dplyr)
+setwd("~/fri/voi-vod")
+source("sources/functions.R")
+library(ggplot2)
+library(xpt)
+
+library(ggplot2)
+library(scales)
+```
+
+```{r}
 # Get median PU for each camp
 medianPU <- pSheet_final %>%
   group_by(Camp) %>%
@@ -44,19 +56,6 @@ punotc_s = punotc(pc_s, puc_s, pu_s)
 punotc_c = punotc(pc_c, puc_c, pu_c)
 
 VoD_log_gmod_max = VoD_log_gmod(pu_s, pu_c, puc_s, puc_c, pc_s, pc_c, punotc(pc_s, puc_s, pu_s), punotc(pc_c, puc_c, pu_c))
-```
-
-```{r}
-library(tidyr)
-library(dplyr)
-setwd("~/fri/voi-vod")
-source("sources/functions.R")
-library(ggplot2)
-library(xpt)
-
-library(ggplot2)
-library(scales)
-
 ```
 
 ```{r}
@@ -189,7 +188,9 @@ set.seed(123)
 # Pre-generate bootstrap indices
 R <- 1000
 boot_indices <- lapply(1:R, function(i) sample(1:11, 11, replace = TRUE))
+```
 
+```{r}
 # Modify boot_results to use pre-generated bootstrap indices
 boot_results_modified <- function(data, indices, statistic) {
   stat_fun <- match.fun(statistic)
@@ -206,11 +207,71 @@ results <- reshapedData %>%
   summarize(
     medians = list(
       map(boot_indices, ~boot_results_modified(cur_data(), .x, "quantile50"))
-    )
+    ),
   ) %>%
   unnest(medians)
 
 results$medians <- sapply(results$medians, `[[`, "50%")
+
+write.csv(results, "results_VoI.csv", row.names = FALSE)
+```
+
+```{r}
+boot_results_modified_VoD <- function(data, indices, statistic) {
+  stat_fun <- match.fun(statistic)
+
+  # Separate data into two camps
+  data_s <- data[data$Camp == "Skeptical", ]
+  data_c <- data[data$Camp == "Concerned", ]
+
+  resampled_data_s <- data_s[indices, , drop = FALSE]
+  resampled_data_c <- data_c[indices, , drop = FALSE]
+
+  # Give "people" unique IDs 1 through 22
+  resampled_data_s$person <- c(1:11)
+  resampled_data_c$person <- c(12:22)
+
+  dt <- rbind(resampled_data_s, resampled_data_c)
+  VoDs <- c()
+
+  # Get cross-camp VoDs for each pair of people
+  for (i in 1:11) {
+      for (j in 11:22) {
+        pu_a <- dt[dt$person == i, "PU"] %>% pull
+        pu_b <- dt[dt$person == j, "PU"] %>% pull
+        puc_a <- dt[dt$person == i, "PUc"] %>% pull
+        puc_b <- dt[dt$person == j, "PUc"] %>% pull
+        pc_a <- dt[dt$person == i, "Pc"] %>% pull
+        pc_b <- dt[dt$person == j, "Pc"] %>% pull
+        punotc_a <- dt[dt$person == i, "punotc"] %>% pull
+        punotc_b <- dt[dt$person == j, "punotc"] %>% pull
+        answer <- VoD_log_gmod(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_b)
+        # Append answer to VoDs
+        VoDs <- c(VoDs, answer)
+      }
+  }
+
+  stat_val <- stat_fun(VoDs)
+  
+  return(stat_val)
+}
+
+results_VoD <- reshapedData %>%
+  group_by(ID) %>%
+  summarize(
+    medians_VoD = list(
+      map(boot_indices, ~boot_results_modified_VoD(
+        cur_data(),
+        .x,
+        "quantile50"
+      ))
+    )
+  ) %>%
+  unnest(medians_VoD)
+
+results_VoD$medians_VoD <- sapply(results_VoD$medians_VoD, `[[`, "50%")
+
+write.csv(results_VoD, "results_VoD.csv", row.names = FALSE)
 ```
 
 ```{r}
@@ -248,6 +309,34 @@ comparison_matrix <- comparison_matrix / R * 100
 ```
 
 ```{r}
+# Comparison matrix for VoD
+
+# Function to compare medians between two IDs and count occurrences
+compare_medians <- function(id1, id2, data) {
+  medians_id1 <- data %>% filter(ID == id1) %>% pull(medians_VoD)
+  medians_id2 <- data %>% filter(ID == id2) %>% pull(medians_VoD)
+  sum(medians_id1 > medians_id2)
+}
+
+# Create an empty matrix to store results
+unique_IDs <- unique(results_VoD$ID)
+matrix_size <- length(unique_IDs)
+comparison_matrix_VoD <- matrix(0, nrow=matrix_size, ncol=matrix_size,
+                                dimnames=list(unique_IDs, unique_IDs))
+
+# Fill in the matrix
+for (i in 1:matrix_size) {
+  for (j in 1:matrix_size) {
+    if (i != j) {
+      comparison_matrix_VoD[i, j] <- compare_medians(unique_IDs[i], unique_IDs[j], results_VoD)
+    }
+  }
+}
+
+comparison_matrix_VoD <- comparison_matrix_VoD / R * 100  # Convert to percent
+```
+
+```{r}
 # Make a nice heatmap of that comparison_matrix
 library(ggplot2)
 
@@ -275,8 +364,37 @@ heatmap_plot <- ggplot(comparison_df, aes(x = Var1, y = Var2, fill = Freq)) +
   coord_fixed(ratio = 1) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-# Display the heatmap
-print(heatmap_plot)
+ggsave(paste0(currCamp, "_VoI_heatmap.png"), heatmap_plot, width = 10, height = 10)
+```
+
+```{r}
+# NOW VOD: Make a nice heatmap of that comparison_matrix
+library(ggplot2)
+
+# Convert the matrix to a tidy format for ggplot2
+comparison_df_VoD <- as.data.frame(as.table(comparison_matrix_VoD))
+
+# Order by this median pairwise VoD in "our world"
+ordering <- VoD_quantiles %>%
+  arrange(median) %>%
+  pull(ID)
+
+comparison_df_VoD$Var1 <- factor(comparison_df_VoD$Var1, levels = ordering)
+comparison_df_VoD$Var2 <- factor(comparison_df_VoD$Var2, levels = ordering)
+
+# Create the heatmap
+heatmap_plot <- ggplot(comparison_df_VoD, aes(x = Var1, y = Var2, fill = Freq)) +
+  geom_tile() +
+  scale_fill_gradientn(colours = topo.colors(10)) + # You can choose your own color gradient
+  theme_minimal() +
+  labs(title = paste0("Comparison Heatmap for VoD (R=", R, ")"),
+       x = "ID 1",
+       y = "ID 2",
+       fill = "ID1 VOD > ID2 VOD\n (% of samples)") +
+  coord_fixed(ratio = 1) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave("VoD_heatmap.png", heatmap_plot, width = 10, height = 10)
 ```
 
 ```{r}
@@ -339,7 +457,7 @@ central_tendency %>% filter(q50_KL_concerned == 0)
 ```{r}
 # Who are the median forecasters in each camp for each question? Filter reshapedData to those rows
 arj <- merge(central_tendency, reshapedData) %>%
-  select(ID, starts_with("q50_KL_"), person, Camp, PU, Pc, PUc, punotc, VoI_log, direction)
+  select(ID, starts_with("q50_KL_"), person, Camp, PU, Pc, PUc, punotc, VoI_log)
 
 # Filter arj to the rows within ID where VoI_log == median_KL_skeptic or median_KL_concerned
 arjj <- arj %>%
@@ -405,17 +523,17 @@ reshapedData$ID <- factor(reshapedData$ID, levels = central_tendency$ID[order(ce
 
 # create the plot
 plotMe <- function(reshapedData) {
-  ggplot(reshapedData, aes(x = ID, y = VoI_log, color = Camp, shape = direction)) +
+  ggplot(reshapedData, aes(x = ID, y = VoI_log, color = Camp)) +
     geom_point() +
-    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
     scale_y_continuous(trans = log10_trans(),
-                      breaks = trans_breaks("log10", function(x) 10^x),
-                      labels = trans_format("log10", math_format(10^.x))) +
-    geom_point(data = central_tendency, aes(x = ID, y = q50_KL_concerned), color = "#f8a06d", shape = 16, alpha = .3, size = 4, show.legend = FALSE) +
-    geom_point(data = central_tendency, aes(x = ID, y = q50_KL_skeptic), color = "#0072c4", shape = 16, alpha = .3, size = 4, show.legend = FALSE) +
+                       breaks = trans_breaks("log10", function(x) 10^x),
+                       labels = trans_format("log10", math_format(10^.x))) +
+    geom_point(data = central_tendency, aes(x = ID, y = q50_KL_concerned), color = "#f8a06d", shape = 16, alpha = .4, size = 5, show.legend = FALSE) +
+    geom_point(data = central_tendency, aes(x = ID, y = q50_KL_skeptic), color = "#0072c4", shape = 16, alpha = .4, size = 5, show.legend = FALSE) +
     #scale_y_continuous(trans = pseudo_log_trans(sigma = 1, base = 10), limits = c(0, 0.0075)) +
-    labs(x = "Question ID", y = "Log VoI", color = "Person", shape = "Direction") +
-    scale_shape_manual(values = c("up" = 17, "down" = 25, "no change" = 8)) # 19 and 17 are the shapes for the points
+    labs(x = "Question", y = "Log VoI", color = "Camp") +
+    theme_minimal() + 
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
 }
 
 plotMe(reshapedData)
@@ -492,7 +610,7 @@ make_fiedler_ordered_heatmap <- function(mat, title) {
   png(paste0("p8_heatmaps/heatmap_anon_", title, ".png"), width = 800, height = 800)
 
   # create a heatmap
-  pheatmap(mat_reordered, main = title)
+  pheatmap(mat_reordered, main = title, angle_col = "45")
 
   # Close device
   dev.off()
@@ -523,7 +641,7 @@ for (question in uniqueIDs) {
       }
   }
 
-  make_fiedler_ordered_heatmap(vod_matrix, question)
+  #make_fiedler_ordered_heatmap(vod_matrix, question)
 }
 ```
 
@@ -599,6 +717,82 @@ ggplot(VoD_quantiles, aes(x = ID, y = median)) +
   #geom_point(aes(y = VoD_log_gmod, color = 'green'), shape = 8, size = 3, show.legend = FALSE)
 
 ggsave("VoD_log_gmod_easy.png", width = 8, height = 8)
+```
+
+```{r}
+# VOD: For each question, tell me average percent of the time that the median VoD was higher than any other question
+
+fortableD <- comparison_df_VoD %>%
+  group_by(Var1) %>%
+  summarize(stat = mean(Freq, na.rm = TRUE)) %>%
+  rename(ID = Var1)
+
+results_df_cross_camp_q50 <- results_df_cross_camp %>%
+  group_by(ID) %>%
+  summarize(value = quantile50(value))
+
+table1 <- merge(fortableD, results_df_cross_camp_q50, by = "ID") %>%
+  select(ID, value, stat) %>%
+  arrange(value, ascending = FALSE)
+
+write.csv(table1, "table_VoD.csv", row.names = FALSE)
+```
+
+```{r}
+# VOI: Ditto
+
+fortableI <- comparison_df %>%
+  group_by(Var1) %>%
+  summarize(stat = mean(Freq, na.rm = TRUE)) %>%
+  rename(ID = Var1)
+
+medianVOI <- central_tendency %>%
+  select(ID, q50_KL_skeptic) %>%  # CHANGE!!!!!
+  rename(medians = q50_KL_skeptic)
+
+table2 <- merge(fortableI, central_tendency) %>%
+  select(ID, q50_KL_skeptic, stat) %>%  # You have to change this!!
+  arrange(q50_KL_skeptic, ascending = FALSE)
+
+# Which camp did you just do? See currCamp
+write.csv(table2, paste0("table_VOI_", currCamp, ".csv"), row.names = FALSE)
+```
+
+```{r}
+# Plot VoD_quantiles$median for each question as bar graph - over/under zero
+bars <- ggplot(VoD_quantiles, aes(x = ID, y = median, fill = median)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Question", y = "Median Log VoD For Cross-Camp Pairs") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.title.x = element_text(margin = margin(t = 20)),
+        legend.position = "none") +
+  scale_fill_gradient2(low = "orange", high = "green", midpoint = 0,
+                       limits = c(min(VoD_quantiles$median), max(VoD_quantiles$median)))
+
+ggsave("VoD_log_gmod_easy_bars.png", width = 9, height = 8)
+```
+
+```{r}
+# Load necessary libraries
+library(ggplot2)
+library(ggridges)
+
+ordering <- VoD_quantiles %>%
+  arrange(median) %>%
+  pull(ID)
+
+results_df_cross_camp$ID <- factor(results_df_cross_camp$ID, levels = ordering)
+
+# Create dot/half violin plots
+p <- ggplot(results_df_cross_camp, aes(x = ID, y = value)) +
+  geom_violin(aes(fill = ID), scale = "width") +
+  #geom_dotplot(aes(fill = ID), binaxis = 'y', stackdir = 'center', position = position_nudge(x = -0.2), dotsize = 0.5) +
+  theme_minimal() +
+  labs(title = "Dot and Half-Violin Plots by ID", y = "Value", x = "ID") +
+  theme(legend.position = "none", axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave("VoD_log_violinish.png", width = 9, height = 8)
 ```
 
 ```{r}
@@ -747,117 +941,7 @@ ggsave("postpost2.png", g2, width = 6, height = 8)
 ```
 
 ```{r}
-# Using prepost, get change in forecast (final - initial) for each ID, plot that
-prepost <- prepost %>%
-  # If Final is NA, replace it with initial?
-  mutate(Final = ifelse(is.na(Final), Initial, Final)) %>%
-  mutate(change = Final - Initial)
-
-# Create the scatter plot with shapes for "Concerned" vs. "Skeptical" and color for ID
-h <- ggplot(data = prepost) +
-  aes(x = Initial, y = change, shape = Camp) +
-  geom_point(size = 3, color = "royalblue2", alpha = 0.5) +
-  labs(title = "Change in P(doom) Forecasts",
-       x = "Initial Forecast",
-       y = "Change in Forecast") +
-  scale_color_manual(values = custom_color_palette)  # Set the custom color palette
-
-ggsave("change.png", h, width = 6, height = 6)
-```
-
-```{r}
-# Plot initial (x) vs final (y) forecasts, with shape for Camp
-g <- ggplot(data = prepost) +
-  aes(x = Initial, y = Final, shape = Camp) +
-  geom_point(size = 3, color = "royalblue2", alpha = 0.5) +
-  # Make both axes log scale
-  scale_x_log10(limits=c(1e-8, 60)) +
-  scale_y_log10(limits=c(1e-8, 60)) +
-  # Also plot an x = y line, dotted, green
-  geom_abline(intercept = 0, slope = 1, linetype = "dotted", color = "green") +
-  labs(title = "Initial and Final P(doom) Forecasts",
-       x = "Initial Forecast",
-       y = "Final Forecast") +
-  scale_color_manual(values = custom_color_palette)  # Set the custom color palette
-
-ggsave("prepost_new.png", g, width = 7, height = 6)
-```
-
-```{r}
-# Plot initial (x) vs final (y) forecasts, with shape for Camp
-g <- ggplot(data = prepost) +
-  aes(x = Initial, y = Final, shape = Camp) +
-  geom_point(size = 3, color = "royalblue2", alpha = 0.5) +
-  # Limit both axes to (1, 60)
-  coord_cartesian(xlim = c(1, 60), ylim = c(1, 60)) +
-  # Also plot an x = y line, dotted, green
-  geom_abline(intercept = 0, slope = 1, linetype = "dotted", color = "green") +
-  labs(title = "Initial and Final P(doom) Forecasts",
-       x = "Initial Forecast",
-       y = "Final Forecast") +
-  scale_color_manual(values = custom_color_palette)  # Set the custom color palette
-
-ggsave("prepost_new_zoom_2.png", g, width = 7, height = 6)
-```
-
-```{r}
 dogData <- prepostMelt %>% filter(!is.na(Value))
-
-# Make box and whisker plots with dots for reshapedData$VoI_log by Camp and ID
-dog <- ggplot(dogData, aes(x = Camp, y = Value, color = InitFinal)) +
-  geom_boxplot() +
-  scale_y_log10(limits = c(1e-7, 66)) +
-  labs(x = "Question ID", y = "VoI_log", color = "Camp")
-
-ggsave("boxplot.png", dog)
-
-# Calculate boxplot stats to identify outliers
-box_stats <- function(x) {
-  # Calculate the quartiles and IQR
-  quartiles <- quantile(x, probs = c(0.25, 0.75))
-  iqr <- diff(quartiles)
-  
-  # Calculate the whiskers' range
-  whiskers <- quartiles + 1.5 * c(-iqr, iqr)
-  
-  # Identify outliers
-  outliers <- x[x < whiskers[1] | x > whiskers[2]]
-  
-  # Identify median
-  median_val <- quantile(x, p = 0.5)
-  
-  return(data.frame(y = c(outliers, median_val), label = c(outliers, median_val)))
-}
-
-# Calculate the medians and outliers
-textData <- dogData %>%
-  group_by(Camp, InitFinal) %>%
-  do(box_stats(.$Value))
-
-library(ggrepel)
-
-dog2 <- dog +
-    stat_summary(
-      geom = "label",
-      data = textData,
-      aes(label = Round(..y.., 2)),
-      position = position_dodge2(width = 0.75, preserve = "single"),
-      vjust = 0.5,
-      size = 3,
-      fill = "white",
-      show.legend = FALSE
-    )
-  #geom_text_repel(
-  #  data = textData,
-  #  aes(y = y, label = round(label, 2)),
-  #  position = position_dodge2(width = 0.75, preserve = "single"),
-  #  vjust = 0.5,
-  #  size = 3,
-  #  fill = "white",
-  # segment.color = 'grey50'
-  #)
-
-ggsave("boxplot_labeled.png", dog2)
 ```
 
 ```{r}
@@ -868,6 +952,7 @@ medians <- dogData %>%
 
 # Create the ggplot
 dog <- ggplot(dogData, aes(x = Camp, y = Value, color = InitFinal)) +
+  theme_minimal() +
   # Box plot without whiskers
   geom_boxplot(outlier.shape = NA, coef = 0) +
   # Add individual points
@@ -921,4 +1006,22 @@ JC50 = VoI_log(1e-8, 4e-8, 1e-6)
 LR70 = VoI_log(1e-8, 1e-6, 1e-5)
 CQ40 = VoI_log(1e-8, 1e-7, 1e-8)
 HN50 = VoI_log(1e-8, 1e-8, 1e-1)
+```
+
+```{r}
+# This is just a little something about aggregation for research discussion slide deck
+subby <- reshapedData %>% filter(grepl("Platform: AI", ID))
+
+longData <- tidyr::pivot_longer(subby, c("PU", "Pc", "PUc"))
+
+# Plotting
+ggplot(longData, aes(x=name, y=value, color=Camp)) + 
+  geom_point(position=position_jitterdodge(jitter.width=0.2, dodge.width=0.3)) + 
+  labs(x = "Forecasts", y = "Value") +
+  theme_minimal()
+
+ggsave("componentwise_AI_regulation.png", width = 10, height = 8)
+```
+
+```{r}
 ```
