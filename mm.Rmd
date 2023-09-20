@@ -176,6 +176,33 @@ bresults <- reshapedData %>%
 ```
 
 ```{r}
+# Add % of max VOI
+reshapedData <- reshapedData %>%
+  rowwise() %>%
+  mutate(max_VoI = VoI_log(PU, 1 - (1E-16), PU)) %>%
+  mutate(percent_max_VoI = VoI_log / max_VoI)
+
+# How many times is VoI_log bigger than max_VoI?
+sum(reshapedData$VoI_log > reshapedData$max_VoI)
+```
+
+```{r}
+# Quick plot dual axes VoI and % of max VoI
+qr <- reshapedData %>%
+  group_by(ID, Camp) %>%
+  summarize(VoI_log = quantile50(VoI_log), percent_max_VoI = quantile50(percent_max_VoI))
+
+p <- ggplot(qr, aes(x = VoI_log, y = percent_max_VoI)) +
+  geom_point(aes(color = Camp), alpha=0.7) + # The color aesthetic is optional, and you can remove it if not needed
+  labs(x = "Log VoI", y = "% of Max Log VoI") +
+  theme_minimal()
+
+ggsave("VoI_log_vs_percent_max_VoI.png", p, width = 8, height = 8)
+
+write.csv(qr, "abc.csv", row.names = FALSE)
+```
+
+```{r}
 # Bootstrapping but with consistent bootstraps across questions)
 
 library(dplyr)

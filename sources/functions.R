@@ -177,7 +177,6 @@ VoD_log_gmod <- function(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_
     (KL(punotc_a, punotc_b) + KL(punotc_b, punotc_a)) * geoMeanOfOddsCalc(c(1-pc_a, 1-pc_b))
   # Simple difference
   answer <- initDis - expDis
-  browser()
   return(answer)
 }
 
