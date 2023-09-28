@@ -176,6 +176,58 @@ bresults <- reshapedData %>%
 ```
 
 ```{r}
+order <- reshapedData %>%
+  group_by(ID) %>%
+  summarize(median = quantile50(Pc)) %>%
+  arrange(median) %>%
+  pull(ID)
+
+jazz <- reshapedData %>%
+  ggplot(aes(x = factor(ID, levels = order), y = Pc, color = Camp)) +
+  geom_boxplot(alpha = 0.7, outlier.shape = NA) + # outlier.shape = NA to remove default outliers
+  geom_jitter(position = position_jitterdodge(jitter.width = 0.5, dodge.width = 0.9), alpha = 0.5) +
+  labs(x = "Question", y = "P(c)", color = "Camp") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave("pc_by_question.png", jazz, width = 15, height = 8)
+```
+
+```{r}
+order <- reshapedData %>%
+  group_by(ID) %>%
+  summarize(median = quantile50(PUc)) %>%
+  arrange(median) %>%
+  pull(ID)
+
+jazz <- reshapedData %>%
+  ggplot(aes(x = factor(ID, levels = order), y = PUc, color = Camp)) +
+  geom_boxplot(alpha = 0.7, outlier.shape = NA) + # outlier.shape = NA to remove default outliers
+  geom_jitter(position = position_jitterdodge(jitter.width = 0.5, dodge.width = 0.9), alpha = 0.5) +
+  labs(x = "Question", y = "P(U|c)", color = "Camp") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave("puc_by_question.png", jazz, width = 15, height = 8)
+```
+
+```{r}
+# 2030 lookup table
+lookup <- reshapedData %>%
+  group_by(ID, Camp) %>%
+  summarize(happens = quantile50(PUc),
+            doesnt = quantile50(punotc)) %>%
+  arrange(ID) %>%
+  # Melt to wide format
+  pivot_wider(names_from = Camp, values_from = c(happens, doesnt))
+
+write.csv(lookup, "lookup.csv", row.names = FALSE)
+```
+
+```{r}
+```
+
+```{r}
 # Add % of max VOI
 reshapedData <- reshapedData %>%
   rowwise() %>%
@@ -184,6 +236,17 @@ reshapedData <- reshapedData %>%
 
 # How many times is VoI_log bigger than max_VoI?
 sum(reshapedData$VoI_log > reshapedData$max_VoI)
+```
+
+```{r}
+juice <- reshapedData %>%
+  group_by(ID, Camp) %>%
+  summarize(medianVOI = quantile50(VoI_log),
+            medianPercentMaxVOI = quantile50(percent_max_VoI)) %>%
+  pivot_wider(names_from = Camp, values_from = c(medianVOI, medianPercentMaxVOI)) %>%
+  select(ID, medianVOI_Concerned, medianPercentMaxVOI_Concerned, medianVOI_Skeptical, medianPercentMaxVOI_Skeptical)
+
+write.csv(juice, "juice.csv", row.names = FALSE)
 ```
 
 ```{r}

@@ -37,6 +37,30 @@ KL <- function(p, q) {
   return(answer)
 }
 
+symmetricKL <- function(p, q) {
+  return(KL(p, q) + KL(q, p))
+}
+
+maxVOI <- function(pu, fun = VoI_log) {
+  #' Compute percent of max value.
+  #' 
+  #' @param fun: VOI function
+  #' @param pu: P(U)
+  max <- VoI_log(pu, 1-(1E-16), pu)
+  return(max)
+}
+
+maxVOD <- function(pu_a, pu_b, fun = symmetricKL) {
+  #' Compute percent of max VOD. When expected disagreement is zero, VOD is
+  #' the initial disagreement.
+  #' 
+  #' @param fun: Divergence measure, defaults to symmetric KL
+  #' @param pu_a: P(U) for model A
+  #' @param pu_b: P(U) for model B
+  max <- fun(pu_a, pu_b)
+  return(max)
+}
+
 VoI_log <- function(pu, puc, pc, punotc = NA) {
   #' Compute Log VoI, or expected KL divergence.
   #' 
