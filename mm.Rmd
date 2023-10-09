@@ -176,6 +176,11 @@ bresults <- reshapedData %>%
 ```
 
 ```{r}
+palette1 <- c("#59C3C3", "#52489C")
+palette2 <- c("#006E90", "#F18F01")
+```
+
+```{r}
 order <- reshapedData %>%
   group_by(ID) %>%
   summarize(median = quantile50(Pc)) %>%
@@ -186,11 +191,20 @@ jazz <- reshapedData %>%
   ggplot(aes(x = factor(ID, levels = order), y = Pc, color = Camp)) +
   geom_boxplot(alpha = 0.7, outlier.shape = NA) + # outlier.shape = NA to remove default outliers
   geom_jitter(position = position_jitterdodge(jitter.width = 0.5, dodge.width = 0.9), alpha = 0.5) +
-  labs(x = "Question", y = "P(c)", color = "Camp") +
+  labs(x = "Question", y = "P(Question Resolves \"Yes\")", color = "Camp") +
   theme_minimal() +
+  scale_color_manual(values = palette2) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ggsave("pc_by_question.png", jazz, width = 15, height = 8)
+
+PC <- reshapedData %>%
+  group_by(ID, Camp) %>%
+  summarize(median = quantile50(Pc)) %>%
+  # Pivot wider: Camp
+  pivot_wider(names_from = Camp, values_from = median)
+
+write.csv(PC, "PC.csv", row.names = FALSE)
 ```
 
 ```{r}
@@ -204,8 +218,9 @@ jazz <- reshapedData %>%
   ggplot(aes(x = factor(ID, levels = order), y = PUc, color = Camp)) +
   geom_boxplot(alpha = 0.7, outlier.shape = NA) + # outlier.shape = NA to remove default outliers
   geom_jitter(position = position_jitterdodge(jitter.width = 0.5, dodge.width = 0.9), alpha = 0.5) +
-  labs(x = "Question", y = "P(U|c)", color = "Camp") +
+  labs(x = "Question", y = "P(AI Extinction by 2100 | Question Resolves \"Yes\")", color = "Camp") +
   theme_minimal() +
+  scale_color_manual(values = palette2) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ggsave("puc_by_question.png", jazz, width = 15, height = 8)
@@ -222,9 +237,6 @@ lookup <- reshapedData %>%
   pivot_wider(names_from = Camp, values_from = c(happens, doesnt))
 
 write.csv(lookup, "lookup.csv", row.names = FALSE)
-```
-
-```{r}
 ```
 
 ```{r}
@@ -452,7 +464,9 @@ heatmap_plot <- ggplot(comparison_df, aes(x = Var1, y = Var2, fill = Freq)) +
        y = "ID 2",
        fill = "ID1 VOI > ID2 VOI\n (% of samples)") +
   coord_fixed(ratio = 1) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text.y = element_blank(),      # Hide y-axis labels
+        axis.ticks.y = element_blank())     # Hide y-axis ticks
 
 ggsave(paste0(currCamp, "_VoI_heatmap.png"), heatmap_plot, width = 10, height = 10)
 ```
@@ -618,11 +632,12 @@ plotMe <- function(reshapedData) {
     scale_y_continuous(trans = log10_trans(),
                        breaks = trans_breaks("log10", function(x) 10^x),
                        labels = trans_format("log10", math_format(10^.x))) +
-    geom_point(data = central_tendency, aes(x = ID, y = q50_KL_concerned), color = "#f8a06d", shape = 16, alpha = .4, size = 5, show.legend = FALSE) +
-    geom_point(data = central_tendency, aes(x = ID, y = q50_KL_skeptic), color = "#0072c4", shape = 16, alpha = .4, size = 5, show.legend = FALSE) +
+    geom_point(data = central_tendency, aes(x = ID, y = q50_KL_concerned), color = "#0072c4", shape = 5, size = 3, show.legend = FALSE) +
+    geom_point(data = central_tendency, aes(x = ID, y = q50_KL_skeptic), color = "#f8a06d", shape = 5, size = 3, show.legend = FALSE) +
     #scale_y_continuous(trans = pseudo_log_trans(sigma = 1, base = 10), limits = c(0, 0.0075)) +
     labs(x = "Question", y = "Log VoI", color = "Camp") +
-    theme_minimal() + 
+    theme_minimal() +
+    scale_color_manual(values = palette2) + 
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
 }
 
@@ -864,6 +879,41 @@ ggsave("VoD_log_gmod_easy_bars.png", width = 9, height = 8)
 ```
 
 ```{r}
+here <- results_df_cross_camp %>%
+  separate(ID_pair, c("ID", "person1", "person2"), sep = "_")
+
+order <- here %>%
+  group_by(ID) %>%
+  summarize(median = quantile50(value)) %>%
+  arrange(median) %>%
+  pull(ID)
+
+here <- merge(here, VoD_quantiles, by = "ID")
+
+jazz <- here %>%
+  ggplot(aes(x = factor(ID, levels = order), y = value)) +
+  geom_boxplot(aes(fill = factor(ID)), alpha = 0.7, outlier.shape = NA) + # fill boxes with color
+  geom_jitter(aes(color = factor(ID)), width = 0.2, alpha = 0.5) + # jittered points with color
+  stat_summary(fun = quantile50, geom = "point", shape = 23, size = 3, color = "black") +
+  labs(x = "Question", y = "VoD (cross-camp pairs)", fill = "Question", color = "Question") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "none")
+
+jazz <- here %>%
+  ggplot(aes(x = factor(ID, levels = order), y = value)) +
+  geom_boxplot(aes(fill = median), alpha = 0.7, outlier.shape = NA) +
+  geom_jitter(aes(color = median), width = 0.2, alpha = 0.5) +
+  stat_summary(fun = quantile50, geom = "point", shape = 23, size = 3, color = "black") +
+  labs(x = "Question", y = "VoD (cross-camp pairs)", fill = "Median", color = "Median") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "grey", midpoint = 0) + 
+  scale_color_gradient2(low = "blue", high = "red", mid = "grey", midpoint = 0) + 
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "none")
+
+ggsave("P8_VOD_boxplot.png", jazz, width = 10, height = 8)
+```
+
+```{r}
 # Load necessary libraries
 library(ggplot2)
 library(ggridges)
@@ -1035,18 +1085,21 @@ dogData <- prepostMelt %>% filter(!is.na(Value))
 ```
 
 ```{r}
+library(ggrepel)
+
 # Calculate medians for each group
 medians <- dogData %>%
   group_by(Camp, InitFinal) %>%
   summarise(Median = quantile(Value, 0.5, type = 1))
 
 # Create the ggplot
-dog <- ggplot(dogData, aes(x = Camp, y = Value, color = InitFinal)) +
+dog <- ggplot(dogData, aes(x = InitFinal, y = Value, color = Camp)) +
   theme_minimal() +
+  scale_color_manual(values = palette2) +
   # Box plot without whiskers
   geom_boxplot(outlier.shape = NA, coef = 0) +
   # Add individual points
-  geom_point(position = position_jitterdodge(jitter.width = 0.1)) +
+  geom_point(position = position_jitterdodge(jitter.width = 0.05), alpha = 0.5) +
   # Log scale
   scale_y_log10(limits = c(1e-7, 66)) +
   # Add labels to the points
@@ -1054,20 +1107,21 @@ dog <- ggplot(dogData, aes(x = Camp, y = Value, color = InitFinal)) +
     aes(label = Value),
     box.padding = 0.5,
     point.padding = 0.5,
-    position = position_jitterdodge(jitter.width = 0.1),
+    size = 3,
+    position = position_jitterdodge(jitter.width = 0.05),
     max.overlaps = 4
   ) +
-  # Add median labels
-    geom_text(
+  geom_label(
     data = medians,
-    aes(y = Median, label = round(Median, 2), color = InitFinal),
-    vjust = -0.5,
-    position = position_dodge(0.6)
+    fill = "white",
+    aes(y = Median, label = round(Median, 2), color = Camp, fill = "white"),
+    position = position_dodge(0.75),
+    size = 3,
+    label.size = 0.5,
+    show.legend = FALSE # This prevents legend for the fill aesthetic
   ) +
   # Add labels and themes as you like
-  labs(x = "Camp", y = "P(AI Extinction by 2100)", color = "Init/Final")
-  # Add labels and themes as you like
-  labs(x = "Camp", y = "Value", color = "Init/Final")
+  labs(x = "", y = "P(AI Extinction by 2100)", color = "Camp")
 
 ggsave('dflkj.png', dog)
 ```
@@ -1114,4 +1168,190 @@ ggsave("componentwise_AI_regulation.png", width = 10, height = 8)
 ```
 
 ```{r}
+# Ezra's "best of" idea: When we know the answers to all these cruxes in 2030, where are we?
+
+# For each PERSON, what's the highest VOI question
+best_of_x <- reshapedData %>%
+  group_by(person, Camp) %>%
+  filter(percent_max_VoI == max(percent_max_VoI, na.rm = TRUE)) %>%
+  select(person, Camp, percent_max_VoI, ID)
+
+n_per_question_x <- best_of_x %>%
+  group_by(ID) %>%
+  summarize(n = n()) %>%
+  arrange(desc(n))
+
+# And if we remove Transformative growth?
+best_of <- reshapedData %>%
+  filter(grepl("Transformative", ID) == FALSE) %>%
+  group_by(person, Camp) %>%
+  filter(percent_max_VoI == max(percent_max_VoI, na.rm = TRUE)) %>%
+  select(person, Camp, percent_max_VoI, ID)
+
+n_per_question_skeptics <- best_of %>%
+  filter(Camp == "Skeptical") %>%
+  group_by(ID) %>%
+  summarize(n = n()) %>%
+  arrange(desc(n))
+
+n_per_question_concerned <- best_of %>%
+  filter(Camp == "Concerned") %>%
+  group_by(ID) %>%
+  summarize(n = n()) %>%
+  arrange(desc(n))
+```
+
+```{r}
+# Headline stat: Median of the highest % of max VoI for each camp
+best_of %>%
+  group_by(Camp) %>%
+  summarize(median = quantile50(percent_max_VoI),
+            mean = mean(percent_max_VoI),
+            sd = sd(percent_max_VoI))
+```
+
+```{r}
+# Kinda surprised the skeptic median for that stat turned out larger since the concerned % of max VoIs generally seemed higher
+reshapedData %>%
+  group_by(Camp) %>%
+  summarize(median = quantile50(percent_max_VoI),
+            mean = mean(percent_max_VoI),
+            sd = sd(percent_max_VoI),
+            min = min(percent_max_VoI),
+            max = max(percent_max_VoI))
+```
+
+```{r}
+# Get the "best of" VoD: for each pair, what's the question that yields highest VoD?
+aa <- results_df %>%
+  separate(ID_pair, into = c("C", "ID1", "ID2"), sep = "_") %>%
+  mutate(pair = paste0(pmin(ID1, ID2), "_", pmax(ID1, ID2))) %>%
+  filter(!grepl("Transformative", C)) %>%
+  group_by(pair) %>%
+  filter(value == max(value, na.rm = TRUE)) %>%
+  select(C, pair, value) %>%
+  separate(pair, into = c("ID1", "ID2"), sep = "_")
+
+people <- unique(reshapedData$person)
+numpeople <- length(people)
+
+# create a symmetric adjacency matrix where each cell is the vod between the two people
+vod_matrix <- matrix(0, nrow = numpeople, ncol = numpeople)
+rownames(vod_matrix) <- people
+colnames(vod_matrix) <- people
+
+for (i in 1:(numpeople-1)) {
+    for (j in (i+1):numpeople) {
+        a <- aa %>% filter(ID1 == people[i], ID2 == people[j]) %>% pull(value)
+        b <- aa %>% filter(ID2 == people[i], ID1 == people[j]) %>% pull(value)
+        if (length(a) == 0) {
+            vod_matrix[i, j] <- b[1]
+            vod_matrix[j, i] <- b[1]  # use the same value for the "mirror" cell
+        } else {
+            vod_matrix[i, j] <- a[1]
+            vod_matrix[j, i] <- a[1]
+        }
+    }
+}
+
+make_fiedler_ordered_heatmap(vod_matrix, "Best Of VoD for Each Pair (without Transformative Growth)")
+```
+
+```{r}
+aa %>% filter("Xander (Concerned)" == ID2, "James (Skeptical)" == ID1)
+```
+
+```{r}
+# Join ID1 and ID2 into one column & filter to cross-camp pairs
+bb <- aa %>%
+  mutate(ID = paste0(pmin(ID1, ID2), "_", pmax(ID1, ID2))) %>%
+  select(C, ID, value) %>%
+  filter(grepl("Concerned", ID) & grepl("Skeptical", ID))
+
+bestVOD <- bb %>%
+  group_by(C) %>%
+  summarize(n = n()) %>%
+  arrange(desc(n))
+
+write.csv(bestVOD, "BB.csv", row.names = FALSE)
+```
+
+```{r}
+reshapedData %>% filter(grepl("James", person) | grepl("Xander", person), grepl("Evidence", ID)) %>% select(Camp, PU, Pc, PUc, ID, person, punotc, percent_max_VoI)
+```
+
+```{r}
+# How many times does each question come up in aa$value
+aa %>% group_by(C) %>% summarize(n = n()) %>% arrange(desc(n)) %>% print(n = 31)
+```
+
+```{r}
+stacked <- reshapedData %>%
+  group_by(ID, Camp) %>%
+  summarize(percent_up = sum(direction == "up") / n() * 100,
+            percent_down = sum(direction == "down") / n() * 100,
+            percent_no_change = sum(direction == "no change") / n() * 100)
+```
+
+```{r}
+# Extracting the order based on percent_down for Concerned group
+order_index <- stacked %>% 
+  filter(Camp == "Concerned") %>% 
+  arrange(-percent_down) %>% 
+  pull(ID)
+
+# Setting the order in the stacked dataframe
+stacked$ID <- factor(stacked$ID, levels = order_index)
+
+# Reshaping the data with pivot_longer
+stacked_melted <- pivot_longer(stacked, cols = starts_with("percent_"), names_to = "Category", values_to = "Value")
+
+# Rename the Categories
+stacked_melted$Category[stacked_melted$Category == "percent_down"] <- "Down"
+stacked_melted$Category[stacked_melted$Category == "percent_up"] <- "Up"
+stacked_melted$Category[stacked_melted$Category == "percent_no_change"] <- "No Change"
+
+# Adjusting the order of categories for stacked bars AFTER renaming
+stacked_melted$Category <- factor(stacked_melted$Category, levels = c("Up", "No Change", "Down"))
+
+# Plotting
+stacks <- ggplot(stacked_melted, aes(x = ID, y = Value, fill = Category)) +
+  geom_bar(stat = "identity", position = "stack") +
+  facet_grid(Camp ~ ., scales = "free_x", space = "free") +
+  labs(y = "", x = "Question", fill = "Direction of\nUpdate") +
+  scale_fill_manual(values = c('Up'='#FED766', 'Down'='#56A96A', 'No Change'='#272727')) +
+  theme_minimal() +
+  theme(axis.text.x.top = element_blank(), axis.ticks.x.top = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave("stacks_direction.png", stacks, width = 8, height = 10, dpi = 300)
+```
+
+```{r}
+# Debugging stacked bar chart....
+reshapedData %>% group_by(ID, Camp, direction) %>% summarize(n = n())
+```
+
+```{r}
+# Take two
+
+# Calculate "% down" for each ID within the "Concerned" camp and arrange the levels of ID based on this.
+reshapedData <- reshapedData %>%
+  group_by(ID) %>%
+  summarize(percent_down = sum(direction == "down" & Camp == "Concerned") / n()) %>%
+  arrange(-percent_down) %>%
+  left_join(reshapedData) %>%
+  mutate(ID = factor(ID, levels = unique(ID)))
+
+# Plot
+stacked2 <- ggplot(reshapedData, aes(x = ID, fill = direction)) +
+  geom_bar(position = "fill", stat = "count", show.legend = TRUE) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  facet_grid(Camp ~ ., scales = "free_x", space = "free") +
+  labs(y = 'Percent of Participants', y = 'Question', fill = "Direction of\nUpdate") +
+  scale_fill_manual(values = c('up'='#FED766', 'down'='#56A96A', 'no change'='#272727')) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave('stacks_direction.png', stacked2, width = 10, height = 14)
 ```
