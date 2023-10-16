@@ -72,6 +72,13 @@ VoD_log_gmod_easy <- function(dt, id1, id2) {
   answer <- VoD_log_gmod(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_b)
   return(answer)
 }
+
+maxVOD_easy <- function(dt, id1, id2) {
+  pu_a <- dt[dt$person == id1, "PU"] %>% pull
+  pu_b <- dt[dt$person == id2, "PU"] %>% pull
+  answer <- maxVOD(pu_a, pu_b)
+  return(answer)
+}
 ```
 
 ```{r}
@@ -303,19 +310,23 @@ boot_results_modified <- function(data, indices, statistic) {
   return(stat_val)
 }
 
-# Apply bootstrapping using pre-generated indices
-results <- reshapedData %>%
-  group_by(Camp, ID) %>%
-  summarize(
-    medians = list(
-      map(boot_indices, ~boot_results_modified(cur_data(), .x, "quantile50"))
-    ),
-  ) %>%
-  unnest(medians)
+if (file.exists("results_VoI.csv")) {
+  results <- read.csv("results_VoI.csv", header = TRUE)
+} else {
+  # Apply bootstrapping using pre-generated indices
+  results <- reshapedData %>%
+    group_by(Camp, ID) %>%
+    summarize(
+      medians = list(
+        map(boot_indices, ~boot_results_modified(cur_data(), .x, "quantile50"))
+      ),
+    ) %>%
+    unnest(medians)
 
-results$medians <- sapply(results$medians, `[[`, "50%")
+  results$medians <- sapply(results$medians, `[[`, "50%")
 
-write.csv(results, "results_VoI.csv", row.names = FALSE)
+  write.csv(results, "results_VoI.csv", row.names = FALSE)
+}
 ```
 
 ```{r}
@@ -358,22 +369,26 @@ boot_results_modified_VoD <- function(data, indices, statistic) {
   return(stat_val)
 }
 
-results_VoD <- reshapedData %>%
-  group_by(ID) %>%
-  summarize(
-    medians_VoD = list(
-      map(boot_indices, ~boot_results_modified_VoD(
-        cur_data(),
-        .x,
-        "quantile50"
-      ))
-    )
-  ) %>%
-  unnest(medians_VoD)
+if (file.exists("results_VoD.csv")) {
+  results_VoD <- read.csv("results_VoD.csv", header = TRUE)
+} else {
+  results_VoD <- reshapedData %>%
+    group_by(ID) %>%
+    summarize(
+      medians_VoD = list(
+        map(boot_indices, ~boot_results_modified_VoD(
+          cur_data(),
+          .x,
+          "quantile50"
+        ))
+      )
+    ) %>%
+    unnest(medians_VoD)
 
-results_VoD$medians_VoD <- sapply(results_VoD$medians_VoD, `[[`, "50%")
+  results_VoD$medians_VoD <- sapply(results_VoD$medians_VoD, `[[`, "50%")
 
-write.csv(results_VoD, "results_VoD.csv", row.names = FALSE)
+  write.csv(results_VoD, "results_VoD.csv", row.names = FALSE)
+}
 ```
 
 ```{r}
@@ -400,6 +415,7 @@ campResults <- results %>% filter(Camp == currCamp)
 
 # Fill in the matrix
 for (i in 1:matrix_size) {
+  print(paste0(i, " of ", matrix_size))
   for (j in 1:matrix_size) {
     if (i != j) {
       comparison_matrix[i, j] <- compare_medians(unique_IDs[i], unique_IDs[j], campResults)
@@ -408,6 +424,23 @@ for (i in 1:matrix_size) {
 }
 
 comparison_matrix <- comparison_matrix / R * 100
+```
+
+```{r}
+# Show me the row of comparison matrix names "Supers changing minds"
+comparison_matrix["Supers changing minds", ]
+
+# How many of the numbers in that row are between 74 and 75?
+sum(comparison_matrix["Supers changing minds", ] >= 74 &
+    comparison_matrix["Supers changing minds", ] <= 75)
+
+comparison_matrix["Alignment researchers changing minds",]
+
+# What's the range of values in that row?
+range(comparison_matrix["Alignment researchers changing minds",])
+
+# What's the range if you take out zero?
+range(comparison_matrix["Alignment researchers changing minds",] %>% .[. != 0])
 ```
 
 ```{r}
@@ -773,29 +806,48 @@ for (id in unique(reshapedData$ID)) {
     id1 <- combinations[1, col]
     id2 <- combinations[2, col]
     
-    statistic_value <- VoD_log_gmod_easy(dt_subset, id1, id2)
+    statistic_value_1 <- VoD_log_gmod_easy(dt_subset, id1, id2)
+    statistical_value_2 <- maxVOD_easy(dt_subset, id1, id2)
     
-    results[[paste(id, id1, id2, sep = "_")]] <- statistic_value
+    results[[paste(id, id1, id2, "VoD", sep = "_")]] <- statistic_value_1
+    results[[paste(id, id1, id2, "maxVOD", sep = "_")]] <- statistical_value_2
   }
 }
 
-# Convert the list of results to a dataframe if needed
-results_df <- data.frame(ID_pair = names(results), value = unlist(results))
+# Convert the list of results to a dataframe
+results_df <- data.frame(ID_pair_statistic = names(results), value = unlist(results))
+```
 
+```{r}
 # Filter to only the rows that contain (Skeptical) AND (Concerned)
 results_df_cross_camp <- results_df %>%
-  filter(grepl("Skeptical", ID_pair) & grepl("Concerned", ID_pair))
+  filter(grepl("Skeptical", ID_pair_statistic) & grepl("Concerned", ID_pair_statistic))
 
-# Make a column ID that's ID_pair before the underscore
+# Extract ID, stat, and value
 results_df_cross_camp <- results_df_cross_camp %>%
-  mutate(ID = gsub("_.*", "", ID_pair))
+  mutate(ID = gsub("_.+$", "", ID_pair_statistic),
+         pair = gsub("^[^_]+_", "", gsub("_[^_]+$", "", ID_pair_statistic)),
+         stat = gsub("^.+_", "", ID_pair_statistic)) %>%
+  select(-ID_pair_statistic)
 
-# Now give me variance of VoD_log_gmod_easy for each question
-VoD_variance <- results_df_cross_camp %>%
+# Reshape the data frame to have VoD and maxVOD columns
+results_df_cross_camp <- results_df_cross_camp %>%
+  pivot_wider(names_from = stat, values_from = value)
+
+# Add percent of max VOD
+results_df_cross_camp <- results_df_cross_camp %>%
+  mutate(percent_max_VoD = VoD / maxVOD)
+
+results_df_cross_camp_agg <- results_df_cross_camp %>%
   group_by(ID) %>%
-  summarize(variance = var(value, na.rm = TRUE)) %>%
-  arrange(desc(variance))
+  summarize(median_VoD = median(VoD, na.rm = TRUE),
+            median_VoD_pom = median(percent_max_VoD, na.rm = TRUE)) %>%
+  arrange(desc(median_VoD))
 
+write.csv(results_df_cross_camp_agg, "P8_results_df_cross_camp_VoD_agg.csv", row.names = FALSE)
+```
+
+```{r}
 VoD_quantiles <- results_df_cross_camp %>%
   group_by(ID) %>%
   summarize(median = median(value, na.rm = TRUE),
