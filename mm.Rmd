@@ -269,6 +269,17 @@ write.csv(juice, "juice.csv", row.names = FALSE)
 ```
 
 ```{r}
+juice_naive <- reshapedData %>%
+  group_by(ID, Camp) %>%
+  summarize(medianVOI = quantile50(VoI_naive),
+            medianPercentMaxVOI = quantile50(VoI_naive / VoI_naive(PU, 1 - (1E-16), PU))) %>%  # Divide by max naive VOI
+  pivot_wider(names_from = Camp, values_from = c(medianVOI, medianPercentMaxVOI)) %>%
+  select(ID, medianVOI_Concerned, medianPercentMaxVOI_Concerned, medianVOI_Skeptical, medianPercentMaxVOI_Skeptical)
+
+write.csv(juice_naive, "juice_naive.csv", row.names = FALSE)
+```
+
+```{r}
 # Quick plot dual axes VoI and % of max VoI
 qr <- reshapedData %>%
   group_by(ID, Camp) %>%
@@ -285,7 +296,7 @@ write.csv(qr, "abc.csv", row.names = FALSE)
 ```
 
 ```{r}
-# Bootstrapping but with consistent bootstraps across questions)
+# Bootstrapping but with consistent bootstraps across questions
 
 library(dplyr)
 library(boot)
@@ -408,8 +419,8 @@ compare_medians <- function(id1, id2, data) {
 # Create an empty matrix to store results
 unique_IDs <- unique(results$ID)
 matrix_size <- length(unique_IDs)
-comparison_matrix <- matrix(0, nrow=matrix_size, ncol=matrix_size,
-                            dimnames=list(unique_IDs, unique_IDs))
+comparison_matrix <- matrix(0, nrow = matrix_size, ncol=matrix_size,
+                            dimnames = list(unique_IDs, unique_IDs))
 
 campResults <- results %>% filter(Camp == currCamp)
 
@@ -487,9 +498,12 @@ ordering <- bresults %>%
 comparison_df$Var1 <- factor(comparison_df$Var1, levels = ordering)
 comparison_df$Var2 <- factor(comparison_df$Var2, levels = ordering)
 
+# Remove upper triangle
+comparison_df <- comparison_df[as.integer(comparison_df$Var2) <= as.integer(comparison_df$Var1), ]
+
 # Create the heatmap
 heatmap_plot <- ggplot(comparison_df, aes(x = Var1, y = Var2, fill = Freq)) +
-  geom_tile() +
+  geom_tile(color = "white") +
   scale_fill_gradientn(colours = topo.colors(10)) + # You can choose your own color gradient
   theme_minimal() +
   labs(title = paste0("Comparison Heatmap for ", currCamp, " (R=", R, ")"),
@@ -498,10 +512,9 @@ heatmap_plot <- ggplot(comparison_df, aes(x = Var1, y = Var2, fill = Freq)) +
        fill = "ID1 VOI > ID2 VOI\n (% of samples)") +
   coord_fixed(ratio = 1) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        axis.text.y = element_blank(),      # Hide y-axis labels
         axis.ticks.y = element_blank())     # Hide y-axis ticks
 
-ggsave(paste0(currCamp, "_VoI_heatmap.png"), heatmap_plot, width = 10, height = 10)
+ggsave(paste0(currCamp, "_VoI_heatmap.png"), heatmap_plot, width = 10, height = 8)
 ```
 
 ```{r}
@@ -519,6 +532,9 @@ ordering <- VoD_quantiles %>%
 comparison_df_VoD$Var1 <- factor(comparison_df_VoD$Var1, levels = ordering)
 comparison_df_VoD$Var2 <- factor(comparison_df_VoD$Var2, levels = ordering)
 
+# Remove upper triangle
+comparison_df_VoD <- comparison_df_VoD[as.integer(comparison_df_VoD$Var2) <= as.integer(comparison_df_VoD$Var1), ]
+
 # Create the heatmap
 heatmap_plot <- ggplot(comparison_df_VoD, aes(x = Var1, y = Var2, fill = Freq)) +
   geom_tile() +
@@ -531,7 +547,7 @@ heatmap_plot <- ggplot(comparison_df_VoD, aes(x = Var1, y = Var2, fill = Freq)) 
   coord_fixed(ratio = 1) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-ggsave("VoD_heatmap.png", heatmap_plot, width = 10, height = 10)
+ggsave("VoD_heatmap.png", heatmap_plot, width = 10, height = 8)
 ```
 
 ```{r}
@@ -753,7 +769,49 @@ make_fiedler_ordered_heatmap <- function(mat, title) {
   # Close device
   dev.off()
 }
+```
 
+```{r}
+library(igraph)
+library(ggplot2)
+library(reshape2)
+library(RColorBrewer)
+
+make_fiedler_ordered_heatmap_2 <- function(mat, title) {
+  # Get the Fiedler order
+  g <- graph_from_adjacency_matrix(mat, mode = "undirected", weighted = TRUE, diag = FALSE)
+  laplacian <- laplacian_matrix(g)
+  eigen_info <- eigen(laplacian)
+  fiedler_vector <- eigen_info$vectors[,which.min(eigen_info$values[eigen_info$values > min(eigen_info$values)])]
+  order_rows <- order(fiedler_vector)
+
+  # Convert the matrix to a data frame in long format
+  df <- melt(mat)
+
+  # Order the Var1 and Var2 based on the Fiedler ordering
+  df$Var1 <- factor(df$Var1, levels = rownames(mat)[order_rows])
+  df$Var2 <- factor(df$Var2, levels = rownames(mat)[order_rows])
+
+  # Remove upper triangle
+  df <- df[as.integer(df$Var2) <= as.integer(df$Var1), ]
+
+  # Get the default pheatmap colors
+  colors_pheatmap <- colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(100)
+
+  # Plot using ggplot2
+  p <- ggplot(df, aes(x = Var1, y = Var2, fill = value)) +
+    geom_tile(color = "white") +
+    scale_fill_gradientn(colors = colors_pheatmap) +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          axis.text.y = element_text(angle = 0)) +
+    labs(title = title, fill = "VoD") +
+    xlab(NULL) +
+    ylab(NULL)
+
+  # Save the plot
+  ggsave(filename = paste0("p8_heatmaps/lower_triangle_", title, ".png"), plot = p, width = 8, height = 8)
+}
 ```
 
 ```{r}
@@ -779,7 +837,7 @@ for (question in uniqueIDs) {
       }
   }
 
-  #make_fiedler_ordered_heatmap(vod_matrix, question)
+  make_fiedler_ordered_heatmap_2(vod_matrix, question)
 }
 ```
 
@@ -850,10 +908,10 @@ write.csv(results_df_cross_camp_agg, "P8_results_df_cross_camp_VoD_agg.csv", row
 ```{r}
 VoD_quantiles <- results_df_cross_camp %>%
   group_by(ID) %>%
-  summarize(median = median(value, na.rm = TRUE),
+  summarize(median = median(VoD, na.rm = TRUE),
   # Give me two more columns: 25th quantile and 75th quantile
-            quantile_25 = quantile(value, 0.25, na.rm = TRUE),
-            quantile_75 = quantile(value, 0.75, na.rm = TRUE)) %>%
+            quantile_25 = quantile(VoD, 0.25, na.rm = TRUE),
+            quantile_75 = quantile(VoD, 0.75, na.rm = TRUE)) %>%
   mutate(IQR = quantile_75 - quantile_25,
          platform = grepl("Platform", ID)) %>%
   arrange(desc(median)) %>%
@@ -1127,7 +1185,6 @@ g2 <- ggplot(data = prepost) +
   scale_y_log10() +  # Set y-axis to log scale
   scale_color_manual(values = custom_color_palette) +  # Set the custom color palette
   guides(color = FALSE)  # Remove the legend for ID
-
 
 ggsave("postpost2.png", g2, width = 6, height = 8)
 ```

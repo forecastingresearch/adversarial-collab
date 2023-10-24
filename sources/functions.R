@@ -18,11 +18,6 @@ geoMeanOfOddsCalc <- function(x) {
   return(geoMeanOfOdds)
 }
 
-VoI_naive <- function(pu, puc, pc, punotc) {
-  answer <- abs(pu - puc) * pc + abs(pu - punotc) * (1 - pc)
-  return(answer)
-}
-
 KL <- function(p, q) {
   #' Compute KL divergence between p and q.
   #' 
@@ -89,6 +84,14 @@ VoI_log <- function(pu, puc, pc, punotc = NA) {
   l_punotc_pu <- KL(punotc, pu)
   # EV(KL divergence)
   answer <- l_puc_pu * pc + l_punotc_pu * (1 - pc)
+  return(answer)
+}
+
+VoI_naive <- function(pu, puc, pc, punotc = NA) {
+  if (is.na(punotc)) {
+    punotc = (pu - puc * pc) / (1 - pc)
+  }
+  answer <- abs(pu - puc) * pc + abs(pu - punotc) * (1 - pc)
   return(answer)
 }
 
