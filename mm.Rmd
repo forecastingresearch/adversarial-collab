@@ -79,6 +79,27 @@ maxVOD_easy <- function(dt, id1, id2) {
   answer <- maxVOD(pu_a, pu_b)
   return(answer)
 }
+
+VoD_level_easy <- function(dt, id1, id2) {
+  pu_a <- dt[dt$person == id1, "PU"] %>% pull
+  pu_b <- dt[dt$person == id2, "PU"] %>% pull
+  puc_a <- dt[dt$person == id1, "PUc"] %>% pull
+  puc_b <- dt[dt$person == id2, "PUc"] %>% pull
+  pc_a <- dt[dt$person == id1, "Pc"] %>% pull
+  pc_b <- dt[dt$person == id2, "Pc"] %>% pull
+  punotc_a <- dt[dt$person == id1, "punotc"] %>% pull
+  punotc_b <- dt[dt$person == id2, "punotc"] %>% pull
+
+  answer <- VoD_naive(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_b)
+  return(answer)
+}
+
+maxVOD_level_easy <- function(dt, id1, id2) {
+  pu_a <- dt[dt$person == id1, "PU"] %>% pull
+  pu_b <- dt[dt$person == id2, "PU"] %>% pull
+  answer <- maxVOD(pu_a, pu_b, fun = function(a, b) abs(a - b))
+  return(answer)
+}
 ```
 
 ```{r}
@@ -201,7 +222,8 @@ jazz <- reshapedData %>%
   labs(x = "Question", y = "P(Question Resolves \"Yes\")", color = "Camp") +
   theme_minimal() +
   scale_color_manual(values = palette2) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.margin = margin(, , , 2, "cm"))
 
 ggsave("pc_by_question.png", jazz, width = 15, height = 8)
 
@@ -228,7 +250,8 @@ jazz <- reshapedData %>%
   labs(x = "Question", y = "P(AI Extinction by 2100 | Question Resolves \"Yes\")", color = "Camp") +
   theme_minimal() +
   scale_color_manual(values = palette2) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.margin = margin(, , , 2, "cm"))
 
 ggsave("puc_by_question.png", jazz, width = 15, height = 8)
 ```
@@ -512,6 +535,7 @@ heatmap_plot <- ggplot(comparison_df, aes(x = Var1, y = Var2, fill = Freq)) +
        fill = "ID1 VOI > ID2 VOI\n (% of samples)") +
   coord_fixed(ratio = 1) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.margin = margin(, , , 2, "cm"),
         axis.ticks.y = element_blank())     # Hide y-axis ticks
 
 ggsave(paste0(currCamp, "_VoI_heatmap.png"), heatmap_plot, width = 10, height = 8)
@@ -545,7 +569,8 @@ heatmap_plot <- ggplot(comparison_df_VoD, aes(x = Var1, y = Var2, fill = Freq)) 
        y = "ID 2",
        fill = "ID1 VOD > ID2 VOD\n (% of samples)") +
   coord_fixed(ratio = 1) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.margin = margin(, , , 2, "cm"))
 
 ggsave("VoD_heatmap.png", heatmap_plot, width = 10, height = 8)
 ```
@@ -686,8 +711,9 @@ plotMe <- function(reshapedData) {
     #scale_y_continuous(trans = pseudo_log_trans(sigma = 1, base = 10), limits = c(0, 0.0075)) +
     labs(x = "Question", y = "Log VoI", color = "Camp") +
     theme_minimal() +
-    scale_color_manual(values = palette2) + 
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    scale_color_manual(values = palette2) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          plot.margin = margin(, , , 2, "cm"))
 }
 
 plotMe(reshapedData)
@@ -804,6 +830,7 @@ make_fiedler_ordered_heatmap_2 <- function(mat, title) {
     scale_fill_gradientn(colors = colors_pheatmap) +
     theme_minimal() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          plot.margin = margin(, , , 2, "cm"),
           axis.text.y = element_text(angle = 0)) +
     labs(title = title, fill = "VoD") +
     xlab(NULL) +
@@ -874,9 +901,7 @@ for (id in unique(reshapedData$ID)) {
 
 # Convert the list of results to a dataframe
 results_df <- data.frame(ID_pair_statistic = names(results), value = unlist(results))
-```
 
-```{r}
 # Filter to only the rows that contain (Skeptical) AND (Concerned)
 results_df_cross_camp <- results_df %>%
   filter(grepl("Skeptical", ID_pair_statistic) & grepl("Concerned", ID_pair_statistic))
@@ -904,6 +929,69 @@ results_df_cross_camp_agg <- results_df_cross_camp %>%
 
 write.csv(results_df_cross_camp_agg, "P8_results_df_cross_camp_VoD_agg.csv", row.names = FALSE)
 ```
+
+```{r}
+# PAIRWISE LEVEL VOD
+
+# For each question (ID) in reshapedData, for each pair of people (person), calculate the VoD (log, gmod)
+
+results <- list()
+
+# Split dataframe by ID
+split_data <- split(reshapedData, reshapedData$ID)
+
+for (id in unique(reshapedData$ID)) {
+  
+  dt_subset <- split_data[[as.character(id)]]
+  
+  # Identify all unique person combinations
+  people <- unique(dt_subset$person)
+  combinations <- combn(people, 2) # Gets all combinations of people taken 2 at a time
+  
+  # For each combination, compute the statistic
+  for (col in seq(1, ncol(combinations))) {
+    id1 <- combinations[1, col]
+    id2 <- combinations[2, col]
+    
+    statistic_value_1 <- VoD_level_easy(dt_subset, id1, id2)
+    statistical_value_2 <- maxVOD_level_easy(dt_subset, id1, id2)
+    
+    results[[paste(id, id1, id2, "VoD", sep = "_")]] <- statistic_value_1
+    results[[paste(id, id1, id2, "maxVOD", sep = "_")]] <- statistical_value_2
+  }
+}
+
+# Convert the list of results to a dataframe
+results_df <- data.frame(ID_pair_statistic = names(results), value = unlist(results))
+
+# Filter to only the rows that contain (Skeptical) AND (Concerned)
+results_df_cross_camp <- results_df %>%
+  filter(grepl("Skeptical", ID_pair_statistic) & grepl("Concerned", ID_pair_statistic))
+
+# Extract ID, stat, and value
+results_df_cross_camp <- results_df_cross_camp %>%
+  mutate(ID = gsub("_.+$", "", ID_pair_statistic),
+         pair = gsub("^[^_]+_", "", gsub("_[^_]+$", "", ID_pair_statistic)),
+         stat = gsub("^.+_", "", ID_pair_statistic)) %>%
+  select(-ID_pair_statistic)
+
+# Reshape the data frame to have VoD and maxVOD columns
+results_df_cross_camp <- results_df_cross_camp %>%
+  pivot_wider(names_from = stat, values_from = value)
+
+# Add percent of max VOD
+results_df_cross_camp <- results_df_cross_camp %>%
+  mutate(percent_max_VoD = VoD / maxVOD)
+
+results_df_cross_camp_agg <- results_df_cross_camp %>%
+  group_by(ID) %>%
+  summarize(median_VoD = median(VoD, na.rm = TRUE),
+            median_VoD_pom = median(percent_max_VoD, na.rm = TRUE)) %>%
+  arrange(desc(median_VoD))
+
+write.csv(results_df_cross_camp_agg, "P8_results_df_cross_camp_VoD_LEVEL_agg.csv", row.names = FALSE)
+```
+
 
 ```{r}
 VoD_quantiles <- results_df_cross_camp %>%
@@ -980,6 +1068,7 @@ bars <- ggplot(VoD_quantiles, aes(x = ID, y = median, fill = median)) +
   labs(x = "Question", y = "Median Log VoD For Cross-Camp Pairs") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.margin = margin(, , , 2, "cm"),
         axis.title.x = element_text(margin = margin(t = 20)),
         legend.position = "none") +
   scale_fill_gradient2(low = "orange", high = "green", midpoint = 0,
@@ -1007,7 +1096,9 @@ jazz <- here %>%
   stat_summary(fun = quantile50, geom = "point", shape = 23, size = 3, color = "black") +
   labs(x = "Question", y = "VoD (cross-camp pairs)", fill = "Question", color = "Question") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "none")
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.margin = margin(, , , 2, "cm"),
+        legend.position = "none")
 
 jazz <- here %>%
   ggplot(aes(x = factor(ID, levels = order), y = value)) +
@@ -1018,7 +1109,9 @@ jazz <- here %>%
   scale_fill_gradient2(low = "blue", high = "red", mid = "grey", midpoint = 0) + 
   scale_color_gradient2(low = "blue", high = "red", mid = "grey", midpoint = 0) + 
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "none")
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.margin = margin(, , , 2, "cm"),
+        legend.position = "none")
 
 ggsave("P8_VOD_boxplot.png", jazz, width = 10, height = 8)
 ```
@@ -1040,7 +1133,9 @@ p <- ggplot(results_df_cross_camp, aes(x = ID, y = value)) +
   #geom_dotplot(aes(fill = ID), binaxis = 'y', stackdir = 'center', position = position_nudge(x = -0.2), dotsize = 0.5) +
   theme_minimal() +
   labs(title = "Dot and Half-Violin Plots by ID", y = "Value", x = "ID") +
-  theme(legend.position = "none", axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.margin = margin(, , , 2, "cm"),
+        legend.position = "none")
 
 ggsave("VoD_log_violinish.png", width = 9, height = 8)
 ```
@@ -1404,9 +1499,9 @@ stacked <- reshapedData %>%
 
 ```{r}
 # Extracting the order based on percent_down for Concerned group
-order_index <- stacked %>% 
-  filter(Camp == "Concerned") %>% 
-  arrange(-percent_down) %>% 
+order_index <- stacked %>%
+  filter(Camp == "Concerned") %>%
+  arrange(-percent_down) %>%
   pull(ID)
 
 # Setting the order in the stacked dataframe
@@ -1431,7 +1526,9 @@ stacks <- ggplot(stacked_melted, aes(x = ID, y = Value, fill = Category)) +
   scale_fill_manual(values = c('Up'='#FED766', 'Down'='#56A96A', 'No Change'='#272727')) +
   theme_minimal() +
   theme(axis.text.x.top = element_blank(), axis.ticks.x.top = element_blank(),
-        axis.text.x = element_text(angle = 45, hjust = 1))
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.margin = margin(, , , 3, "cm"),
+        legend.position = "none")
 
 ggsave("stacks_direction.png", stacks, width = 8, height = 10, dpi = 300)
 ```
@@ -1460,7 +1557,10 @@ stacked2 <- ggplot(reshapedData, aes(x = ID, fill = direction)) +
   labs(y = 'Percent of Participants', y = 'Question', fill = "Direction of\nUpdate") +
   scale_fill_manual(values = c('up'='#FED766', 'down'='#56A96A', 'no change'='#272727')) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x.top = element_blank(), axis.ticks.x.top = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.margin = margin(, , , 2, "cm"),
+        legend.position = "none")
 
 ggsave('stacks_direction.png', stacked2, width = 10, height = 14)
 ```

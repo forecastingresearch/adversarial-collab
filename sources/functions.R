@@ -207,6 +207,25 @@ VoD_log_gmod <- function(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_
   return(answer)
 }
 
+VoD_log_alt <- function(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_b) {
+  #' VoD using KL divergence (log) and geometric mean for P(c) except instead of
+  #' taking GMOD of their P(c)s we compute VOI using one and then the other and
+  #' average (Tegan's idea)
+
+  # Initial disagreement 
+  initDis <- KL(pu_a, pu_b) + KL(pu_b, pu_a)
+  # Expected disagreement
+  expDis_a <- (KL(puc_a, puc_b) + KL(puc_b, puc_a)) * pc_a +
+    (KL(punotc_a, punotc_b) + KL(punotc_b, punotc_a)) * (1 - pc_a)
+  expDis_b <- (KL(puc_a, puc_b) + KL(puc_b, puc_a)) * pc_b +
+    (KL(punotc_a, punotc_b) + KL(punotc_b, punotc_a)) * (1 - pc_b)
+  # Simple difference
+  answer_a <- initDis - expDis_a
+  answer_b <- initDis - expDis_b
+  answer <- (answer_a + answer_b) / 2
+  return(answer)
+}
+
 VoD_quadratic_mean <- function(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_b) {
   initDis <- (pu_a - pu_b)^2
   expDis <- ((puc_a - puc_b)^2 * (pc_a + pc_b) / 2) + ((punotc_a - punotc_b)^2 * ((1 - pc_a) + (1 - pc_b)) / 2)
