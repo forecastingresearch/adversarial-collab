@@ -20,13 +20,13 @@ geoMeanOfOddsCalc <- function(x) {
 
 KL <- function(p, q) {
   #' Compute KL divergence between p and q.
-  #' 
+  #'
   #' KL divergence can be thought of as as expected excess surprise. You think the
   #' chance of U is q, but it's actually p. How surprised are you?
   #'
   #' @param p: Actual probability of P given some condition.
   #' @param q: Initial probability of P.
-  #' 
+  #'
   #' @note KL divergence is not commutative.
   answer <- p * log10(p / q) + (1 - p) * log10((1 - p) / (1 - q))
   return(answer)
@@ -38,17 +38,17 @@ symmetricKL <- function(p, q) {
 
 maxVOI <- function(pu, fun = VoI_log) {
   #' Compute percent of max value.
-  #' 
+  #'
   #' @param fun: VOI function
   #' @param pu: P(U)
-  max <- VoI_log(pu, 1-(1E-16), pu)
+  max <- VoI_log(pu, 1 - (1E-16), pu)
   return(max)
 }
 
 maxVOD <- function(pu_a, pu_b, fun = symmetricKL) {
   #' Compute percent of max VOD. When expected disagreement is zero, VOD is
   #' the initial disagreement.
-  #' 
+  #'
   #' @param fun: Divergence measure, defaults to symmetric KL
   #' @param pu_a: P(U) for model A
   #' @param pu_b: P(U) for model B
@@ -58,13 +58,13 @@ maxVOD <- function(pu_a, pu_b, fun = symmetricKL) {
 
 VoI_log <- function(pu, puc, pc, punotc = NA) {
   #' Compute Log VoI, or expected KL divergence.
-  #' 
+  #'
   #' @param pu: P(U)
   #' @param puc: P(U|c)
   #' @param pc: P(c)
   #' @param punotc: P(U|¬c)
   if (is.na(punotc)) {
-    punotc = (pu - puc * pc) / (1 - pc)
+    punotc <- (pu - puc * pc) / (1 - pc)
   }
   if (is.na(pu)) {
     return(NA)
@@ -76,7 +76,7 @@ VoI_log <- function(pu, puc, pc, punotc = NA) {
     return(0)
   }
   if (punotc < 0) {
-    return(NA)  # incoherent
+    return(NA) # incoherent
   }
   # KL divergence between P(U|c) and P(U)
   l_puc_pu <- KL(puc, pu)
@@ -89,7 +89,7 @@ VoI_log <- function(pu, puc, pc, punotc = NA) {
 
 VoI_naive <- function(pu, puc, pc, punotc = NA) {
   if (is.na(punotc)) {
-    punotc = (pu - puc * pc) / (1 - pc)
+    punotc <- (pu - puc * pc) / (1 - pc)
   }
   answer <- abs(pu - puc) * pc + abs(pu - punotc) * (1 - pc)
   return(answer)
@@ -101,6 +101,38 @@ VoI_quadratic <- function(pu, puc, pc, punotc) {
   answer <- q_puc_pu * pc + q_punotc_pu * (1 - pc)
   return(answer)
 }
+
+ttest_combinations <- function(data, statistic) {
+  # Validate if 'statistic' is a valid column name
+  if (!statistic %in% names(data)) {
+    stop("Error: The provided statistic is not a valid column name.")
+  }
+
+  # Initialize an empty dataframe to store results
+  results_df <- data.frame(C1 = character(), C2 = character(), t = numeric(), p_value = numeric(), stringsAsFactors = FALSE)
+
+  # Get the list of unique questions
+  questions <- unique(data$C)
+
+  for (i in 1:(length(questions) - 1)) {
+    for (j in (i + 1):length(questions)) {
+      # Extract the values for the two groups based on the 'statistic' column
+      values_C1 <- data[[statistic]][data$C == questions[i]]
+      values_C2 <- data[[statistic]][data$C == questions[j]]
+
+      # Conduct t-test (do NOT assume equal variance)
+      test_result <- t.test(values_C1, values_C2, var.equal = FALSE)
+
+      # Append the results to the dataframe
+      results_df <- rbind(results_df, data.frame(C1 = questions[i], C2 = questions[j], t = test_result$statistic, p_value = test_result$p.value))
+    }
+  }
+
+  # Return the results dataframe
+  return(results_df)
+}
+
+################################################################################
 
 get_userIds <- function(prob_sheet) {
   userIds <- names(prob_sheet)[!grepl("ID", names(prob_sheet))]
@@ -176,7 +208,7 @@ VoD_naive <- function(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_b) 
 }
 
 VoD_log_mean <- function(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_b) {
-  # Initial disagreement 
+  # Initial disagreement
   initDis <- KL(pu_a, pu_b) + KL(pu_b, pu_a)
   # Expected disagreement
   expDis <- (KL(puc_a, puc_b) + KL(puc_b, puc_a)) * ((pc_a * pc_b) / 2) +
@@ -193,15 +225,15 @@ VoD_log_gmod <- function(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_
   #' expected disagreement (KL between their P(U|c)s and their P(U|¬c)s, in
   #' expectation), and subtract the latter from the former. Previously we took
   #' the symmetric KL (SKL) between the initial SKL and the expected SKL.
-  #' 
+  #'
   #' @note Questions about this? Ask Molly or Ben Tereick.
   #' @note This is currently the preferred VoD formulation.
 
-  # Initial disagreement 
+  # Initial disagreement
   initDis <- KL(pu_a, pu_b) + KL(pu_b, pu_a)
   # Expected disagreement
   expDis <- (KL(puc_a, puc_b) + KL(puc_b, puc_a)) * geoMeanOfOddsCalc(c(pc_a, pc_b)) +
-    (KL(punotc_a, punotc_b) + KL(punotc_b, punotc_a)) * geoMeanOfOddsCalc(c(1-pc_a, 1-pc_b))
+    (KL(punotc_a, punotc_b) + KL(punotc_b, punotc_a)) * geoMeanOfOddsCalc(c(1 - pc_a, 1 - pc_b))
   # Simple difference
   answer <- initDis - expDis
   return(answer)
@@ -212,7 +244,7 @@ VoD_log_alt <- function(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a, punotc_b
   #' taking GMOD of their P(c)s we compute VOI using one and then the other and
   #' average (Tegan's idea)
 
-  # Initial disagreement 
+  # Initial disagreement
   initDis <- KL(pu_a, pu_b) + KL(pu_b, pu_a)
   # Expected disagreement
   expDis_a <- (KL(puc_a, puc_b) + KL(puc_b, puc_a)) * pc_a +

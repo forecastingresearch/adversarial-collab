@@ -1,0 +1,87 @@
+```{r}
+source("sources/functions.R")
+library(stringr)
+```
+
+```{r}
+# Run up to "new_all" var creation in cc.Rmd, that's P1
+p1 <- new_all %>%
+    select(c(C, person, group, LVOI, VOI_pom))
+
+# Run up to "percent_max_VOI" var creation in mm.Rmd, that's P2
+p8 <- reshapedData %>%
+    mutate(group = case_when(
+        str_detect(person, "\\(Concerned\\)") ~ "experts",
+        str_detect(person, "\\(Skeptical\\)") ~ "supers",
+        TRUE ~ NA_character_ # For cases that don't match either pattern
+    )) %>%
+    rename(C = ID, LVOI = VoI_log, VOI_pom = percent_max_VoI) %>%
+    select(c(C, person, group, LVOI, VOI_pom))
+```
+
+```{r}
+# Merge them but have a "project" variable that indicates which project the data came from
+p1$project <- "P1"
+p8$project <- "P8"
+goon <- rbind(p1, p8)
+```
+
+```{r}
+for (grp in c("experts", "supers")) {
+    print(paste("!!!!!", grp))
+
+    pom_ttest <- ttest_combinations(goon %>% filter(group == grp), "VOI_pom")
+
+    # Filter to only the pairs where C1 has "30" in it and C2 is not "Platform: Transformative Growth" AND is not four chars AND does not contains "Metaculus"
+    pom_results2030 <- pom_ttest %>%
+        filter(
+            str_detect(C1, "30"), # C1 contains "30"
+            C2 != "Platform: Transformative growth", # C2 is not "Platform: Transformative Growth"
+            nchar(C2) != 4, # C2 is not four characters long
+            !str_detect(C2, "Metaculus") # C2 does not contain "Metaculus"
+        )
+
+    # Results 2070
+    pom_results2070 <- pom_ttest %>%
+        filter(
+            str_detect(C1, "70"), # C1 contains "70"
+            C2 == "Platform: Transformative growth" # C2 is exactly "Platform: Transformative Growth"
+        )
+
+    log_ttest <- ttest_combinations(goon %>% filter(group == grp), "LVOI")
+
+    # Filter to only the pairs where C1 has "30" in it and C2 is not "Platform: Transformative Growth" AND is not four chars AND does not contains "Metaculus"
+    log_results2030 <- log_ttest %>%
+        filter(
+            str_detect(C1, "30"), # C1 contains "30"
+            C2 != "Platform: Transformative growth", # C2 is not "Platform: Transformative Growth"
+            nchar(C2) != 4, # C2 is not four characters long
+            !str_detect(C2, "Metaculus") # C2 does not contain "Metaculus"
+        )
+
+    # Results 2070
+    log_results2070 <- log_ttest %>%
+        filter(
+            str_detect(C1, "70"), # C1 contains "70"
+            C2 == "Platform: Transformative growth" # C2 is exactly "Platform: Transformative Growth"
+        )
+    print("POM 2030")
+    print(pom_results2030 %>%
+        filter(p_value < 0.05))
+
+    print("POM 2070")
+    print(pom_results2070 %>%
+        filter(p_value < 0.05))
+
+    print("LOG 2030")
+    print(log_results2030 %>%
+        filter(p_value < 0.05))
+
+    print("LOG 2070")
+    print(log_results2070 %>%
+        filter(p_value < 0.05))
+}
+```
+
+```{r}
+```
