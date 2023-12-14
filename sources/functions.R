@@ -272,6 +272,78 @@ VoD_quadratic_geomean <- function(pu_a, pu_b, puc_a, puc_b, pc_a, pc_b, punotc_a
   return(answer)
 }
 
+mymean <- function(x) {
+  mean(x, na.rm = TRUE)
+}
+
+quantile50 <- function(x) {
+  return(quantile(x, p = 0.5, type = 1, na.rm = TRUE))
+}
+
+geomean <- function(x) {
+  exp(mean(log(x)))
+}
+
+getValues <- function(data, column_name) {
+  unique_values <- unique(data[[column_name]])
+  if (length(unique_values) != 2) {
+    stop("Error: The column must have exactly two unique values.")
+  }
+  return(list(value1 = unique_values[1], value2 = unique_values[2]))
+}
+
+p_by_question_graph <- function(data, group_colname, xlab, pname, qname, palette, fpath) {
+  # Calculate median for each group and ID
+  medians <- data %>%
+    group_by(!!sym(qname), !!sym(group_colname)) %>%
+    summarize(median_P = quantile50(!!sym(pname)), .groups = "drop")
+
+  # Get values for each group/camp
+  values <- with(getValues(data, {{ group_colname }}), c(value1, value2))
+
+  # Prepare shading data and calculate differences
+  shade_data <- medians %>%
+    spread(key = !!sym(group_colname), value = median_P) %>%
+    rename(median_Value1 = values[1], median_Value2 = values[2]) %>%
+    mutate(difference = abs(median_Value1 - median_Value2))
+
+  # Order IDs by the biggest difference between medians
+  ordered_IDs <- shade_data %>%
+    arrange(desc(difference)) %>%
+    pull(!!sym(qname))
+
+  # Dynamically update the column specified by 'column_name' - order by ID
+  data <- data %>%
+    mutate(!!sym(qname) := factor(!!sym(qname), levels = ordered_IDs))
+
+  medians <- medians %>%
+    mutate(!!sym(qname) := factor(!!sym(qname), levels = ordered_IDs))
+
+  shade_data <- shade_data %>%
+    mutate(!!sym(qname) := factor(!!sym(qname), levels = ordered_IDs))
+
+  # Plot with jittered dots, shaded area, and median markers
+  ggplot() +
+    geom_jitter(data = data, aes(y = !!sym(qname), x = !!sym(pname), color = !!sym(group_colname)), width = 0, height = 0.2, alpha = 0.5, size = 3) +
+    geom_rect(data = shade_data, aes(ymin = as.numeric(!!sym(qname)) - 0.4, ymax = as.numeric(!!sym(qname)) + 0.4, xmin = median_Value1, xmax = median_Value2), fill = "grey", alpha = 0.5, inherit.aes = FALSE) +
+    geom_point(data = medians, aes(x = median_P, y = as.numeric(!!sym(qname)), color = !!sym(group_colname)), size = 6, shape = 124) +
+    labs(y = "Question", x = xlab, color = group_colname) +
+    scale_color_manual(values = palette) +
+    theme_minimal() +
+    theme(
+      text = element_text(size = 14),
+      axis.title = element_text(size = 16),
+      axis.text = element_text(size = 14),
+      legend.title = element_text(size = 16),
+      legend.text = element_text(size = 14)
+    )
+
+  # Save to file
+  ggsave(fpath, width = 10, height = 12)
+}
+
+# ===============================================================================
+
 get_VoD <- function(prob_sheet, userIDs, comparison_model_prefixes) {
   pSheet_final <- tibble(ID = prob_sheet$ID)
 

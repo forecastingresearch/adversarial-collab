@@ -192,10 +192,6 @@ reshapedData <- reshapedData %>%
 ```
 
 ```{r}
-quantile50 <- function(x) {
-  return(quantile(x, p = 0.5, type = 1, na.rm = TRUE))
-}
-
 bresults <- reshapedData %>%
   group_by(Camp, ID) %>%
   summarize(
@@ -244,6 +240,14 @@ PC <- reshapedData %>%
   pivot_wider(names_from = Camp, values_from = median)
 
 write.csv(PC, "PC.csv", row.names = FALSE)
+```
+
+```{r}
+# P(c) by question
+p_by_question_graph(reshapedData, "Camp", "P(Question Resolves \"Yes\")", "Pc", "ID", palette2, "p8_graphs/pc_by_question.png")
+
+# P(U|c) by question
+p_by_question_graph(reshapedData, "Camp", "P(AI Extinction by 2100 | Question Resolves \"Yes\")", "PUc", "ID", palette2, "p8_graphs/puc_by_question.png")
 ```
 
 ```{r}
