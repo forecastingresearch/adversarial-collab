@@ -267,27 +267,30 @@ ordered_IDs <- shade_data %>%
   arrange(desc(difference)) %>%
   pull(ID)
 
+# Update ID ordering in medians data frame
+medians$ID <- factor(medians$ID, levels = ordered_IDs)
+
 # Update reshapedData to have the same order
 reshapedData$ID <- factor(reshapedData$ID, levels = ordered_IDs)
 
-# Update shade_data for geom_rect
-shade_data <- shade_data %>%
-  mutate(ID = as.numeric(factor(ID, levels = ordered_IDs)))
-
-# Plot with jittered dots and shaded area, with larger text
-ggplot(reshapedData, aes(y = ID, x = Pc, color = Camp)) +
-  geom_jitter(width = 0.2, alpha = 0.5, size = 3) +
-  geom_rect(data = shade_data, aes(ymin = ID - 0.4, ymax = ID + 0.4, xmin = median_Concerned, xmax = median_Skeptical), fill = "grey", alpha = 0.5, inherit.aes = FALSE) +
+# Plot with jittered dots (only vertically), shaded area, and median markers
+ggplot() +
+  geom_jitter(data = reshapedData, aes(y = ID, x = Pc, color = Camp), width = 0, height = 0.2, alpha = 0.5, size = 3) +
+  geom_rect(data = shade_data, aes(ymin = as.numeric(ID) - 0.4, ymax = as.numeric(ID) + 0.4, xmin = median_Concerned, xmax = median_Skeptical), fill = "grey", alpha = 0.5, inherit.aes = FALSE) +
+  geom_point(data = medians, aes(x = median_Pc, y = as.numeric(ID), color = Camp), size = 6, shape = 124) +
   labs(y = "Question (Ordered by Difference in Medians)", x = "P(Question Resolves \"Yes\")", color = "Camp") +
   scale_color_manual(values = palette2) +
   theme_minimal() +
   theme(
-    text = element_text(size = 14), # Default text size
-    axis.title = element_text(size = 16), # Axis labels
-    axis.text = element_text(size = 14), # Axis tick labels
-    legend.title = element_text(size = 16), # Legend title
-    legend.text = element_text(size = 14) # Legend text
+    text = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    axis.text = element_text(size = 14),
+    legend.title = element_text(size = 16),
+    legend.text = element_text(size = 14)
   )
+
+# Save to pc_by_question.png
+ggsave("pc_by_question.png", width = 10, height = 12)
 ```
 
 ```{r}
