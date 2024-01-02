@@ -1399,7 +1399,7 @@ prepost <- data.table(
   Camp = c(rep("Concerned", 11), rep("Skeptical", 11)),
   ID = 1:22,
   Initial = c(65, 60, 35, 30, 30, 25, 22.9, 21, 10, 9, 4, 3, 1.5, .5, .4, .2, .1, .1, .1, .05, .000001, 0.0000001),
-  Final = c(55, 30, NA, NA, NA, 20, 17.5, 18, NA, NA, 2.4, 2, 1, NA, 1.1, .1, .12, .2, .02, .07, .0001, .0001)
+  Final = c(55, 30, 35, 30, 30, 20, 17.5, 18, 10, 9, 2.4, 2, 1, .5, 1.1, .1, .12, .2, .02, .07, .0001, .0001)
 )
 
 # reshape prepost so that Initial and Final are in one column, and which is which is denoted by a new column InitFinal
@@ -1468,7 +1468,7 @@ dog <- ggplot(dogData, aes(x = InitFinal, y = Value, color = Camp)) +
   # Add labels and themes as you like
   labs(x = "", y = "P(AI Extinction by 2100)", color = "Camp")
 
-ggsave("dflkj.png", dog)
+ggsave("init-final-box-and-dots-p8.png", dog, width = 7, height = 7)
 ```
 
 ```{r}
