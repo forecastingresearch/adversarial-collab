@@ -346,6 +346,218 @@ sum(reshapedData$VoI_log > reshapedData$max_VoI)
 ```
 
 ```{r}
+# IRR
+library(dplyr)
+library(tidyr)
+library(irr)
+
+kripp_alpha_result <- list()
+
+for (grp in c("Skeptical", "Concerned")) {
+  # Reshape the data to wide format
+  df_wide <- reshapedData %>%
+    filter(Camp == grp) %>%
+    select(ID, person, percent_max_VoI, Camp) %>% # Selecting item, rater and the rating columns
+    pivot_wider(names_from = ID, values_from = percent_max_VoI, id_cols = person) %>% # Pivoting the data to wide format
+    mutate(across(all_of(unique(reshapedData$ID)), as.double, .names = "{col}")) # Converting list-columns to double
+
+  # Converting the data frame to a matrix (excluding the first column)
+  mat_wide <- as.matrix(df_wide[-1])
+
+  # Compute Krippendorff's Alpha
+  kripp_alpha_result[[grp]] <- irr::kripp.alpha(mat_wide, method = "interval") # excluding the first column which might be item names/IDs
+}
+```
+
+```{r}
+# Calculate pearson and spearman correlations between every possible pair of
+# forecasters across all questions
+
+my_corrs <- reshapedData %>%
+  pivot_wider(names_from = person, values_from = percent_max_VoI, id_cols = ID) %>%
+  as.data.frame()
+
+# Set ID as row names using base R
+rownames(my_corrs) <- my_corrs$ID
+
+# Remove the ID column
+my_corrs <- my_corrs[, !(names(my_corrs) %in% c("ID"))]
+
+# Function to calculate correlations
+calculate_correlations <- function(df) {
+  combn(names(df), 2, function(pair) {
+    person1 <- df[[pair[1]]]
+    person2 <- df[[pair[2]]]
+
+    list(
+      pair = paste(pair, collapse = " - "),
+      raw_corr = cor(person1, person2, method = "pearson", use = "complete.obs"),
+      spearman_corr = cor(person1, person2, method = "spearman", use = "complete.obs")
+    )
+  }, simplify = FALSE) %>% bind_rows()
+}
+```
+
+```{r}
+# Calculate correlations for each pair
+my_corrs <- calculate_correlations(my_corrs)
+
+# Filter to only pairs with TWO SKEPTICAL
+skeptical_corrs <- my_corrs %>%
+  filter(grepl("Skeptical", pair)) %>%
+  filter(!grepl("Concerned", pair))
+
+# Summary statistics
+summary(skeptical_corrs$raw_corr)
+summary(skeptical_corrs$spearman_corr)
+
+# Filter to only pairs with TWO CONCERNED
+concerned_corrs <- my_corrs %>%
+  filter(grepl("Concerned", pair)) %>%
+  filter(!grepl("Skeptical", pair))
+
+# Summary statistics
+summary(concerned_corrs$raw_corr)
+summary(concerned_corrs$spearman_corr)
+
+# Filter to only pairs with ONE SKEPTICAL AND ONE CONCERNED
+mixed_corrs <- my_corrs %>%
+  filter(grepl("Concerned", pair)) %>%
+  filter(grepl("Skeptical", pair))
+
+# Summary statistics
+summary(mixed_corrs$raw_corr)
+summary(mixed_corrs$spearman_corr)
+```
+
+```{r}
+# Calculate the 50% quantiles for each dataset
+mixed_medians <- mixed_corrs %>%
+  summarize(
+    raw_corr = quantile50(raw_corr),
+    spearman_corr = quantile50(spearman_corr)
+  )
+
+skeptical_medians <- skeptical_corrs %>%
+  summarize(
+    raw_corr = quantile50(raw_corr),
+    spearman_corr = quantile50(spearman_corr)
+  )
+
+concerned_medians <- concerned_corrs %>%
+  summarize(
+    raw_corr = quantile50(raw_corr),
+    spearman_corr = quantile50(spearman_corr)
+  )
+
+# Combine the data into one dataframe
+combined_medians <- rbind(
+  cbind(mixed_medians, group = "mixed"),
+  cbind(skeptical_medians, group = "skeptical"),
+  cbind(concerned_medians, group = "concerned")
+)
+```
+
+```{r}
+# This does not work properly
+
+R <- 1000
+
+# OK now let's do that for each of mixed, skeptical and concerned, and for both Pearson and Spearman
+corrs_list <- list(
+  mixed_corrs = mixed_corrs,
+  skeptical_corrs = skeptical_corrs,
+  concerned_corrs = concerned_corrs
+)
+
+# List of correlation types
+corr_types <- c("spearman_corr", "raw_corr")
+
+# Initialize an empty list to store results
+numeric_results <- list()
+
+# Outer loop over data frames
+for (corr_name in names(corrs_list)) {
+  df <- corrs_list[[corr_name]]
+
+  numpairs <- length(df$pair)
+  boot_indices <- lapply(1:R, function(i) sample(1:numpairs, numpairs, replace = TRUE))
+
+  # Inner loop over correlation types
+  for (corr_type in corr_types) {
+    # Perform bootstrap CI calculation
+    boot_results <- df %>%
+      ungroup() %>%
+      summarize(
+        actual_median_corr = quantile50(!!sym(corr_type)),
+        boot_results = list(
+          map(boot_indices, ~ boot_results_modified(df, .x, "quantile50", corr_type))
+        )
+      ) %>%
+      unnest(boot_results)
+
+    # Extract numeric results and store in the list
+    numeric_results[[paste(corr_name, corr_type, sep = "_")]] <- sapply(boot_results[["boot_results"]], `[[`, 1)
+  }
+}
+```
+
+```{r}
+# Calculate the 95% CI for each correlation type and name (mixed, skeptical, concerned)
+ci_results <- lapply(numeric_results, function(x) {
+  # Calculate the 95% CI
+  ci <- quantile(x, c(0.025, .25, .50, .75, 0.975))
+
+  # Return the CI
+  return(ci)
+})
+```
+
+```{r}
+# Simple corrs plots
+library(dplyr)
+library(ggplot2)
+
+# Add a category label to each data frame
+skeptical_corrs$category <- "Skeptical"
+concerned_corrs$category <- "Concerned"
+mixed_corrs$category <- "Cross-Camp"
+
+# Combine into a single data frame
+all_corrs <- bind_rows(skeptical_corrs, concerned_corrs, mixed_corrs)
+```
+
+```{r}
+# Boxplot of Pearson correlations for all categories
+ggplot(all_corrs, aes(x = category, y = raw_corr, fill = category)) +
+  geom_boxplot() +
+  labs(
+    title = "Boxplot of Pearson Correlations",
+    x = "Within- or Between-Camps",
+    y = "Pearson Correlation"
+  ) +
+  theme_minimal() +
+  scale_fill_manual(values = c("Skeptical" = "#7575d8", "Concerned" = "#dd6565", "Cross-Camp" = "yellow"))
+
+ggsave("pearson_corrs.png", width = 9, height = 8)
+```
+
+```{r}
+# Boxplot of Spearman correlations for all categories
+ggplot(all_corrs, aes(x = category, y = spearman_corr, fill = category)) +
+  geom_boxplot() +
+  labs(
+    title = "Boxplot of Spearman Correlations",
+    x = "Within- or Between-Camps",
+    y = "Spearman Correlation"
+  ) +
+  theme_minimal() +
+  scale_fill_manual(values = c("Skeptical" = "#7575d8", "Concerned" = "#dd6565", "Cross-Camp" = "yellow"))
+
+ggsave("spearman_corrs.png", width = 9, height = 8)
+```
+
+```{r}
 juice <- reshapedData %>%
   group_by(ID, Camp) %>%
   summarize(
@@ -404,11 +616,11 @@ boot_indices <- lapply(1:R, function(i) sample(1:11, 11, replace = TRUE))
 
 ```{r}
 # Modify boot_results to use pre-generated bootstrap indices
-boot_results_modified <- function(data, indices, statistic) {
+boot_results_modified <- function(data, indices, statistic, colname = "VoI_log") {
   stat_fun <- match.fun(statistic)
 
   resampled_data <- data[indices, , drop = FALSE]
-  stat_val <- stat_fun(resampled_data$VoI_log)
+  stat_val <- stat_fun(resampled_data[[colname]])
 
   return(stat_val)
 }
