@@ -63,11 +63,11 @@ VoI_log <- function(pu, puc, pc, punotc = NA) {
   #' @param puc: P(U|c)
   #' @param pc: P(c)
   #' @param punotc: P(U|¬c)
+  if (is.na(pu) || is.na(puc) || is.na(pc)) {
+    return(NA)
+  }
   if (is.na(punotc)) {
     punotc <- (pu - puc * pc) / (1 - pc)
-  }
-  if (is.na(pu)) {
-    return(NA)
   }
   if (pu == 0) {
     return(0)
@@ -1018,6 +1018,7 @@ raw_data_to_results <- function(ids) {
 
     # Calc P(U|¬C), VoI
     user_sheet <- user_sheet %>%
+      rowwise() %>%
       mutate(XX_punotc = punotc(XX_Pc, XX_PUc, XX_PU)) %>%
       mutate(XX_VoI_naive = VoI_naive(XX_PU, XX_PUc, XX_Pc, XX_punotc)) %>%
       mutate(XX_VoI_log = VoI_log(XX_PU, XX_PUc, XX_Pc, XX_punotc)) %>%
@@ -1046,6 +1047,7 @@ raw_data_to_results <- function(ids) {
 
     # Calc P(U|¬C), VoI
     user_sheet <- user_sheet %>%
+      rowwise() %>%
       mutate(E_XX_punotc = punotc(E_XX_Pc, E_XX_PUc, E_XX_PU)) %>%
       mutate(E_XX_VoI_naive = VoI_naive(E_XX_PU, E_XX_PUc, E_XX_Pc, E_XX_punotc)) %>%
       mutate(E_XX_VoI_log = VoI_log(E_XX_PU, E_XX_PUc, E_XX_Pc, E_XX_punotc)) %>%
@@ -1074,6 +1076,7 @@ raw_data_to_results <- function(ids) {
 
     # Calc P(U|¬C), VoI
     user_sheet <- user_sheet %>%
+      rowwise() %>%
       mutate(S_XX_punotc = punotc(S_XX_Pc, S_XX_PUc, S_XX_PU)) %>%
       mutate(S_XX_VoI_naive = VoI_naive(S_XX_PU, S_XX_PUc, S_XX_Pc, S_XX_punotc)) %>%
       mutate(S_XX_VoI_log = VoI_log(S_XX_PU, S_XX_PUc, S_XX_Pc, S_XX_punotc)) %>%

@@ -1,6 +1,15 @@
+```{r}
+library(googlesheets4)
+library(dplyr)
+library(data.table)
+gs4_auth()
+```
 
 ```{r}
-pSheet_final <- read.csv("molly_composite.csv", header = TRUE)
+spreadsheet_url <- "***REMOVED***"
+
+# Read the 'RawForR' sheet from the Google Spreadsheet
+pSheet_final <- read_sheet(spreadsheet_url, sheet = "RawForR")
 ```
 
 ```{r}
@@ -105,41 +114,23 @@ maxVOD_level_easy <- function(dt, id1, id2) {
 ```{r}
 # How many rows are there in each ID-Person combo?
 alpha <- pSheet_final %>%
-  group_by(ID, Person) %>%
+  group_by(ID, person) %>%
   summarise(n = n()) %>%
   arrange(desc(n))
 ```
 
 ```{r}
-summaryResults_final <- pSheet_final %>%
-  # Own beliefs only (drop reciprocal questions & VOD)
-  select(-c(starts_with("S_"), starts_with("E_"), contains("VoD"), "X"))
-```
+reshapedData <- pSheet_final
 
-```{r}
-if (FALSE) { # This was for conditional tree data (pSheet_final_supers.csv)
-  # Reshape this so that each row is a question-person pair. Question is the ID, person is the letters before the first underscore
-
-  reshapedData <- summaryResults_final %>%
-    pivot_longer(cols = -ID, names_to = "variable", values_to = "value")
-
-  # separate person from other variables
-  reshapedData <- reshapedData %>%
-    separate(variable, into = c("person", "measure"), sep = "_", extra = "merge") %>%
-    pivot_wider(names_from = measure, values_from = value)
-
-  # view reshaped data
-  head(reshapedData)
-}
-
-reshapedData <- pSheet_final %>%
-  rename(person = Person)
-```
-
-```{r}
 # Aliases
-newnames <- read.csv("aliases.csv", header = TRUE)
+aliases_supers <- read_sheet("***REMOVED***", sheet = "Sheet1")
+aliases_experts <- read_sheet("***REMOVED***", sheet = "Sheet2")
+newnames <- rbind(aliases_supers, aliases_experts)
+
 reshapedData <- merge(reshapedData, newnames, by.x = "person", by.y = "name", all.x = TRUE)
+```
+
+```{r}
 # Drop "person" and rename alias to "person"
 reshapedData <- reshapedData %>%
   select(-person) %>%
