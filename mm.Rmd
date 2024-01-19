@@ -2,7 +2,7 @@
 library(googlesheets4)
 library(dplyr)
 library(data.table)
-gs4_auth()
+gs4_auth() # run this to authenticate with google sheet (must do this before running code)
 ```
 
 ```{r}
@@ -10,6 +10,16 @@ spreadsheet_url <- "***REMOVED***"
 
 # Read the 'RawForR' sheet from the Google Spreadsheet
 pSheet_final <- read_sheet(spreadsheet_url, sheet = "RawForR")
+
+# Read the Tags (short names corresponding to question IDs)
+tags <- read_sheet(spreadsheet_url, sheet = "Composite") %>%
+  select(Id, Tag) %>%
+  rename(ID = Id)
+
+# Merge the tags with the pSheet_final data frame
+pSheet_final <- merge(pSheet_final, tags, by = "ID", all.x = TRUE) %>%
+  select(-ID) %>%
+  rename(ID = Tag)
 ```
 
 ```{r}
@@ -1573,7 +1583,7 @@ ggsave("mean_voi_hist.png", width = 10, height = 10)
 # Create a column in reshapedData that tells me whether >0.67 of the people updated in the same direction, and if so, which
 directions <- reshapedData %>%
   group_by(ID, Camp) %>%
-  summarize(numUp = sum(direction == "up"), numDown = sum(direction == "down"), total = n()) %>%
+  summarize(numUp = sum(direction == "up"), numDown = sum(direction == "down"), numNoChange = sum(direction == "no change"), total = n()) %>%
   # Determine ***REMOVED*** direction
   mutate(
     ***REMOVED***Direction =
@@ -1591,6 +1601,8 @@ directions2 <- merge(M, directions, by = c("ID", "Camp")) %>%
 write.csv(directions2, "directions2.csv", row.names = FALSE)
 
 print(directions %>% select(ID, Camp, ***REMOVED***Direction), n = 60)
+
+write.csv(directions %>% select(ID, Camp, numUp, numDown, numNoChange, total), "directions.csv", row.names = FALSE)
 ```
 
 ```{r}
