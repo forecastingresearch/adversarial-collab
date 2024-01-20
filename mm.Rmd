@@ -2,7 +2,9 @@
 library(googlesheets4)
 library(dplyr)
 library(data.table)
-gs4_auth() # run this to authenticate with google sheet (must do this before running code)
+if (FALSE) {
+  gs4_auth() # run this to authenticate with google sheet (must do this before running code)
+}
 ```
 
 ```{r}
@@ -25,7 +27,7 @@ pSheet_final <- merge(pSheet_final, tags, by = "ID", all.x = TRUE) %>%
 ```{r}
 library(tidyr)
 library(dplyr)
-setwd("~/fri/voi-vod")
+setwd("~/fri/voivod")
 source("sources/functions.R")
 library(ggplot2)
 library(xpt)
@@ -685,25 +687,27 @@ boot_results_modified_VoD <- function(data, indices, statistic) {
   return(stat_val)
 }
 
-if (file.exists("results_VoD.csv")) {
-  results_VoD <- read.csv("results_VoD.csv", header = TRUE)
-} else {
-  results_VoD <- reshapedData %>%
-    group_by(ID) %>%
-    summarize(
-      medians_VoD = list(
-        map(boot_indices, ~ boot_results_modified_VoD(
-          cur_data(),
-          .x,
-          "quantile50"
-        ))
-      )
-    ) %>%
-    unnest(medians_VoD)
+if (FALSE) {
+  if (file.exists("results_VoD.csv")) {
+    results_VoD <- read.csv("results_VoD.csv", header = TRUE)
+  } else {
+    results_VoD <- reshapedData %>%
+      group_by(ID) %>%
+      summarize(
+        medians_VoD = list(
+          map(boot_indices, ~ boot_results_modified_VoD(
+            cur_data(),
+            .x,
+            "quantile50"
+          ))
+        )
+      ) %>%
+      unnest(medians_VoD)
 
-  results_VoD$medians_VoD <- sapply(results_VoD$medians_VoD, `[[`, "50%")
+    results_VoD$medians_VoD <- sapply(results_VoD$medians_VoD, `[[`, "50%")
 
-  write.csv(results_VoD, "results_VoD.csv", row.names = FALSE)
+    write.csv(results_VoD, "results_VoD.csv", row.names = FALSE)
+  }
 }
 ```
 
@@ -1250,12 +1254,18 @@ results_df_cross_camp <- results_df_cross_camp %>%
 results_df_cross_camp_agg <- results_df_cross_camp %>%
   group_by(ID) %>%
   summarize(
-    median_VoD = median(VoD, na.rm = TRUE),
-    median_VoD_pom = median(percent_max_VoD, na.rm = TRUE)
+    median_VoD = quantile50(VoD),
+    median_VoD_pom = quantile50(percent_max_VoD)
   ) %>%
   arrange(desc(median_VoD))
 
 write.csv(results_df_cross_camp_agg, "P8_results_df_cross_camp_VoD_agg.csv", row.names = FALSE)
+```
+
+```{r}
+options(pillar.sigfig = 5)
+
+results_df_cross_camp_agg %>% filter(grepl("Alignment researchers", ID))
 ```
 
 ```{r}
@@ -1315,8 +1325,8 @@ results_df_cross_camp <- results_df_cross_camp %>%
 results_df_cross_camp_agg <- results_df_cross_camp %>%
   group_by(ID) %>%
   summarize(
-    median_VoD = median(VoD, na.rm = TRUE),
-    median_VoD_pom = median(percent_max_VoD, na.rm = TRUE)
+    median_VoD = quantile50(VoD, na.rm = TRUE),
+    median_VoD_pom = quantile50(percent_max_VoD, na.rm = TRUE)
   ) %>%
   arrange(desc(median_VoD))
 
@@ -1328,7 +1338,7 @@ write.csv(results_df_cross_camp_agg, "P8_results_df_cross_camp_VoD_LEVEL_agg.csv
 VoD_quantiles <- results_df_cross_camp %>%
   group_by(ID) %>%
   summarize(
-    median = median(VoD, na.rm = TRUE),
+    median = quantile50(VoD, na.rm = TRUE),
     # Give me two more columns: 25th quantile and 75th quantile
     quantile_25 = quantile(VoD, 0.25, na.rm = TRUE),
     quantile_75 = quantile(VoD, 0.75, na.rm = TRUE)
