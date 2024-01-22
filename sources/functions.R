@@ -57,7 +57,7 @@ maxVOD <- function(pu_a, pu_b, fun = symmetricKL) {
 }
 
 VoI_log <- function(pu, puc, pc, punotc = NA) {
-  #' Compute Log VoI, or expected KL divergence.
+  #' Compute Log VOI, or expected KL divergence.
   #'
   #' @param pu: P(U)
   #' @param puc: P(U|c)
