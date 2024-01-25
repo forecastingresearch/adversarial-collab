@@ -1,0 +1,75 @@
+"ID","Camp","VoI_log","percent_max_VoI"
+"Req testing","Concerned",0,0
+"Req testing","Skeptical",0,0
+"IC demonstration","Concerned",0,0
+"IC demonstration","Skeptical",0,0
+"Muehlhauser policies","Concerned",0.000981358543183778,0.00401835377717516
+"Muehlhauser policies","Skeptical",5.70287296561264e-11,5.05233412692742e-05
+"Platform: Transformative growth","Concerned",0.0138553362608003,0.0892652984368828
+"Platform: Transformative growth","Skeptical",4.52674190956397e-07,0.000180180945950428
+"Evidence of misalignment","Concerned",0.00287995478425903,0.0174123329111316
+"Evidence of misalignment","Skeptical",5.46086176465683e-09,0.000450590913615254
+"Power-seeking shutdown","Concerned",0.000768928392131838,0.00381803343797294
+"Power-seeking shutdown","Skeptical",1.69249698820037e-06,0.00042041017712832
+"Supers changing minds","Concerned",0.000314188679183205,0.00430765929527851
+"Supers changing minds","Skeptical",0.000157386041789971,0.0115122460837674
+"Platform: ARC Evals","Concerned",0.00319664504075757,0.0135243154479373
+"Platform: ARC Evals","Skeptical",7.625551367839e-07,0.00902549259743773
+"Other fields IC","Concerned",0,0
+"Other fields IC","Skeptical",0,0
+"Progress in lethal technologies","Concerned",0,0
+"Progress in lethal technologies","Skeptical",7.1743019367978e-06,0.00449897268129447
+"IT progress","Concerned",0.000177928636155949,0.00135419704232293
+"IT progress","Skeptical",0,0
+"Alignment researchers changing minds","Concerned",0.00644138833501164,0.024280097410326
+"Alignment researchers changing minds","Skeptical",0,0
+"AI articles and apps","Concerned",0,0
+"AI articles and apps","Skeptical",2.1697367997449e-19,9.72852865032802e-18
+"AI Robotics","Concerned",0.000886743466914556,0.00458146555265861
+"AI Robotics","Skeptical",3.97785079953231e-19,1.51274686817368e-17
+"Short-term GDP change","Concerned",0,0
+"Short-term GDP change","Skeptical",0,0
+"Platform: AI regulation","Concerned",0.000658096727798291,0.00443522676872761
+"Platform: AI regulation","Skeptical",1.13203802950594e-06,0.000180673395131621
+"AI Forecasting skill","Concerned",0.000476975549597974,0.00195306446829218
+"AI Forecasting skill","Skeptical",0,0
+"Warning shot","Concerned",0.00104426333111294,0.00413300512734453
+"Warning shot","Skeptical",3.34797090667949e-07,0.000124610359581487
+"Fast AI efficiency gains","Concerned",0.000102464068638989,0.000553081804525928
+"Fast AI efficiency gains","Skeptical",7.00433691899519e-16,8.30459137230428e-09
+"AI solving novel math problems","Concerned",0.000702445117441764,0.00287629125005922
+"AI solving novel math problems","Skeptical",0,0
+"Cyberattacks","Concerned",3.37006784495133e-06,1.42318223536195e-05
+"Cyberattacks","Skeptical",0,0
+"Intergovernmental AI safety","Concerned",0.00035131399714447,0.00714460777133698
+"Intergovernmental AI safety","Skeptical",1.34293132752999e-06,0.000264157268479995
+"Non-democracy AI","Concerned",0.000191313534378792,0.00065454391646164
+"Non-democracy AI","Skeptical",8.67785268738925e-19,3.89092070994593e-17
+"Power-seeking","Concerned",0.000135310833798082,0.000813203676159207
+"Power-seeking","Skeptical",4.69902851096685e-07,0.00123921777848884
+"Major powers war","Concerned",0.00456376668941231,0.0204462005217749
+"Major powers war","Skeptical",4.14524873854402e-07,3.89191250565428e-05
+"Escalating warning shots","Concerned",0.000483831027722138,0.00182374728432057
+"Escalating warning shots","Skeptical",1.88830083050843e-07,3.01373022094245e-05
+"AI writes AI","Concerned",0.000861515361493735,0.00403938583839744
+"AI writes AI","Skeptical",9.14058833463199e-07,0.00026617305426203
+"Reduction in AI investment","Concerned",0.000991208671722147,0.00672165555835659
+"Reduction in AI investment","Skeptical",1.29491150613721e-10,5.31954700491748e-05
+"No violence LLM","Concerned",0.000827751342179033,0.00492775688528703
+"No violence LLM","Skeptical",0,0
+"Taiwan-China","Concerned",0.000118766389043181,0.000413491830913108
+"Taiwan-China","Skeptical",0,0
+"AI coding","Concerned",0.000975877033771764,0.00484561525418561
+"AI coding","Skeptical",0,0
+"Platform: Escalating warning shots","Concerned",0.000490453104208805,0.00219728640783596
+"Platform: Escalating warning shots","Skeptical",4.75938238552704e-07,0.000138592757881558
+"6 month pause","Concerned",0.000302940158423218,0.00273699837281027
+"6 month pause","Skeptical",4.33947359948979e-20,1.9457057300656e-18
+"Democratic influence","Concerned",0.000108742323091471,0.000858369829088061
+"Democratic influence","Skeptical",3.44898834281403e-06,0.000295119244378148
+"Alignment solution","Concerned",0.00198843494511485,0.0151337793606533
+"Alignment solution","Skeptical",3.94684562551329e-07,0.000114931765482019
+"Politicization","Concerned",0,0
+"Politicization","Skeptical",0,0
+"Public concern","Concerned",0.000177882417976393,0.00125462103609626
+"Public concern","Skeptical",1.10964133003847e-07,0.000264157268479995

@@ -800,6 +800,10 @@ arjj <- arj %>%
   mutate(VoD_log_gmod = ifelse(n() >= 2, VoD_log_gmod_easy(cur_data(), person[1], person[2]), NA)) %>%
   arrange(VoD_log_gmod, ID)
 
+write.csv(arjj, "median_by_VOI_stats.csv", row.names = FALSE)
+```
+
+```{r}
 # How many IDs in arjj have two or more people (VoD should be defined for 19 questions, I think?)
 arjj %>%
   group_by(ID) %>%
