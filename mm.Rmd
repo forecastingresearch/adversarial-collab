@@ -27,13 +27,25 @@ pSheet_final <- merge(pSheet_final, tags, by = "ID", all.x = TRUE) %>%
 ```{r}
 library(tidyr)
 library(dplyr)
-setwd("~/fri/voivod")
-source("sources/functions.R")
+library(voivod) # devtools::install_github("forecastingresearch/voi-vod")
 library(ggplot2)
 library(xpt)
 
 library(ggplot2)
 library(scales)
+```
+
+```{r}
+geoMeanOfOddsCalc <- function(x) {
+  if (0 %in% x) {
+    x[x == 0] <- 1e-14
+  }
+  odds <- x / (1 - x)
+  geoMeanOfOdds <- exp(mean(log(odds)))
+  # Convert back to probability
+  geoMeanOfOdds <- geoMeanOfOdds / (geoMeanOfOdds + 1)
+  return(geoMeanOfOdds)
+}
 ```
 
 ```{r}
