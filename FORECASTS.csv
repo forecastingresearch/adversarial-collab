@@ -1,0 +1,652 @@
+"person","Camp","ID","PU","Pc","PUc"
+"Eve","Skeptical","Cyberattacks",0.03,0.15,0.03
+"Eve","Skeptical","Platform: AI regulation",0.06,0.15,0.01
+"Eve","Skeptical","Politicization",0.05,0.6,0.05
+"Eve","Skeptical","Democratic influence",0.03,1e-04,0.2
+"Eve","Skeptical","Intergovernmental AI safety",0.05,0.001,0.1
+"Eve","Skeptical","Platform: Escalating warning shots",0.06,0.001,0.02
+"Eve","Skeptical","AI articles and apps",0.03,0.01,NA
+"Eve","Skeptical","Alignment solution",0.03,0.01,0.01
+"Eve","Skeptical","AI writes AI",0.03,0.001,0.3
+"Eve","Skeptical","No violence LLM",0.03,0.6,0.03
+"Eve","Skeptical","AI coding",0.05,0.8,0.05
+"Eve","Skeptical","6 month pause",0.03,0.001,NA
+"Eve","Skeptical","Non-democracy AI",0.03,0.01,0.05
+"Eve","Skeptical","Req testing",0.03,0.05,0.03
+"Eve","Skeptical","Other fields IC",0.05,0.3,0.05
+"Eve","Skeptical","AI Robotics",0.05,0.7,0.05
+"Eve","Skeptical","Public concern",0.05,0.02,0.05
+"Eve","Skeptical","Power-seeking shutdown",0.05,0.4,0.08
+"Eve","Skeptical","Platform: ARC Evals",0.06,0.25,0.06
+"Eve","Skeptical","IT progress",0.03,0.01,0.04
+"Eve","Skeptical","Power-seeking",0.03,0.8,0.02
+"Eve","Skeptical","Taiwan-China",0.03,0.4,0.03
+"Eve","Skeptical","Luke policies",0.03,0.15,0.02
+"Eve","Skeptical","Major powers war",0.05,0.05,0.04
+"Eve","Skeptical","Platform: Transformative growth",0.06,0.001,0.07
+"Eve","Skeptical","IC demonstration",0.03,0.7,0.03
+"Hank","Skeptical","Supers changing minds",0.001,0.12,0.008
+"Hank","Skeptical","Public concern",0.0012,0.1,0.0013
+"Hank","Skeptical","Politicization",0.0012,0.3,0.0012
+"Hank","Skeptical","Fast AI efficiency gains",0.001,0.01,0.006
+"Hank","Skeptical","Intergovernmental AI safety",0.0012,0.15,0.001
+"Hank","Skeptical","No violence LLM",0.001,0.1,0.001
+"Hank","Skeptical","Warning shot",0.001,0.2,0.004
+"Hank","Skeptical","AI Forecasting skill",0.001,0.3,0.003
+"Hank","Skeptical","Platform: Escalating warning shots",0.001,0.01,0.0015
+"Hank","Skeptical","AI articles and apps",0.001,0.65,0.0011
+"Hank","Skeptical","Short-term GDP change",0.001,0.1,0.001
+"Hank","Skeptical","Alignment solution",0.001,0.15,9e-04
+"Hank","Skeptical","Reduction in AI investment",0.001,0.1,5e-04
+"Hank","Skeptical","Escalating warning shots",0.001,0.05,0.005
+"Hank","Skeptical","AI solving novel math problems",0.001,0.2,0.0012
+"Hank","Skeptical","Major powers war",0.0012,0.02,0.001
+"Hank","Skeptical","Other fields IC",0.0012,0.5,0.0013
+"Hank","Skeptical","Luke policies",0.001,0.3,9e-04
+"Hank","Skeptical","Democratic influence",0.001,0.01,0.01
+"Hank","Skeptical","Platform: ARC Evals",0.001,0.005,0.01
+"Hank","Skeptical","Req testing",0.001,0.1,0.00095
+"Hank","Skeptical","Evidence of misalignment",0.001,0.1,0.01
+"Hank","Skeptical","IC demonstration",0.001,0.2,0.0012
+"Hank","Skeptical","Taiwan-China",0.001,0.1,0.001
+"Hank","Skeptical","IT progress",0.001,0.05,0.0012
+"Hank","Skeptical","Cyberattacks",0.001,0.3,0.0012
+"Hank","Skeptical","AI coding",0.0012,0.7,0.0012
+"Hank","Skeptical","AI Robotics",0.0012,0.05,0.002
+"Hank","Skeptical","Alignment researchers changing minds",0.001,0.1,0.001
+"Hank","Skeptical","Platform: Transformative growth",0.001,0.001,0.005
+"Hank","Skeptical","Platform: AI regulation",0.0012,0.52,0.001
+"Hank","Skeptical","Non-democracy AI",0.001,0.75,0.0011
+"Hank","Skeptical","AI writes AI",0.001,0.4,0.002
+"Hank","Skeptical","6 month pause",0.001,0.05,9e-04
+"Hank","Skeptical","Progress in lethal technologies",0.001,0.1,0.009
+"Hank","Skeptical","Power-seeking",0.001,0.2,0.002
+"Hank","Skeptical","Power-seeking shutdown",0.0012,0.1,0.0015
+"Wesley","Concerned","Reduction in AI investment",0.25,0.05,0.1
+"Wesley","Concerned","Short-term GDP change",0.25,0.66,0.25
+"Wesley","Concerned","Taiwan-China",0.25,0.1,0.22
+"Wesley","Concerned","IC demonstration",0.25,0.9,0.25
+"Wesley","Concerned","Alignment researchers changing minds",0.25,0.33,0.1
+"Wesley","Concerned","Democratic influence",0.25,5e-04,0.2
+"Wesley","Concerned","6 month pause",0.25,0.03,0.1
+"Wesley","Concerned","Luke policies",0.25,0.9,0.24
+"Wesley","Concerned","Platform: Escalating warning shots",0.25,0.046,0.45
+"Wesley","Concerned","AI Forecasting skill",0.25,0.8,0.26
+"Wesley","Concerned","AI articles and apps",0.25,5e-04,0.3
+"Wesley","Concerned","AI writes AI",0.25,0.02,0.9
+"Wesley","Concerned","IT progress",0.25,0.07,0.35
+"Wesley","Concerned","Platform: Transformative growth",0.25,0.75,0.32
+"Wesley","Concerned","Escalating warning shots",0.25,0.1,0.4
+"Wesley","Concerned","Supers changing minds",0.25,0.2,0.28
+"Wesley","Concerned","Platform: ARC Evals",0.25,0.4,0.17
+"Wesley","Concerned","Power-seeking",0.25,NA,NA
+"Wesley","Concerned","Non-democracy AI",0.25,0.1,0.35
+"Wesley","Concerned","Progress in lethal technologies",0.25,0.5,0.25
+"Wesley","Concerned","Req testing",0.25,0.95,0.25
+"Wesley","Concerned","AI solving novel math problems",0.25,0.2,0.3
+"Wesley","Concerned","Alignment solution",0.25,0.01,0.002
+"Wesley","Concerned","Fast AI efficiency gains",0.25,0.15,0.36
+"Wesley","Concerned","Cyberattacks",0.25,0.25,0.3
+"Wesley","Concerned","Warning shot",0.25,0.5,0.28
+"Wesley","Concerned","No violence LLM",0.25,0.01,0.002
+"Wesley","Concerned","Platform: AI regulation",0.2,0.36,0.12
+"Wesley","Concerned","Evidence of misalignment",0.25,0.1,0.2
+"Vincent","Concerned","Reduction in AI investment",0.3,0.12,0.15
+"Vincent","Concerned","Platform: Transformative growth",0.3,0.35,0.6
+"Vincent","Concerned","Progress in lethal technologies",0.3,0.3,0.4
+"Vincent","Concerned","AI solving novel math problems",0.3,0.2,0.32
+"Vincent","Concerned","Alignment researchers changing minds",0.3,0.35,0.18
+"Vincent","Concerned","Fast AI efficiency gains",0.3,0.2,0.32
+"Vincent","Concerned","AI Forecasting skill",0.3,0.5,0.35
+"Vincent","Concerned","Short-term GDP change",0.3,0.18,0.31
+"Vincent","Concerned","Platform: AI regulation",0.3,0.65,0.24
+"Vincent","Concerned","Supers changing minds",0.3,0.6,0.34
+"Vincent","Concerned","Warning shot",0.3,0.2,0.32
+"Vincent","Concerned","Evidence of misalignment",0.3,0.55,0.36
+"Vincent","Concerned","Escalating warning shots",0.3,0.09,0.37
+"Vincent","Concerned","Platform: ARC Evals",0.3,0.6,0.31
+"James","Skeptical","AI Robotics",1e-07,0.01,1e-07
+"James","Skeptical","Platform: Transformative growth",1e-06,0.03,1e-06
+"James","Skeptical","Cyberattacks",1e-08,0.75,1e-08
+"James","Skeptical","Progress in lethal technologies",1e-08,0.001,1e-05
+"James","Skeptical","Power-seeking shutdown",1e-07,0.02,1e-07
+"James","Skeptical","Major powers war",1e-07,0.005,1e-07
+"James","Skeptical","Reduction in AI investment",1e-08,1e-05,1e-10
+"James","Skeptical","Taiwan-China",1e-08,0.8,1e-08
+"James","Skeptical","Luke policies",1e-08,0.08,5e-09
+"James","Skeptical","Other fields IC",1e-07,0.08,1e-07
+"James","Skeptical","Fast AI efficiency gains",1e-08,1e-08,1e-07
+"James","Skeptical","Supers changing minds",1e-08,0.01,1e-05
+"James","Skeptical","Power-seeking",1e-08,0.02,8e-08
+"James","Skeptical","AI coding",1e-07,0.6,1e-07
+"James","Skeptical","Politicization",1e-07,0.1,1e-07
+"James","Skeptical","Req testing",1e-08,0.04,5e-09
+"James","Skeptical","AI articles and apps",1e-08,0.01,2e-08
+"James","Skeptical","Non-democracy AI",1e-08,0.6,2e-08
+"James","Skeptical","6 month pause",1e-08,0.03,1e-08
+"James","Skeptical","Platform: AI regulation",1e-06,0.55,1e-06
+"James","Skeptical","Intergovernmental AI safety",1e-07,0.25,8e-08
+"James","Skeptical","IC demonstration",1e-08,0.1,1e-08
+"James","Skeptical","Alignment researchers changing minds",1e-08,0.01,1e-10
+"James","Skeptical","Short-term GDP change",1e-08,0.1,1e-08
+"James","Skeptical","Warning shot",1e-08,0.01,1e-08
+"James","Skeptical","Platform: ARC Evals",1e-06,1e-06,1e-06
+"James","Skeptical","Escalating warning shots",1e-08,0.001,4e-08
+"James","Skeptical","Alignment solution",1e-08,0.1,5e-09
+"James","Skeptical","Public concern",1e-07,0.3,5e-08
+"James","Skeptical","AI Forecasting skill",1e-08,0.08,1e-08
+"James","Skeptical","Democratic influence",1e-08,0.01,1e-07
+"James","Skeptical","IT progress",1e-08,0.01,1e-08
+"James","Skeptical","AI writes AI",1e-08,0.02,1e-07
+"James","Skeptical","Platform: Escalating warning shots",1e-06,1e-04,5e-07
+"James","Skeptical","Evidence of misalignment",1e-08,1e-06,1e-04
+"James","Skeptical","AI solving novel math problems",1e-08,0.04,1e-08
+"James","Skeptical","No violence LLM",1e-08,0.01,1e-08
+"Riley","Concerned","Alignment researchers changing minds",0.3,0.2,0.15
+"Riley","Concerned","Evidence of misalignment",0.3,0.35,0.4
+"Riley","Concerned","AI articles and apps",0.3,0.3,0.3
+"Riley","Concerned","Platform: Escalating warning shots",0.3,0.05,0.2
+"Riley","Concerned","Democratic influence",0.3,0.02,0.2
+"Riley","Concerned","IC demonstration",0.3,0.2,0.3
+"Riley","Concerned","Cyberattacks",0.3,0.07,0.32
+"Riley","Concerned","Alignment solution",0.3,0.05,0.07
+"Riley","Concerned","IT progress",0.3,0.55,0.35
+"Riley","Concerned","Short-term GDP change",0.3,0.15,0.3
+"Riley","Concerned","Progress in lethal technologies",0.3,0.5,0.35
+"Riley","Concerned","Platform: ARC Evals",0.3,0.55,0.35
+"Riley","Concerned","AI writes AI",0.3,0.2,0.35
+"Riley","Concerned","No violence LLM",0.3,0.05,0.15
+"Riley","Concerned","Platform: Transformative growth",0.3,0.51,0.15
+"Riley","Concerned","Warning shot",0.3,0.1,0.4
+"Riley","Concerned","Luke policies",0.3,0.5,0.6
+"Riley","Concerned","AI solving novel math problems",0.3,0.2,0.35
+"Riley","Concerned","Supers changing minds",0.3,0.35,0.35
+"Riley","Concerned","Platform: AI regulation",0.3,0.49,0.25
+"Riley","Concerned","Taiwan-China",0.3,0.5,0.3
+"Riley","Concerned","Fast AI efficiency gains",0.3,0.15,0.4
+"Riley","Concerned","6 month pause",0.3,0.05,0.1
+"Riley","Concerned","Reduction in AI investment",0.3,0.15,0.25
+"Riley","Concerned","Escalating warning shots",0.3,0.03,0.2
+"Riley","Concerned","Non-democracy AI",0.3,0.3,0.3
+"Riley","Concerned","Power-seeking",0.3,0.25,0.35
+"Riley","Concerned","AI Forecasting skill",0.3,0.2,0.32
+"Riley","Concerned","Req testing",0.3,0.9,0.3
+"Blake","Skeptical","Democratic influence",0.002,0.001,0.0021
+"Blake","Skeptical","Intergovernmental AI safety",0.002,0.15,0.0015
+"Blake","Skeptical","AI writes AI",0.002,0.05,0.0021
+"Blake","Skeptical","Evidence of misalignment",0.001,0.5,0.001
+"Blake","Skeptical","Supers changing minds",0.001,0.02,0.04
+"Blake","Skeptical","Warning shot",0.001,0.02,0.0011
+"Blake","Skeptical","Luke policies",0.002,0.5,0.0019
+"Blake","Skeptical","Platform: Escalating warning shots",0.002,0.005,0.015
+"Blake","Skeptical","Short-term GDP change",0.001,0.05,0.001
+"Blake","Skeptical","AI Robotics",0.002,0.33,0.002
+"Blake","Skeptical","AI solving novel math problems",0.001,0.55,0.001
+"Blake","Skeptical","Reduction in AI investment",0.001,0.98,0.001
+"Blake","Skeptical","Alignment solution",0.002,0.05,0.0015
+"Blake","Skeptical","AI Forecasting skill",0.001,0.35,0.001
+"Blake","Skeptical","Progress in lethal technologies",0.001,0.05,0.01
+"Blake","Skeptical","Taiwan-China",0.002,0.55,0.002
+"Blake","Skeptical","Non-democracy AI",0.002,0.2,0.0018
+"Blake","Skeptical","IT progress",0.002,5e-04,0.002
+"Blake","Skeptical","AI coding",0.002,0.75,0.002
+"Blake","Skeptical","Public concern",0.002,0.05,0.003
+"Blake","Skeptical","AI articles and apps",0.002,0.1,0.002
+"Blake","Skeptical","Power-seeking",0.002,0.1,0.0022
+"Blake","Skeptical","Platform: Transformative growth",0.002,0.02,0.002
+"Blake","Skeptical","Platform: AI regulation",0.002,0.51,0.0019
+"Blake","Skeptical","Fast AI efficiency gains",0.001,0.5,0.001
+"Blake","Skeptical","Power-seeking shutdown",0.002,0.5,0.002
+"Blake","Skeptical","Platform: ARC Evals",0.002,0.15,0.0022
+"Blake","Skeptical","IC demonstration",0.002,0.25,0.002
+"Blake","Skeptical","Major powers war",0.002,0.01,0.002
+"Blake","Skeptical","Escalating warning shots",0.001,0.005,0.01
+"Blake","Skeptical","Alignment researchers changing minds",0.001,0.03,0.00025
+"Blake","Skeptical","6 month pause",0.002,0.03,0.0025
+"Blake","Skeptical","Other fields IC",0.002,0.1,0.0022
+"Blake","Skeptical","No violence LLM",0.002,0.05,0.002
+"Blake","Skeptical","Req testing",0.002,0.2,0.0018
+"Blake","Skeptical","Politicization",0.002,0.1,0.0025
+"Blake","Skeptical","Cyberattacks",0.002,0.5,0.002
+"Flint","Skeptical","AI Forecasting skill",0.004,0.036,0.007
+"Flint","Skeptical","Other fields IC",0.011,0.7,0.012
+"Flint","Skeptical","Taiwan-China",0.009,0.6,0.011
+"Flint","Skeptical","Platform: AI regulation",0.011,0.6,0.009
+"Flint","Skeptical","Non-democracy AI",0.009,0.99999,0.009
+"Flint","Skeptical","AI Robotics",0.011,0.75,0.011
+"Flint","Skeptical","AI coding",0.011,0.8,0.011
+"Flint","Skeptical","Evidence of misalignment",0.004,0.01,0.0041
+"Flint","Skeptical","Alignment solution",0.009,0.03,0.0075
+"Flint","Skeptical","Major powers war",0.011,0.66,0.014
+"Flint","Skeptical","Public concern",0.011,0.65,0.013
+"Flint","Skeptical","Fast AI efficiency gains",0.004,0.045,0.01
+"Flint","Skeptical","Short-term GDP change",0.004,0.03,0.004
+"Flint","Skeptical","Warning shot",0.004,0.15,0.0035
+"Flint","Skeptical","No violence LLM",0.009,NA,NA
+"Flint","Skeptical","IT progress",0.009,0.01,0.009
+"Flint","Skeptical","IC demonstration",0.009,0.1,0.01
+"Flint","Skeptical","Power-seeking shutdown",0.011,0.05,0.012
+"Flint","Skeptical","AI writes AI",0.009,0.02,0.012
+"Flint","Skeptical","Alignment researchers changing minds",0.004,0.02,0.005
+"Flint","Skeptical","AI solving novel math problems",0.004,0.08,0.0045
+"Flint","Skeptical","Platform: Transformative growth",0.011,0.011,0.011
+"Flint","Skeptical","AI articles and apps",0.009,0.7,0.009
+"Flint","Skeptical","Supers changing minds",0.004,0.02,0.04
+"Flint","Skeptical","Platform: ARC Evals",0.011,0.01,0.013
+"Flint","Skeptical","Cyberattacks",0.009,0.1,0.01
+"Flint","Skeptical","Intergovernmental AI safety",0.011,0.05,0.009
+"Flint","Skeptical","Reduction in AI investment",0.004,0.01,0.003
+"Flint","Skeptical","Democratic influence",0.009,0.003,0.02
+"Flint","Skeptical","Platform: Escalating warning shots",0.011,0.005,0.013
+"Flint","Skeptical","Escalating warning shots",0.004,0.07,0.0032
+"Flint","Skeptical","Req testing",0.009,0.8,0.009
+"Flint","Skeptical","Progress in lethal technologies",0.004,0.9,0.004
+"Flint","Skeptical","6 month pause",0.009,0.05,0.009
+"Flint","Skeptical","Politicization",0.011,0.6,0.011
+"Flint","Skeptical","Power-seeking",0.009,0.05,0.014
+"Flint","Skeptical","Luke policies",0.009,0.1,0.009
+"Claire","Skeptical","No violence LLM",1e-08,0.11,1e-08
+"Claire","Skeptical","Platform: Escalating warning shots",1e-06,0.001,1e-05
+"Claire","Skeptical","AI articles and apps",1e-08,0.11,1e-08
+"Claire","Skeptical","Warning shot",1e-08,0.01,1e-04
+"Claire","Skeptical","Luke policies",1e-08,0.08,1e-08
+"Claire","Skeptical","AI writes AI",1e-08,0.08,1e-08
+"Claire","Skeptical","Platform: Transformative growth",1e-06,0.001,1e-06
+"Claire","Skeptical","Intergovernmental AI safety",1e-06,0.01,2e-06
+"Claire","Skeptical","Short-term GDP change",1e-09,0.14,1e-09
+"Claire","Skeptical","Platform: AI regulation",1e-06,0.24,1e-06
+"Claire","Skeptical","AI coding",1e-06,0.82,1e-06
+"Claire","Skeptical","Non-democracy AI",1e-08,0.04,1e-08
+"Claire","Skeptical","Major powers war",1e-06,1e-07,3e-06
+"Claire","Skeptical","Progress in lethal technologies",1e-09,0.01,1e-04
+"Claire","Skeptical","Politicization",1e-06,0.01,1e-06
+"Claire","Skeptical","IC demonstration",1e-08,0.14,1e-08
+"Claire","Skeptical","Reduction in AI investment",1e-09,0.02,1e-08
+"Claire","Skeptical","Other fields IC",1e-06,0.03,5e-06
+"Claire","Skeptical","Alignment solution",1e-08,0.22,1e-08
+"Claire","Skeptical","Democratic influence",1e-08,0.04,1e-08
+"Claire","Skeptical","Fast AI efficiency gains",1e-09,0.01,1e-08
+"Claire","Skeptical","Power-seeking shutdown",1e-06,1e-05,4e-06
+"Claire","Skeptical","IT progress",1e-08,0.13,1e-08
+"Claire","Skeptical","AI Robotics",1e-06,0.04,1e-06
+"Claire","Skeptical","AI Forecasting skill",1e-09,0.08,1e-09
+"Claire","Skeptical","Power-seeking",1e-08,0.01,1e-08
+"Claire","Skeptical","Alignment researchers changing minds",1e-09,0.01,1e-09
+"Claire","Skeptical","Escalating warning shots",1e-09,1e-05,1e-04
+"Claire","Skeptical","Cyberattacks",1e-08,0.05,1e-07
+"Claire","Skeptical","6 month pause",1e-08,0.04,1e-08
+"Claire","Skeptical","Supers changing minds",1e-09,0.001,0.001
+"Claire","Skeptical","Req testing",1e-08,0.62,1e-08
+"Claire","Skeptical","AI solving novel math problems",1e-09,0.04,1e-09
+"Claire","Skeptical","Evidence of misalignment",1e-09,0.001,1e-05
+"Claire","Skeptical","Platform: ARC Evals",1e-06,0.001,1e-04
+"Claire","Skeptical","Taiwan-China",1e-08,0.09,1e-07
+"Claire","Skeptical","Public concern",1e-06,0.01,2e-06
+"Stella","Concerned","AI Forecasting skill",0.1,0.1,0.2
+"Stella","Concerned","Evidence of misalignment",0.1,0.5,0.1
+"Stella","Concerned","Luke policies",0.1,0.1,0.08
+"Stella","Concerned","Platform: ARC Evals",0.1,0.1,0.11
+"Stella","Concerned","Supers changing minds",0.1,0.25,0.1
+"Stella","Concerned","IT progress",0.1,0.5,0.1
+"Stella","Concerned","IC demonstration",0.1,0.9,0.1
+"Stella","Concerned","Platform: Transformative growth",0.1,0.52,0.01
+"Stella","Concerned","Non-democracy AI",0.1,0.1,0.1
+"Stella","Concerned","Taiwan-China",0.1,0.3,0.1
+"Stella","Concerned","Progress in lethal technologies",0.1,0.5,0.1
+"Stella","Concerned","Cyberattacks",0.1,0.5,0.1
+"Stella","Concerned","Power-seeking",0.1,0.1,0.1
+"Stella","Concerned","Req testing",0.1,0.2,0.1
+"Stella","Concerned","Fast AI efficiency gains",0.1,0.001,0.2
+"Stella","Concerned","AI writes AI",0.1,0.01,0.2
+"Stella","Concerned","Escalating warning shots",0.1,1e-04,0.5
+"Stella","Concerned","Warning shot",0.1,0.005,0.5
+"Stella","Concerned","Democratic influence",0.1,0.02,0.15
+"Stella","Concerned","AI solving novel math problems",0.1,0.05,0.2
+"Stella","Concerned","AI articles and apps",0.1,0.4,0.1
+"Stella","Concerned","6 month pause",0.1,0.03,0.05
+"Stella","Concerned","Reduction in AI investment",0.1,0.03,0.1
+"Stella","Concerned","Short-term GDP change",0.1,0.35,0.1
+"Stella","Concerned","Alignment solution",0.1,0.05,0.01
+"Stella","Concerned","Platform: AI regulation",0.1,0.15,0.09
+"Stella","Concerned","No violence LLM",0.1,0.1,0.08
+"Stella","Concerned","Alignment researchers changing minds",0.1,0.2,0.05
+"Xander","Concerned","Platform: ARC Evals",0.35,0.55,0.45
+"Xander","Concerned","Progress in lethal technologies",0.4,0.4,0.45
+"Xander","Concerned","Platform: AI regulation",0.35,0.2,0.3
+"Xander","Concerned","Short-term GDP change",0.4,0.25,0.55
+"Xander","Concerned","AI solving novel math problems",0.4,0.09,0.6
+"Xander","Concerned","Supers changing minds",0.4,0.7,0.5
+"Xander","Concerned","Platform: Transformative growth",0.35,0.45,0.25
+"Xander","Concerned","Evidence of misalignment",0.4,0.8,0.47
+"Xander","Concerned","Warning shot",0.4,0.17,0.65
+"Xander","Concerned","AI Forecasting skill",0.4,0.33,0.55
+"Xander","Concerned","Escalating warning shots",0.4,0.13,0.8
+"Xander","Concerned","Alignment researchers changing minds",0.4,0.4,0.06
+"Xander","Concerned","Fast AI efficiency gains",0.4,0.2,0.6
+"Xander","Concerned","Reduction in AI investment",0.4,0.17,0.6
+"Gus","Skeptical","Intergovernmental AI safety",0.005,0.175,0.004
+"Gus","Skeptical","Luke policies",0.005,0.2,0.00475
+"Gus","Skeptical","Reduction in AI investment",0.005,0.05,1e-04
+"Gus","Skeptical","Progress in lethal technologies",0.005,0.2,0.0075
+"Gus","Skeptical","Req testing",0.005,0.05,0.005
+"Gus","Skeptical","No violence LLM",0.005,0.33,0.005
+"Gus","Skeptical","Supers changing minds",0.005,0.15,0.01
+"Gus","Skeptical","Other fields IC",0.005,0.25,0.005
+"Gus","Skeptical","6 month pause",0.005,0.005,1e-04
+"Gus","Skeptical","Platform: ARC Evals",0.005,0.035,0.05
+"Gus","Skeptical","Public concern",0.005,0.05,0.005
+"Gus","Skeptical","IC demonstration",0.005,0.35,0.005
+"Gus","Skeptical","Platform: Escalating warning shots",0.005,8e-04,0.035
+"Gus","Skeptical","Major powers war",0.005,0.025,0.005
+"Gus","Skeptical","AI articles and apps",0.005,0.05,0.005
+"Gus","Skeptical","Escalating warning shots",0.005,1e-05,0.035
+"Gus","Skeptical","IT progress",0.005,0.05,0.005
+"Gus","Skeptical","Warning shot",0.005,0.001,0.0025
+"Gus","Skeptical","Politicization",0.005,0.05,0.005
+"Gus","Skeptical","Alignment researchers changing minds",0.005,0.1,0.005
+"Gus","Skeptical","AI Robotics",0.005,0.1,0.0055
+"Gus","Skeptical","Fast AI efficiency gains",0.005,0.001,0.005
+"Gus","Skeptical","Democratic influence",0.005,0.005,0.03
+"Gus","Skeptical","AI writes AI",0.005,0.001,0.07
+"Gus","Skeptical","Power-seeking",0.005,0.1,0.03
+"Gus","Skeptical","Platform: AI regulation",0.005,0.5001,0.005
+"Gus","Skeptical","Alignment solution",0.005,0.01,0.005
+"Gus","Skeptical","Platform: Transformative growth",0.005,0.01,0.011
+"Gus","Skeptical","AI solving novel math problems",0.005,0.075,0.05
+"Gus","Skeptical","AI Forecasting skill",0.005,0.25,0.007
+"Gus","Skeptical","Evidence of misalignment",0.005,0.06,0.06
+"Gus","Skeptical","AI coding",0.005,0.66,0.005
+"Gus","Skeptical","Short-term GDP change",0.005,0.125,0.007
+"Gus","Skeptical","Taiwan-China",0.005,0.2,0.005
+"Gus","Skeptical","Power-seeking shutdown",0.005,0.005,0.03
+"Gus","Skeptical","Non-democracy AI",0.005,0.175,0.005
+"Gus","Skeptical","Cyberattacks",0.005,0.035,0.005
+"Ash","Skeptical","Power-seeking shutdown",0.001,0.2,0.0015
+"Ash","Skeptical","Warning shot",0.002,0.03,0.0025
+"Ash","Skeptical","Reduction in AI investment",0.002,0.05,0.002
+"Ash","Skeptical","Non-democracy AI",0.001,0.8,0.001
+"Ash","Skeptical","Cyberattacks",0.001,0.001,0.0012
+"Ash","Skeptical","Escalating warning shots",0.002,0.002,0.003
+"Ash","Skeptical","Platform: Escalating warning shots",0.001,0.0025,0.003
+"Ash","Skeptical","AI solving novel math problems",0.002,0.2,0.002
+"Ash","Skeptical","AI Robotics",0.001,0.03,0.0015
+"Ash","Skeptical","Platform: Transformative growth",0.001,0.02,0.005
+"Ash","Skeptical","Public concern",0.001,0.05,0.0011
+"Ash","Skeptical","Req testing",0.001,0.1,0.001
+"Ash","Skeptical","Evidence of misalignment",0.002,0.1,0.0025
+"Ash","Skeptical","No violence LLM",0.001,1e-04,0.001
+"Ash","Skeptical","IC demonstration",0.001,0.01,0.0015
+"Ash","Skeptical","Alignment solution",0.001,0.05,0.001
+"Ash","Skeptical","Progress in lethal technologies",0.002,0.07,0.003
+"Ash","Skeptical","AI Forecasting skill",0.002,0.5,0.002
+"Ash","Skeptical","Supers changing minds",0.002,0.05,0.04
+"Ash","Skeptical","IT progress",0.001,0.15,0.001
+"Ash","Skeptical","Luke policies",0.001,0.5,0.001
+"Ash","Skeptical","6 month pause",0.001,0.01,0.001
+"Ash","Skeptical","Platform: AI regulation",0.001,0.35,0.001
+"Ash","Skeptical","Power-seeking",0.001,0.2,0.001
+"Ash","Skeptical","Intergovernmental AI safety",0.001,0.05,8e-04
+"Ash","Skeptical","Major powers war",0.001,0.008,0.12
+"Ash","Skeptical","Other fields IC",0.001,0.3,0.001
+"Ash","Skeptical","Democratic influence",0.001,0.02,0.002
+"Ash","Skeptical","Alignment researchers changing minds",0.002,0.05,0.002
+"Ash","Skeptical","Politicization",0.001,0.2,0.001
+"Ash","Skeptical","Short-term GDP change",0.002,0.1,0.002
+"Ash","Skeptical","AI coding",0.001,0.7,0.001
+"Ash","Skeptical","Taiwan-China",0.001,0.25,0.002
+"Ash","Skeptical","AI writes AI",0.001,0.1,0.0012
+"Ash","Skeptical","AI articles and apps",0.001,0.05,0.001
+"Ash","Skeptical","Fast AI efficiency gains",0.002,0.05,0.003
+"Ash","Skeptical","Platform: ARC Evals",0.001,0.1,0.0025
+"Teshi","Concerned","Public concern",0.55,0.02,0.45
+"Teshi","Concerned","AI coding",0.55,0.55,0.8
+"Teshi","Concerned","AI Robotics",0.55,0.1,0.75
+"Teshi","Concerned","Platform: ARC Evals",0.65,0.25,0.85
+"Teshi","Concerned","Other fields IC",0.55,0.3,0.55
+"Teshi","Concerned","Politicization",0.55,0.1,0.55
+"Teshi","Concerned","Major powers war",0.55,0.15,0.75
+"Teshi","Concerned","Platform: AI regulation",0.65,0.17,0.62
+"Teshi","Concerned","Power-seeking shutdown",0.55,0.35,0.45
+"Teshi","Concerned","Intergovernmental AI safety",0.55,0.03,0.5
+"Teshi","Concerned","Platform: Transformative growth",0.65,0.15,0.45
+"Yael","Concerned","Power-seeking",0.235,0.15,0.26
+"Yael","Concerned","AI articles and apps",0.235,0.2,0.25
+"Yael","Concerned","Major powers war",0.175,0.115,0.16
+"Yael","Concerned","AI Robotics",0.175,0.33,0.21
+"Yael","Concerned","AI coding",0.175,0.25,0.22
+"Yael","Concerned","Req testing",0.235,0.85,0.23
+"Yael","Concerned","Power-seeking shutdown",0.175,0.3,0.21
+"Yael","Concerned","Non-democracy AI",0.235,0.12,0.238
+"Yael","Concerned","Democratic influence",0.235,0.1,0.33
+"Yael","Concerned","Intergovernmental AI safety",0.175,0.25,0.17
+"Yael","Concerned","Platform: Escalating warning shots",0.229,0.075,0.17
+"Yael","Concerned","IC demonstration",0.235,0.65,0.23
+"Yael","Concerned","No violence LLM",0.235,0.2,0.22
+"Yael","Concerned","Other fields IC",0.175,0.6,0.185
+"Yael","Concerned","IT progress",0.235,0.25,0.24
+"Yael","Concerned","Public concern",0.175,0.25,0.16
+"Yael","Concerned","Platform: AI regulation",0.229,0.68,0.213
+"Yael","Concerned","Platform: ARC Evals",0.229,0.315,0.305
+"Yael","Concerned","6 month pause",0.235,0.3,0.2
+"Yael","Concerned","Luke policies",0.235,0.65,0.211
+"Yael","Concerned","Alignment solution",0.235,0.07,0.05
+"Yael","Concerned","AI writes AI",0.235,0.25,0.3
+"Yael","Concerned","Platform: Transformative growth",0.229,0.268,0.274
+"Yael","Concerned","Politicization",0.175,0.2,0.2
+"Yael","Concerned","Cyberattacks",0.235,0.1,0.23
+"Yael","Concerned","Taiwan-China",0.235,0.28,0.225
+"Zoe","Concerned","Platform: Transformative growth",0.21,0.28,0.26
+"Zoe","Concerned","Req testing",0.21,0.7,0.21
+"Zoe","Concerned","AI articles and apps",0.21,0.2,0.21
+"Zoe","Concerned","IT progress",0.21,0.3,0.3
+"Zoe","Concerned","Platform: ARC Evals",0.21,0.03,0.19
+"Zoe","Concerned","Power-seeking",0.21,0.1,0.18
+"Zoe","Concerned","Platform: AI regulation",0.21,0.53,0.15
+"Zoe","Concerned","Other fields IC",0.21,0.5,0.21
+"Zoe","Concerned","Power-seeking shutdown",0.21,0.1,0.5
+"Zoe","Concerned","IC demonstration",0.21,0.8,0.21
+"Zoe","Concerned","6 month pause",0.21,0.2,0.18
+"Zoe","Concerned","No violence LLM",0.21,0.2,0.1
+"Zoe","Concerned","Non-democracy AI",0.21,0.1,0.35
+"Zoe","Concerned","Democratic influence",0.21,0.005,0.4
+"Zoe","Concerned","Luke policies",0.21,0.65,0.2
+"Zoe","Concerned","Politicization",0.21,0.2,0.4
+"Zoe","Concerned","Cyberattacks",0.21,0.2,0.21
+"Zoe","Concerned","Intergovernmental AI safety",0.21,0.1,0.1
+"Zoe","Concerned","Public concern",0.21,0.05,0.3
+"Zoe","Concerned","Platform: Escalating warning shots",0.21,0.05,0.13
+"Zoe","Concerned","Alignment solution",0.21,0.15,0.05
+"Zoe","Concerned","AI writes AI",0.21,0.01,0.5
+"Zoe","Concerned","AI coding",0.21,0.75,0.25
+"Zoe","Concerned","Taiwan-China",0.21,0.3,0.5
+"Zoe","Concerned","AI Robotics",0.21,0.2,0.25
+"Zoe","Concerned","Major powers war",0.21,0.1,0.4
+"Pascal","Concerned","Taiwan-China",0.09,0.3,0.12
+"Pascal","Concerned","IT progress",0.09,0.15,0.11
+"Pascal","Concerned","Evidence of misalignment",0.09,0.25,0.15
+"Pascal","Concerned","6 month pause",0.09,0.55,0.09
+"Pascal","Concerned","Power-seeking",0.09,0.75,0.1
+"Pascal","Concerned","IC demonstration",0.09,0.4,0.08
+"Pascal","Concerned","No violence LLM",0.09,0.15,0.065
+"Pascal","Concerned","Req testing",0.09,0.65,0.09
+"Pascal","Concerned","Luke policies",0.09,0.35,0.08
+"Pascal","Concerned","Alignment researchers changing minds",0.09,0.15,0.06
+"Pascal","Concerned","Warning shot",0.09,0.15,0.12
+"Pascal","Concerned","Alignment solution",0.09,0.1,0.02
+"Pascal","Concerned","Escalating warning shots",0.09,0.22,0.05
+"Pascal","Concerned","AI Forecasting skill",0.09,0.35,0.09
+"Pascal","Concerned","Platform: Escalating warning shots",0.09,0.07,0.08
+"Pascal","Concerned","Democratic influence",0.09,0.02,0.1
+"Pascal","Concerned","AI writes AI",0.09,0.75,0.1
+"Pascal","Concerned","Short-term GDP change",0.09,0.4,0.1
+"Pascal","Concerned","AI solving novel math problems",0.09,0.04,0.18
+"Pascal","Concerned","AI articles and apps",0.09,0.35,0.09
+"Pascal","Concerned","Progress in lethal technologies",0.09,0.1,0.09
+"Pascal","Concerned","Platform: AI regulation",0.09,0.28,0.07
+"Pascal","Concerned","Reduction in AI investment",0.09,0.17,0.05
+"Pascal","Concerned","Cyberattacks",0.09,0.07,0.08
+"Pascal","Concerned","Platform: Transformative growth",0.09,0.55,0.15
+"Pascal","Concerned","Fast AI efficiency gains",0.09,0.18,0.2
+"Pascal","Concerned","Supers changing minds",0.09,0.3,0.09
+"Pascal","Concerned","Non-democracy AI",0.09,0.25,0.12
+"Pascal","Concerned","Platform: ARC Evals",0.09,0.12,0.25
+"Quentin","Concerned","Major powers war",0.024,0.21,0.04
+"Quentin","Concerned","Warning shot",0.04,0.3,0.042
+"Quentin","Concerned","Luke policies",0.04,0.7,0.03
+"Quentin","Concerned","AI solving novel math problems",0.04,0.1,0.044
+"Quentin","Concerned","Power-seeking",0.04,0.3,0.045
+"Quentin","Concerned","AI writes AI",0.04,0.15,0.05
+"Quentin","Concerned","Platform: ARC Evals",0.024,0.2,0.03
+"Quentin","Concerned","Taiwan-China",0.04,0.35,0.05
+"Quentin","Concerned","Intergovernmental AI safety",0.024,0.3,0.015
+"Quentin","Concerned","AI articles and apps",0.04,0.1,0.06
+"Quentin","Concerned","AI Robotics",0.024,0.1,0.04
+"Quentin","Concerned","IT progress",0.04,0.1,0.06
+"Quentin","Concerned","6 month pause",0.04,0.3,0.03
+"Quentin","Concerned","Alignment solution",0.04,0.2,0.01
+"Quentin","Concerned","Short-term GDP change",0.04,0.0828308,0.0412
+"Quentin","Concerned","No violence LLM",0.04,0.6,0.03
+"Quentin","Concerned","Evidence of misalignment",0.04,0.4,0.048
+"Quentin","Concerned","AI coding",0.024,0.65,0.025
+"Quentin","Concerned","Reduction in AI investment",0.04,0.15,0.029
+"Quentin","Concerned","IC demonstration",0.04,0.3,0.04
+"Quentin","Concerned","Democratic influence",0.04,0.05,0.06
+"Quentin","Concerned","Supers changing minds",0.04,0.1,0.064
+"Quentin","Concerned","Progress in lethal technologies",0.04,0.99,0.04
+"Quentin","Concerned","Politicization",0.024,0.1,0.024
+"Quentin","Concerned","Escalating warning shots",0.04,0.04,0.052
+"Quentin","Concerned","AI Forecasting skill",0.04,0.2,0.042
+"Quentin","Concerned","Fast AI efficiency gains",0.04,0.02,0.06
+"Quentin","Concerned","Platform: Transformative growth",0.04,0.32,0.00075
+"Quentin","Concerned","Cyberattacks",0.04,0.4,0.04
+"Quentin","Concerned","Other fields IC",0.024,0.3,0.024
+"Quentin","Concerned","Alignment researchers changing minds",0.04,0.1,0.0267
+"Quentin","Concerned","Non-democracy AI",0.04,0.4,0.05
+"Quentin","Concerned","Power-seeking shutdown",0.024,0.3,0.03
+"Quentin","Concerned","Public concern",0.024,0.03,0.04
+"Quentin","Concerned","Platform: Escalating warning shots",0.04,0.01,0.06
+"Quentin","Concerned","Req testing",0.04,0.8,0.037
+"Quentin","Concerned","Platform: AI regulation",0.024,0.6,0.02
+"Dean","Skeptical","Supers changing minds",0.015,0.05,0.015
+"Dean","Skeptical","Intergovernmental AI safety",0.01,0.001,0.007
+"Dean","Skeptical","AI coding",0.01,0.5,0.01
+"Dean","Skeptical","Alignment solution",0.01,0.01,0.001
+"Dean","Skeptical","Platform: Escalating warning shots",0.01,2e-05,0.04
+"Dean","Skeptical","Other fields IC",0.01,0.55,0.01
+"Dean","Skeptical","AI Forecasting skill",0.015,0.19,0.014
+"Dean","Skeptical","Platform: ARC Evals",0.01,0.001,0.015
+"Dean","Skeptical","Short-term GDP change",0.015,0.01,0.015
+"Dean","Skeptical","Progress in lethal technologies",0.015,0.5,0.015
+"Dean","Skeptical","Evidence of misalignment",0.015,0.01,0.015
+"Dean","Skeptical","Luke policies",0.01,0.08,0.007
+"Dean","Skeptical","Cyberattacks",0.01,0.05,0.01
+"Dean","Skeptical","Platform: Transformative growth",0.01,0.112,0.007
+"Dean","Skeptical","Req testing",0.01,0.18,0.01
+"Dean","Skeptical","IC demonstration",0.01,5e-05,0.015
+"Dean","Skeptical","Non-democracy AI",0.01,0.03,0.011
+"Dean","Skeptical","AI articles and apps",0.01,0.005,0.008
+"Dean","Skeptical","Alignment researchers changing minds",0.015,0.01,0.015
+"Dean","Skeptical","AI Robotics",0.01,0.05,0.01
+"Dean","Skeptical","IT progress",0.01,0.001,0.01
+"Dean","Skeptical","Democratic influence",0.01,1e-04,0.04
+"Dean","Skeptical","Reduction in AI investment",0.015,0.005,0.009
+"Dean","Skeptical","Taiwan-China",0.01,0.04,0.01
+"Dean","Skeptical","Power-seeking",0.01,0.0015,0.013
+"Dean","Skeptical","Platform: AI regulation",0.01,0.4,0.01
+"Dean","Skeptical","Public concern",0.01,0.01,0.01
+"Dean","Skeptical","Warning shot",0.015,0.03,0.02
+"Dean","Skeptical","Major powers war",0.01,0.005,0.012
+"Dean","Skeptical","Politicization",0.01,0.15,0.01
+"Dean","Skeptical","AI writes AI",0.01,5e-04,0.012
+"Dean","Skeptical","AI solving novel math problems",0.015,0.2,0.015
+"Dean","Skeptical","No violence LLM",0.01,1e-09,1e-08
+"Dean","Skeptical","6 month pause",0.01,1e-04,0.01
+"Dean","Skeptical","Escalating warning shots",0.015,1e-04,0.04
+"Dean","Skeptical","Power-seeking shutdown",0.01,1e-04,0.015
+"Dean","Skeptical","Fast AI efficiency gains",0.015,0.02,0.015
+"Ume","Concerned","Escalating warning shots",0.6,0.39,0.9
+"Ume","Concerned","Req testing",0.6,0.8,0.5
+"Ume","Concerned","Democratic influence",0.6,0.01,0.2
+"Ume","Concerned","AI Robotics",0.3,0.5,0.4
+"Ume","Concerned","Platform: Escalating warning shots",0.6,0.31,0.9
+"Ume","Concerned","Reduction in AI investment",0.6,0.01,0.05
+"Ume","Concerned","Public concern",0.3,0.3,0.25
+"Ume","Concerned","Short-term GDP change",0.6,0.5,0.6
+"Ume","Concerned","Alignment solution",0.6,0.05,0.1
+"Ume","Concerned","AI writes AI",0.6,0.1,0.95
+"Ume","Concerned","Power-seeking shutdown",0.3,0.9,0.3
+"Ume","Concerned","Warning shot",0.6,0.4,0.5
+"Ume","Concerned","Platform: Transformative growth",0.6,0.43,0.26
+"Ume","Concerned","Supers changing minds",0.6,0.5,0.2
+"Ume","Concerned","Platform: ARC Evals",0.6,0.06,0.03
+"Ume","Concerned","Alignment researchers changing minds",0.6,0.1,0.02
+"Ume","Concerned","6 month pause",0.6,0.01,0.05
+"Ume","Concerned","Fast AI efficiency gains",0.6,0.6,0.6
+"Ume","Concerned","AI solving novel math problems",0.6,0.3,0.15
+"Ume","Concerned","Luke policies",0.6,0.3,0.2
+"Ume","Concerned","AI articles and apps",0.6,0.3,0.65
+"Ume","Concerned","Evidence of misalignment",0.6,0.8,0.55
+"Ume","Concerned","Cyberattacks",0.6,0.7,0.45
+"Ume","Concerned","Taiwan-China",0.6,0.05,0.65
+"Ume","Concerned","No violence LLM",0.6,0.03,0.1
+"Ume","Concerned","IC demonstration",0.6,0.8,0.58
+"Ume","Concerned","Non-democracy AI",0.6,0.02,0.7
+"Ume","Concerned","Other fields IC",0.3,0.9,0.28
+"Ume","Concerned","Power-seeking",0.6,0.05,0.7
+"Ume","Concerned","Platform: AI regulation",0.6,0.25,0.18
+"Ume","Concerned","IT progress",0.6,0.2,0.6
+"Ume","Concerned","Progress in lethal technologies",0.6,0.4,0.5
+"Ume","Concerned","Politicization",0.3,0.5,0.3
+"Ume","Concerned","AI coding",0.3,0.92,0.3
+"Ume","Concerned","Intergovernmental AI safety",0.3,0.7,0.25
+"Ume","Concerned","Major powers war",0.3,0.1,0.7
+"Ume","Concerned","AI Forecasting skill",0.6,0.5,0.65
+"Ike","Skeptical","Platform: Transformative growth",7e-04,0.02,0.00045
+"Ike","Skeptical","AI coding",7e-04,0.65,8e-04
+"Ike","Skeptical","Other fields IC",7e-04,0.35,0.00085
+"Ike","Skeptical","Platform: AI regulation",5e-04,0.35,0.00038
+"Ike","Skeptical","Politicization",7e-04,0.4,0.00063
+"Ike","Skeptical","Major powers war",7e-04,0.07,0.00055
+"Ike","Skeptical","Platform: ARC Evals",5e-04,0.04,0.0025
+"Ike","Skeptical","Public concern",7e-04,0.25,0.0011
+"Ike","Skeptical","AI Robotics",7e-04,0.6,0.00077
+"Ike","Skeptical","Power-seeking shutdown",7e-04,0.55,8e-04
+"Ike","Skeptical","Platform: Escalating warning shots",5e-04,0.004,0.02
+"Ike","Skeptical","Intergovernmental AI safety",7e-04,0.45,0.00055
+"Kim","Skeptical","AI Forecasting skill",1e-05,0.07,1e-05
+"Kim","Skeptical","Platform: Transformative growth",2e-04,0.05,4e-04
+"Kim","Skeptical","Other fields IC",2e-04,0.5,2e-04
+"Kim","Skeptical","AI Robotics",2e-04,0.005,0.006
+"Kim","Skeptical","Platform: ARC Evals",2e-04,0.001,0.05
+"Kim","Skeptical","Platform: AI regulation",2e-04,0.65,8e-05
+"Kim","Skeptical","Alignment solution",1e-04,0.07,1e-05
+"Kim","Skeptical","IT progress",1e-04,0.33,2e-04
+"Kim","Skeptical","Intergovernmental AI safety",2e-04,0.23,2e-04
+"Kim","Skeptical","Req testing",1e-04,0.09,1e-04
+"Kim","Skeptical","Major powers war",2e-04,0.05,1e-04
+"Kim","Skeptical","Politicization",2e-04,0.35,2e-04
+"Kim","Skeptical","Power-seeking shutdown",2e-04,0.002,0.02
+"Kim","Skeptical","Short-term GDP change",1e-05,0.01,2e-05
+"Kim","Skeptical","Fast AI efficiency gains",1e-05,0.5,1e-05
+"Kim","Skeptical","Reduction in AI investment",1e-05,0.07,1e-05
+"Kim","Skeptical","Public concern",2e-04,0.22,0.00025
+"Kim","Skeptical","Cyberattacks",1e-04,0.14,1e-04
+"Kim","Skeptical","6 month pause",1e-04,0.06,2e-04
+"Kim","Skeptical","Escalating warning shots",1e-05,0.02,1e-05
+"Kim","Skeptical","Taiwan-China",1e-04,0.26,8e-05
+"Kim","Skeptical","Evidence of misalignment",1e-05,0.01,5e-04
+"Kim","Skeptical","Non-democracy AI",1e-04,0.2,1e-04
+"Kim","Skeptical","Warning shot",1e-05,0.04,2e-05
+"Kim","Skeptical","IC demonstration",1e-04,0.5,1e-04
+"Kim","Skeptical","Power-seeking",1e-04,0.001,0.03
+"Kim","Skeptical","AI solving novel math problems",1e-05,0.2,1e-05
+"Kim","Skeptical","No violence LLM",1e-04,0.03,5e-05
+"Kim","Skeptical","Alignment researchers changing minds",1e-05,0.3,1e-05
+"Kim","Skeptical","Luke policies",1e-04,0.8,1e-04
+"Kim","Skeptical","Progress in lethal technologies",1e-05,0.25,2e-05
+"Kim","Skeptical","AI articles and apps",1e-04,0.005,0.002
+"Kim","Skeptical","Supers changing minds",1e-05,0.06,1e-05
+"Kim","Skeptical","Platform: Escalating warning shots",2e-04,0.09,2e-04
+"Kim","Skeptical","AI writes AI",1e-04,0.01,0.004
+"Kim","Skeptical","AI coding",2e-04,0.38,0.00029
+"Kim","Skeptical","Democratic influence",1e-04,9e-04,0.04

@@ -158,7 +158,12 @@ reshapedData <- merge(reshapedData, newnames, by.x = "person", by.y = "name", al
 # Drop "person" and rename alias to "person"
 reshapedData <- reshapedData %>%
   select(-person) %>%
-  rename(person = alias)
+  rename(person = alias) %>%
+  select(person, Camp, ID, everything())
+```
+
+```{r}
+reshapedData <- read.csv("FORECASTS.csv")
 ```
 
 ```{r}
