@@ -1,30 +1,4 @@
 ```{r}
-library(googlesheets4)
-library(dplyr)
-library(data.table)
-if (FALSE) {
-  gs4_auth() # run this to authenticate with google sheet (must do this before running code)
-}
-```
-
-```{r}
-spreadsheet_url <- "***REMOVED***"
-
-# Read the 'RawForR' sheet from the Google Spreadsheet
-pSheet_final <- read_sheet(spreadsheet_url, sheet = "RawForR")
-
-# Read the Tags (short names corresponding to question IDs)
-tags <- read_sheet(spreadsheet_url, sheet = "Composite") %>%
-  select(Id, Tag) %>%
-  rename(ID = Id)
-
-# Merge the tags with the pSheet_final data frame
-pSheet_final <- merge(pSheet_final, tags, by = "ID", all.x = TRUE) %>%
-  select(-ID) %>%
-  rename(ID = Tag)
-```
-
-```{r}
 library(tidyr)
 library(dplyr)
 library(voivod) # devtools::install_github("forecastingresearch/voi-vod")
@@ -133,33 +107,6 @@ maxVOD_level_easy <- function(dt, id1, id2) {
   answer <- maxVOD(pu_a, pu_b, fun = function(a, b) abs(a - b))
   return(answer)
 }
-```
-
-```{r}
-# How many rows are there in each ID-Person combo?
-alpha <- pSheet_final %>%
-  group_by(ID, person) %>%
-  summarise(n = n()) %>%
-  arrange(desc(n))
-```
-
-```{r}
-reshapedData <- pSheet_final
-
-# Aliases
-aliases_supers <- read_sheet("***REMOVED***", sheet = "Sheet1")
-aliases_experts <- read_sheet("***REMOVED***", sheet = "Sheet2")
-newnames <- rbind(aliases_supers, aliases_experts)
-
-reshapedData <- merge(reshapedData, newnames, by.x = "person", by.y = "name", all.x = TRUE)
-```
-
-```{r}
-# Drop "person" and rename alias to "person"
-reshapedData <- reshapedData %>%
-  select(-person) %>%
-  rename(person = alias) %>%
-  select(person, Camp, ID, everything())
 ```
 
 ```{r}
