@@ -7,6 +7,12 @@ library(xpt)
 
 library(ggplot2)
 library(scales)
+
+# For Fiedler heatmaps
+library(igraph)
+library(ggplot2)
+library(reshape2)
+library(RColorBrewer)
 ```
 
 ```{r}
@@ -172,10 +178,10 @@ write.csv(PC, "PC.csv", row.names = FALSE)
 
 ```{r}
 # P(c) by question
-p_by_question_graph(reshapedData, "Camp", "P(Question Resolves \"Yes\")", "Pc", "ID", palette2, "p8_graphs/pc_by_question.png")
+p_by_question_graph(reshapedData, "Camp", "P(Question Resolves \"Yes\")", "Pc", "ID", palette2, "figures/pc_by_question.png")
 
 # P(U|c) by question
-p_by_question_graph(reshapedData, "Camp", "P(AI Extinction by 2100 | Question Resolves \"Yes\")", "PUc", "ID", palette2, "p8_graphs/puc_by_question.png")
+p_by_question_graph(reshapedData, "Camp", "P(AI Extinction by 2100 | Question Resolves \"Yes\")", "PUc", "ID", palette2, "figures/puc_by_question.png")
 ```
 
 ```{r}
@@ -354,7 +360,7 @@ ggplot(all_corrs, aes(x = category, y = raw_corr, fill = category)) +
   theme_minimal() +
   scale_fill_manual(values = c("Skeptical" = "#7575d8", "Concerned" = "#dd6565", "Cross-Camp" = "yellow"))
 
-ggsave("pearson_corrs.png", width = 9, height = 8)
+ggsave("corr_graphs/pearson_corrs.png", width = 9, height = 8)
 ```
 
 ```{r}
@@ -369,7 +375,7 @@ ggplot(all_corrs, aes(x = category, y = spearman_corr, fill = category)) +
   theme_minimal() +
   scale_fill_manual(values = c("Skeptical" = "#7575d8", "Concerned" = "#dd6565", "Cross-Camp" = "yellow"))
 
-ggsave("spearman_corrs.png", width = 9, height = 8)
+ggsave("corr_graphs/spearman_corrs.png", width = 9, height = 8)
 ```
 
 ```{r}
@@ -829,18 +835,18 @@ plotMe <- function(reshapedData) {
 }
 
 plotMe(reshapedData)
-ggsave("VoI_log.png", width = 10, height = 8)
+ggsave("figures/VoI_log.png", width = 10, height = 8)
 
 # Ordered versions of same
 reshapedData$ID <- factor(reshapedData$ID, levels = central_tendency$ID[order(central_tendency$q50_KL_concerned)])
 
 plotMe(reshapedData)
-ggsave("VoI_log_ordered_concerned.png", width = 10, height = 9)
+ggsave("figures/VoI_log_ordered_concerned.png", width = 10, height = 9)
 
 reshapedData$ID <- factor(reshapedData$ID, levels = central_tendency$ID[order(central_tendency$q50_KL_skeptic)])
 
 plotMe(reshapedData)
-ggsave("VoI_log_ordered_skeptic.png", width = 10, height = 9)
+ggsave("figures/VoI_log_ordered_skeptic.png", width = 10, height = 9)
 ```
 
 ```{r}
@@ -867,54 +873,6 @@ if (FALSE) {
 ```
 
 ```{r}
-# Fiedler ordering & heatmap
-
-# install necessary packages
-library(igraph)
-library(pheatmap)
-
-make_fiedler_ordered_heatmap <- function(mat, title) {
-  #' @param mat a matrix of pairwise VoD for ONE QUESTION
-
-  # NOTE: NOT SURE IF THIS IS THE RIGHT THING TO DO
-  mat[is.nan(mat)] <- 0
-  mat[is.na(mat)] <- 0
-
-  # create an igraph object
-  g <- graph_from_adjacency_matrix(mat, mode = "undirected", weighted = TRUE, diag = FALSE)
-
-  # calculate Laplacian matrix
-  laplacian <- laplacian_matrix(g)
-
-  # compute eigenvalues and eigenvectors
-  eigen_info <- eigen(laplacian)
-
-  # get the Fiedler vector - the eigenvector of the second smallest eigenvalue
-  fiedler_vector <- eigen_info$vectors[, which.min(eigen_info$values[eigen_info$values > min(eigen_info$values)])]
-
-  # create an ordering based on the Fiedler vector
-  fiedler_ordering <- order(fiedler_vector)
-
-  # reorder the adjacency matrix
-  mat_reordered <- mat[fiedler_ordering, fiedler_ordering]
-
-  # Start png device
-  png(paste0("p8_heatmaps/heatmap_anon_", title, ".png"), width = 800, height = 800)
-
-  # create a heatmap
-  pheatmap(mat_reordered, main = title, angle_col = "45")
-
-  # Close device
-  dev.off()
-}
-```
-
-```{r}
-library(igraph)
-library(ggplot2)
-library(reshape2)
-library(RColorBrewer)
-
 make_fiedler_ordered_heatmap_2 <- function(mat, title) {
   # Get the Fiedler order
   g <- graph_from_adjacency_matrix(mat, mode = "undirected", weighted = TRUE, diag = FALSE)
@@ -951,7 +909,7 @@ make_fiedler_ordered_heatmap_2 <- function(mat, title) {
     ylab(NULL)
 
   # Save the plot
-  ggsave(filename = paste0("p8_heatmaps/lower_triangle_", title, ".png"), plot = p, width = 8, height = 7)
+  ggsave(filename = paste0("heatmaps/lower_triangle_", title, ".png"), plot = p, width = 8, height = 7)
 }
 ```
 
@@ -1119,128 +1077,6 @@ write.csv(results_df_cross_camp_agg, "P8_results_df_cross_camp_VoD_LEVEL_agg.csv
 ```
 
 ```{r}
-VoD_quantiles <- results_df_cross_camp %>%
-  group_by(ID) %>%
-  summarize(
-    median = quantile50(VoD),
-    # Give me two more columns: 25th quantile and 75th quantile
-    quantile_25 = quantile(VoD, 0.25, na.rm = TRUE),
-    quantile_75 = quantile(VoD, 0.75, na.rm = TRUE)
-  ) %>%
-  mutate(
-    IQR = quantile_75 - quantile_25,
-    platform = grepl("Platform", ID)
-  ) %>%
-  arrange(desc(median)) %>%
-  select(ID, median, quantile_25, quantile_75, IQR, platform)
-
-VoD_quantiles <- merge(VoD_quantiles, VoD_between_medians, by = "ID")
-
-# Make ID a factor, ordered by median
-VoD_quantiles$ID <- factor(VoD_quantiles$ID, levels = VoD_quantiles$ID[order(VoD_quantiles$median)])
-
-# Plot VoD_quantiles with x axis is ID (question) and plot box with quantile_25 and quantile_75
-ggplot(VoD_quantiles, aes(x = ID, y = median)) +
-  geom_boxplot() +
-  geom_errorbar(aes(ymin = quantile_25, ymax = quantile_75, color = platform), width = 0.2) +
-  labs(x = "Question ID", y = "Log VoD", title = "Log VoD Between Cross-Camp Pairs") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) #+
-# Plot VoD_log_gmod as green stars
-# geom_point(aes(y = VoD_log_gmod, color = 'green'), shape = 8, size = 3, show.legend = FALSE)
-
-ggsave("VoD_log_gmod_easy.png", width = 8, height = 8)
-```
-
-```{r}
-# Plot VoD_quantiles$median for each question as bar graph - over/under zero
-bars <- ggplot(VoD_quantiles, aes(x = ID, y = median, fill = median)) +
-  geom_bar(stat = "identity") +
-  labs(x = "Question", y = "Median Log VoD For Cross-Camp Pairs") +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    plot.margin = margin(, , , 2, "cm"),
-    axis.title.x = element_text(margin = margin(t = 20)),
-    legend.position = "none"
-  ) +
-  scale_fill_gradient2(
-    low = "orange", high = "green", midpoint = 0,
-    limits = c(min(VoD_quantiles$median), max(VoD_quantiles$median))
-  )
-
-ggsave("VoD_log_gmod_easy_bars.png", width = 9, height = 8)
-```
-
-```{r}
-here <- results_df_cross_camp %>%
-  separate(ID_pair, c("ID", "person1", "person2"), sep = "_")
-
-order <- here %>%
-  group_by(ID) %>%
-  summarize(median = quantile50(value)) %>%
-  arrange(median) %>%
-  pull(ID)
-
-here <- merge(here, VoD_quantiles, by = "ID")
-
-jazz <- here %>%
-  ggplot(aes(x = factor(ID, levels = order), y = value)) +
-  geom_boxplot(aes(fill = factor(ID)), alpha = 0.7, outlier.shape = NA) + # fill boxes with color
-  geom_jitter(aes(color = factor(ID)), width = 0.2, alpha = 0.5) + # jittered points with color
-  stat_summary(fun = quantile50, geom = "point", shape = 23, size = 3, color = "black") +
-  labs(x = "Question", y = "VoD (cross-camp pairs)", fill = "Question", color = "Question") +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    plot.margin = margin(, , , 2, "cm"),
-    legend.position = "none"
-  )
-
-jazz <- here %>%
-  ggplot(aes(x = factor(ID, levels = order), y = value)) +
-  geom_boxplot(aes(fill = median), alpha = 0.7, outlier.shape = NA) +
-  geom_jitter(aes(color = median), width = 0.2, alpha = 0.5) +
-  stat_summary(fun = quantile50, geom = "point", shape = 23, size = 3, color = "black") +
-  labs(x = "Question", y = "VoD (cross-camp pairs)", fill = "Median", color = "Median") +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "grey", midpoint = 0) +
-  scale_color_gradient2(low = "blue", high = "red", mid = "grey", midpoint = 0) +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    plot.margin = margin(, , , 2, "cm"),
-    legend.position = "none"
-  )
-
-ggsave("P8_VOD_boxplot.png", jazz, width = 10, height = 8)
-```
-
-```{r}
-# Load necessary libraries
-library(ggplot2)
-library(ggridges)
-
-ordering <- VoD_quantiles %>%
-  arrange(median) %>%
-  pull(ID)
-
-results_df_cross_camp$ID <- factor(results_df_cross_camp$ID, levels = ordering)
-
-# Create dot/half violin plots
-p <- ggplot(results_df_cross_camp, aes(x = ID, y = value)) +
-  geom_violin(aes(fill = ID), scale = "width") +
-  # geom_dotplot(aes(fill = ID), binaxis = 'y', stackdir = 'center', position = position_nudge(x = -0.2), dotsize = 0.5) +
-  theme_minimal() +
-  labs(title = "Dot and Half-Violin Plots by ID", y = "Value", x = "ID") +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    plot.margin = margin(, , , 2, "cm"),
-    legend.position = "none"
-  )
-
-ggsave("VoD_log_violinish.png", width = 9, height = 8)
-```
-
-```{r}
 results_df_cross_camp_f <- results_df_cross_camp %>%
   select(ID, value) %>%
   group_by(ID) %>%
@@ -1294,24 +1130,6 @@ print(aggVoi %>% arrange(median_voi), n = 40)
 # Is it ever the case that PU is zero but PUc is not? That would be inconsistent
 reshapedData %>%
   filter(PU == 0 & PUc != 0)
-```
-
-```{r}
-# Histogram of median Log VOI's
-ggplot(aggVoi, aes(x = median_voi)) +
-  geom_histogram(binwidth = 0.00001) +
-  labs(x = "Median Log VOI", y = "Count")
-
-ggsave("median_voi_hist.png", width = 10, height = 10)
-```
-
-```{r}
-# Histogram of mean Log VOI's
-ggplot(aggVoi, aes(x = mean_voi)) +
-  geom_histogram(binwidth = 0.001) +
-  labs(x = "Mean Log VOI", y = "Count")
-
-ggsave("mean_voi_hist.png", width = 10, height = 10)
 ```
 
 ```{r}
@@ -1426,21 +1244,6 @@ JC50 <- VoI_log(1e-8, 4e-8, 1e-6)
 LR70 <- VoI_log(1e-8, 1e-6, 1e-5)
 CQ40 <- VoI_log(1e-8, 1e-7, 1e-8)
 HN50 <- VoI_log(1e-8, 1e-8, 1e-1)
-```
-
-```{r}
-# This is just a little something about aggregation for research discussion slide deck
-subby <- reshapedData %>% filter(grepl("Platform: AI", ID))
-
-longData <- tidyr::pivot_longer(subby, c("PU", "Pc", "PUc"))
-
-# Plotting
-ggplot(longData, aes(x = name, y = value, color = Camp)) +
-  geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.3)) +
-  labs(x = "Forecasts", y = "Value") +
-  theme_minimal()
-
-ggsave("componentwise_AI_regulation.png", width = 10, height = 8)
 ```
 
 ```{r}

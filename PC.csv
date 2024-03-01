@@ -1,38 +1,38 @@
 "ID","Concerned","Skeptical"
-"Req testing",0.8,0.1
-"IC demonstration",0.65,0.14
-"Muehlhauser policies",0.65,0.15
-"Platform: Transformative growth",0.43,0.02
-"Evidence of misalignment",0.4,0.01
-"Power-seeking shutdown",0.3,0.05
-"Supers changing minds",0.3,0.05
-"Platform: ARC Evals",0.25,0.01
-"Other fields IC",0.5,0.3
-"Progress in lethal technologies",0.4,0.2
-"IT progress",0.2,0.01
-"Alignment researchers changing minds",0.2,0.03
-"AI articles and apps",0.2,0.05
-"AI Robotics",0.2,0.05
-"Short-term GDP change",0.25,0.1
-"Platform: AI regulation",0.36,0.5001
-"AI Forecasting skill",0.33,0.19
-"Warning shot",0.17,0.03
-"Fast AI efficiency gains",0.15,0.02
-"AI solving novel math problems",0.1,0.2
-"Cyberattacks",0.2,0.1
-"Intergovernmental AI safety",0.25,0.15
-"Non-democracy AI",0.1,0.2
-"Power-seeking",0.15,0.05
-"Major powers war",0.115,0.02
-"Escalating warning shots",0.09,0.002
-"AI writes AI",0.1,0.02
-"Reduction in AI investment",0.12,0.05
-"No violence LLM",0.1,0.05
-"Taiwan-China",0.3,0.25
-"AI coding",0.65,0.7
-"Platform: Escalating warning shots",0.05,0.0025
 "6 month pause",0.05,0.03
-"Democratic influence",0.02,0.003
+"AI Forecasting skill",0.33,0.19
+"AI Robotics",0.2,0.05
+"AI articles and apps",0.2,0.05
+"AI coding",0.65,0.7
+"AI solving novel math problems",0.1,0.2
+"AI writes AI",0.1,0.02
+"Alignment researchers changing minds",0.2,0.03
 "Alignment solution",0.05,0.05
+"Cyberattacks",0.2,0.1
+"Democratic influence",0.02,0.003
+"Escalating warning shots",0.09,0.002
+"Evidence of misalignment",0.4,0.01
+"Fast AI efficiency gains",0.15,0.02
+"IC demonstration",0.65,0.14
+"IT progress",0.2,0.01
+"Intergovernmental AI safety",0.25,0.15
+"Major powers war",0.115,0.02
+"Muehlhauser policies",0.65,0.15
+"No violence LLM",0.1,0.05
+"Non-democracy AI",0.1,0.2
+"Other fields IC",0.5,0.3
+"Platform: AI regulation",0.36,0.5001
+"Platform: ARC Evals",0.25,0.01
+"Platform: Escalating warning shots",0.05,0.0025
+"Platform: Transformative growth",0.43,0.02
 "Politicization",0.2,0.2
+"Power-seeking",0.15,0.05
+"Power-seeking shutdown",0.3,0.05
+"Progress in lethal technologies",0.4,0.2
 "Public concern",0.05,0.05
+"Reduction in AI investment",0.12,0.05
+"Req testing",0.8,0.1
+"Short-term GDP change",0.25,0.1
+"Supers changing minds",0.3,0.05
+"Taiwan-China",0.3,0.25
+"Warning shot",0.17,0.03
