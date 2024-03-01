@@ -182,25 +182,6 @@ reshapedData <- reshapedData %>%
 ```
 
 ```{r}
-# Why are there still NaN's in VoI_log? NA's are when they didn't answer the question (fine), but NaN's are perplexing
-inconsistent <- reshapedData %>%
-  filter(is.nan(VoI_log) | is.na(PU)) %>%
-  select(person, Camp, ID, PU, Pc, PUc, punotc, VoI_log) %>%
-  arrange(ID)
-
-write.csv(inconsistent, "inconsistent.csv", row.names = FALSE)
-
-claireWarning <- reshapedData %>%
-  filter(grepl("Claire", person), grepl("Warning shot", ID))
-
-# FIXED
-claireWarning %>%
-  mutate(punotc = punotc(Pc, PUc, PU)) %>%
-  mutate(VoI_log = VoI_log(PU, PUc, Pc, punotc)) %>%
-  mutate(VoI_naive = VoI_naive(PU, PUc, Pc, punotc))
-```
-
-```{r}
 reshapedData <- reshapedData %>%
   filter(!is.na(PU)) %>% # cases where P(c) * P(U|c) > P(U) OR either P(c) or P(U|c) were NA
   filter(!is.nan(VoI_log))
@@ -763,12 +744,6 @@ ggsave("VoD_heatmap.png", heatmap_plot, width = 10, height = 8)
 ```
 
 ```{r}
-exQuestion <- reshapedData %>% filter(grepl("Progress", ID))
-
-VoD_log_gmod_easy(exQuestion, "James (Skeptical)", "Ash (Skeptical)")
-```
-
-```{r}
 # Add direction of update
 reshapedData <- reshapedData %>%
   mutate(direction = ifelse(PUc > PU, "up", ifelse(PUc == PU, "no change", "down")))
@@ -1225,45 +1200,6 @@ ggsave("VoD_log_gmod_easy.png", width = 8, height = 8)
 ```
 
 ```{r}
-# VOD: For each question, tell me average percent of the time that the median VoD was higher than any other question
-
-fortableD <- comparison_df_VoD %>%
-  group_by(Var1) %>%
-  summarize(stat = mean(Freq, na.rm = TRUE)) %>%
-  rename(ID = Var1)
-
-results_df_cross_camp_q50 <- results_df_cross_camp %>%
-  group_by(ID) %>%
-  summarize(value = quantile50(value))
-
-table1 <- merge(fortableD, results_df_cross_camp_q50, by = "ID") %>%
-  select(ID, value, stat) %>%
-  arrange(value, ascending = FALSE)
-
-write.csv(table1, "table_VoD.csv", row.names = FALSE)
-```
-
-```{r}
-# VOI: Ditto
-
-fortableI <- comparison_df %>%
-  group_by(Var1) %>%
-  summarize(stat = mean(Freq, na.rm = TRUE)) %>%
-  rename(ID = Var1)
-
-medianVOI <- central_tendency %>%
-  select(ID, q50_KL_skeptic) %>% # CHANGE!!!!!
-  rename(medians = q50_KL_skeptic)
-
-table2 <- merge(fortableI, central_tendency) %>%
-  select(ID, q50_KL_skeptic, stat) %>% # You have to change this!!
-  arrange(q50_KL_skeptic, ascending = FALSE)
-
-# Which camp did you just do? See currCamp
-write.csv(table2, paste0("table_VOI_", currCamp, ".csv"), row.names = FALSE)
-```
-
-```{r}
 # Plot VoD_quantiles$median for each question as bar graph - over/under zero
 bars <- ggplot(VoD_quantiles, aes(x = ID, y = median, fill = median)) +
   geom_bar(stat = "identity") +
@@ -1387,20 +1323,6 @@ write.csv(cc, "componentwise.csv", row.names = FALSE)
 ```
 
 ```{r}
-# Spot-checking VoD on short-term GDP change
-gdp <- reshapedData %>% filter(grepl("Short-term", ID))
-# VoD ~ 0
-xander_v_vincent <- VoD_log_gmod_easy(gdp, "Xander (Concerned)", "Vincent (Concerned)")
-# VoD ~ 4
-xander_v_quentin <- VoD_log_gmod_easy(gdp, "Xander (Concerned)", "Quentin (Concerned)")
-# Very negative VoD
-ume_v_hank <- VoD_log_gmod_easy(gdp, "Ume (Concerned)", "Hank (Skeptical)")
-ume_v_ash <- VoD_log_gmod_easy(gdp, "Ume (Concerned)", "Ash (Skeptical)")
-ume_v_james <- VoD_log_gmod_easy(gdp, "Ume (Concerned)", "James (Skeptical)")
-ume_v_claire <- VoD_log_gmod_easy(gdp, "Ume (Concerned)", "Claire (Skeptical)")
-```
-
-```{r}
 # Group by question, get gmod Log VOI for each question
 aggVoi <- reshapedData %>%
   group_by(ID) %>%
@@ -1414,12 +1336,6 @@ aggVoi <- reshapedData %>%
 ```{r}
 # Order ID levels
 print(aggVoi %>% arrange(median_voi), n = 40)
-```
-
-```{r}
-# How many NA's are there in reshapedData$VoI_log? NA's bad, should fix
-sum(is.na(reshapedData$VoI_log))
-sum(reshapedData$VoI_log == 0)
 ```
 
 ```{r}
@@ -1616,7 +1532,11 @@ best_of %>%
   summarize(
     median = quantile50(percent_max_VoI),
     mean = mean(percent_max_VoI),
-    sd = sd(percent_max_VoI)
+    # sd = sd(percent_max_VoI),
+    min = min(percent_max_VoI),
+    max = max(percent_max_VoI),
+    p05 = quantile(percent_max_VoI, 0.05),
+    p95 = quantile(percent_max_VoI, 0.95)
   )
 ```
 
@@ -1680,10 +1600,6 @@ make_fiedler_ordered_heatmap(vod_matrix, "Best Of VoD for Each Pair (without Tra
 ```
 
 ```{r}
-aa %>% filter("Xander (Concerned)" == ID2, "James (Skeptical)" == ID1)
-```
-
-```{r}
 # Join ID1 and ID2 into one column & filter to cross-camp pairs
 bb <- aa %>%
   mutate(ID = paste0(pmin(ID1, ID2), "_", pmax(ID1, ID2))) %>%
@@ -1721,78 +1637,4 @@ stacked <- reshapedData %>%
     percent_down = sum(direction == "down") / n() * 100,
     percent_no_change = sum(direction == "no change") / n() * 100
   )
-```
-
-```{r}
-# Extracting the order based on percent_down for Concerned group
-order_index <- stacked %>%
-  filter(Camp == "Concerned") %>%
-  arrange(-percent_down) %>%
-  pull(ID)
-
-# Setting the order in the stacked dataframe
-stacked$ID <- factor(stacked$ID, levels = order_index)
-
-# Reshaping the data with pivot_longer
-stacked_melted <- pivot_longer(stacked, cols = starts_with("percent_"), names_to = "Category", values_to = "Value")
-
-# Rename the Categories
-stacked_melted$Category[stacked_melted$Category == "percent_down"] <- "Down"
-stacked_melted$Category[stacked_melted$Category == "percent_up"] <- "Up"
-stacked_melted$Category[stacked_melted$Category == "percent_no_change"] <- "No Change"
-
-# Adjusting the order of categories for stacked bars AFTER renaming
-stacked_melted$Category <- factor(stacked_melted$Category, levels = c("Up", "No Change", "Down"))
-
-# Plotting
-stacks <- ggplot(stacked_melted, aes(x = ID, y = Value, fill = Category)) +
-  geom_bar(stat = "identity", position = "stack") +
-  facet_grid(Camp ~ ., scales = "free_x", space = "free") +
-  labs(y = "", x = "Question", fill = "Direction of\nUpdate") +
-  scale_fill_manual(values = c("Up" = "#FED766", "Down" = "#56A96A", "No Change" = "#272727")) +
-  theme_minimal() +
-  theme(
-    axis.text.x.top = element_blank(), axis.ticks.x.top = element_blank(),
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    plot.margin = margin(, , , 3, "cm"),
-    legend.position = "none"
-  )
-
-ggsave("stacks_direction.png", stacks, width = 8, height = 10, dpi = 300)
-```
-
-```{r}
-# Debugging stacked bar chart....
-reshapedData %>%
-  group_by(ID, Camp, direction) %>%
-  summarize(n = n())
-```
-
-```{r}
-# Take two
-
-# Calculate "% down" for each ID within the "Concerned" camp and arrange the levels of ID based on this.
-reshapedData <- reshapedData %>%
-  group_by(ID) %>%
-  summarize(percent_down = sum(direction == "down" & Camp == "Concerned") / n()) %>%
-  arrange(-percent_down) %>%
-  left_join(reshapedData) %>%
-  mutate(ID = factor(ID, levels = unique(ID)))
-
-# Plot
-stacked2 <- ggplot(reshapedData, aes(x = ID, fill = direction)) +
-  geom_bar(position = "fill", stat = "count", show.legend = TRUE) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  facet_grid(Camp ~ ., scales = "free_x", space = "free") +
-  labs(y = "Percent of Participants", y = "Question", fill = "Direction of\nUpdate") +
-  scale_fill_manual(values = c("up" = "#FED766", "down" = "#56A96A", "no change" = "#272727")) +
-  theme_minimal() +
-  theme(
-    axis.text.x.top = element_blank(), axis.ticks.x.top = element_blank(),
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    plot.margin = margin(, , , 2, "cm"),
-    legend.position = "none"
-  )
-
-ggsave("stacks_direction.png", stacked2, width = 10, height = 14)
 ```
