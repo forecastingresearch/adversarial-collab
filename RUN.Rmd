@@ -4,8 +4,6 @@ library(dplyr)
 library(voivod) # devtools::install_github("forecastingresearch/voi-vod")
 library(ggplot2)
 library(xpt)
-
-library(ggplot2)
 library(scales)
 
 # For Fiedler heatmaps
@@ -13,6 +11,13 @@ library(igraph)
 library(ggplot2)
 library(reshape2)
 library(RColorBrewer)
+
+# Inter-rater reliability
+library(irr)
+```
+
+```{r}
+reshapedData <- read.csv("FORECASTS.csv")
 ```
 
 ```{r}
@@ -26,11 +31,61 @@ geoMeanOfOddsCalc <- function(x) {
   geoMeanOfOdds <- geoMeanOfOdds / (geoMeanOfOdds + 1)
   return(geoMeanOfOdds)
 }
+
+p_by_question_graph <- function(data, group_colname, xlab, pname, qname, palette, fpath) {
+  # Calculate median for each group and ID
+  medians <- data %>%
+    group_by(!!sym(qname), !!sym(group_colname)) %>%
+    summarize(median_P = quantile50(!!sym(pname)), .groups = "drop")
+
+  # Get values for each group/camp
+  values <- with(getValues(data, {{ group_colname }}), c(value1, value2))
+
+  # Prepare shading data and calculate differences
+  shade_data <- medians %>%
+    spread(key = !!sym(group_colname), value = median_P) %>%
+    rename(median_Value1 = values[1], median_Value2 = values[2]) %>%
+    mutate(difference = abs(median_Value1 - median_Value2))
+
+  # Order IDs by the biggest difference between medians
+  ordered_IDs <- shade_data %>%
+    arrange(desc(difference)) %>%
+    pull(!!sym(qname))
+
+  # Dynamically update the column specified by 'column_name' - order by ID
+  data <- data %>%
+    mutate(!!sym(qname) := factor(!!sym(qname), levels = ordered_IDs))
+
+  medians <- medians %>%
+    mutate(!!sym(qname) := factor(!!sym(qname), levels = ordered_IDs))
+
+  shade_data <- shade_data %>%
+    mutate(!!sym(qname) := factor(!!sym(qname), levels = ordered_IDs))
+
+  # Plot with jittered dots, shaded area, and median markers
+  ggplot() +
+    geom_jitter(data = data, aes(y = !!sym(qname), x = !!sym(pname), color = !!sym(group_colname)), width = 0, height = 0.2, alpha = 0.5, size = 3) +
+    geom_rect(data = shade_data, aes(ymin = as.numeric(!!sym(qname)) - 0.4, ymax = as.numeric(!!sym(qname)) + 0.4, xmin = median_Value1, xmax = median_Value2), fill = "grey", alpha = 0.5, inherit.aes = FALSE) +
+    geom_point(data = medians, aes(x = median_P, y = as.numeric(!!sym(qname)), color = !!sym(group_colname)), size = 6, shape = 124) +
+    labs(y = "Question", x = xlab, color = group_colname) +
+    scale_color_manual(values = palette) +
+    theme_minimal() +
+    theme(
+      text = element_text(size = 14),
+      axis.title = element_text(size = 16),
+      axis.text = element_text(size = 14),
+      legend.title = element_text(size = 16),
+      legend.text = element_text(size = 14)
+    )
+
+  # Save to file
+  ggsave(fpath, width = 10, height = 12)
+}
 ```
 
 ```{r}
 # Get median PU for each camp
-medianPU <- pSheet_final %>%
+medianPU <- reshapedData %>%
   group_by(Camp) %>%
   summarize(medianPU = median(PU, na.rm = TRUE))
 
@@ -116,23 +171,15 @@ maxVOD_level_easy <- function(dt, id1, id2) {
 ```
 
 ```{r}
-reshapedData <- read.csv("FORECASTS.csv")
-```
-
-```{r}
-# Add Log VOI (KL Divergence) now if it's P8 data
+# Add Log VOI (KL Divergence)
 reshapedData <- reshapedData %>%
   rowwise() %>%
   mutate(punotc = punotc(Pc, PUc, PU))
-```
 
-```{r}
 # For rows with incoherent forecasts, make PU NA (we'll drop these)
 reshapedData <- reshapedData %>%
   mutate(PU = ifelse(PUc * Pc > PU, NA, PU))
-```
 
-```{r}
 reshapedData <- reshapedData %>%
   mutate(VoI_log = VoI_log(PU, PUc, Pc, punotc)) %>%
   mutate(VoI_naive = VoI_naive(PU, PUc, Pc, punotc)) %>%
@@ -162,7 +209,6 @@ bresults <- reshapedData %>%
 ```
 
 ```{r}
-palette1 <- c("#59C3C3", "#52489C")
 palette2 <- c("#006E90", "#F18F01")
 ```
 
@@ -174,6 +220,51 @@ PC <- reshapedData %>%
   pivot_wider(names_from = Camp, values_from = median)
 
 write.csv(PC, "PC.csv", row.names = FALSE)
+```
+
+```{r}
+# Holden/Benjamin's alt VOI
+
+# Same for bresults
+bresults_ranks <- bresults %>%
+  group_by(Camp) %>%
+  mutate(rank_original = rank(-median, ties.method = "min")) %>%
+  select(-confint_lower, -confint_upper)
+
+cherry3 <- reshapedData %>%
+  select(-VoI_log, -VoI_naive)
+
+# We want the opposite camp's PC, so let's swap the camps in PC and make it long
+PC_cherry3 <- PC %>%
+  pivot_longer(cols = c(Concerned, Skeptical), names_to = "Camp", values_to = "PC") %>%
+  mutate(Camp = ifelse(Camp == "Concerned", "Skeptical", "Concerned")) %>%
+  rename(PC_alt = PC)
+
+# Merge the PC data with the reshapedData
+cherry3 <- merge(cherry3, PC_cherry3, by = c("ID", "Camp")) %>%
+  rowwise() %>%
+  mutate(
+    VoI_log = VoI_log(PU, PUc, pc = Pc, punotc = punotc, pc_weight = PC_alt)
+  )
+
+write.csv(cherry3, "counterpart-voi.csv", row.names = FALSE)
+```
+
+```{r}
+cherry_agg3 <- cherry3 %>%
+  group_by(ID, Camp) %>%
+  summarize(median = quantile50(VoI_log))
+
+# Add ranks for both camps
+cherry_agg_ranks3 <- cherry_agg3 %>%
+  group_by(Camp) %>%
+  mutate(rank_alt = rank(-median, ties.method = "min"))
+
+# Merge the two data frames
+cherry_agg_ranks3 <- merge(cherry_agg_ranks3, bresults_ranks, by = c("ID", "Camp")) %>%
+  arrange(rank_alt)
+
+write.csv(cherry_agg_ranks3, "counterpart-voi-agg.csv", row.names = FALSE)
 ```
 
 ```{r}
@@ -211,10 +302,7 @@ sum(reshapedData$VoI_log > reshapedData$max_VoI)
 ```
 
 ```{r}
-# IRR
-library(dplyr)
-library(tidyr)
-library(irr)
+# Inter-rater reliability
 
 kripp_alpha_result <- list()
 
@@ -324,17 +412,6 @@ combined_medians <- rbind(
 ```
 
 ```{r}
-# Calculate the 95% CI for each correlation type and name (mixed, skeptical, concerned)
-ci_results <- lapply(numeric_results, function(x) {
-  # Calculate the 95% CI
-  ci <- quantile(x, c(0.025, .25, .50, .75, 0.975))
-
-  # Return the CI
-  return(ci)
-})
-```
-
-```{r}
 # Simple corrs plots
 library(dplyr)
 library(ggplot2)
@@ -393,10 +470,12 @@ write.csv(juice, "VOI_medians.csv", row.names = FALSE)
 
 ```{r}
 juice_naive <- reshapedData %>%
+  rowwise() %>%
+  mutate(maxVOI = VoI_naive(PU, 1 - (1E-16), PU)) %>%
   group_by(ID, Camp) %>%
   summarize(
     medianVOI = quantile50(VoI_naive),
-    medianPercentMaxVOI = quantile50(VoI_naive / VoI_naive(PU, 1 - (1E-16), PU))
+    medianPercentMaxVOI = quantile50(VoI_naive / maxVOI)
   ) %>% # Divide by max naive VOI
   pivot_wider(names_from = Camp, values_from = c(medianVOI, medianPercentMaxVOI)) %>%
   select(ID, medianVOI_Concerned, medianPercentMaxVOI_Concerned, medianVOI_Skeptical, medianPercentMaxVOI_Skeptical)
@@ -663,9 +742,91 @@ heatmap_plot <- ggplot(comparison_df, aes(x = Var1, y = Var2, fill = Freq)) +
 ggsave(paste0(currCamp, "_VoI_heatmap.png"), heatmap_plot, width = 10, height = 8)
 ```
 
+
+```{r}
+# PAIRWISE LOG gmod VOD
+
+# For each question (ID) in reshapedData, for each pair of people (person), calculate the VoD (log, gmod)
+
+results <- list()
+
+# Split dataframe by ID
+split_data <- split(reshapedData, reshapedData$ID)
+
+for (id in unique(reshapedData$ID)) {
+  dt_subset <- split_data[[as.character(id)]]
+
+  # Identify all unique person combinations
+  people <- unique(dt_subset$person)
+  combinations <- combn(people, 2) # Gets all combinations of people taken 2 at a time
+
+  # For each combination, compute the statistic
+  for (col in seq(1, ncol(combinations))) {
+    id1 <- combinations[1, col]
+    id2 <- combinations[2, col]
+
+    statistic_value_1 <- VoD_log_gmod_easy(dt_subset, id1, id2)
+    statistical_value_2 <- maxVOD_easy(dt_subset, id1, id2)
+
+    results[[paste(id, id1, id2, "VoD", sep = "_")]] <- statistic_value_1
+    results[[paste(id, id1, id2, "maxVOD", sep = "_")]] <- statistical_value_2
+  }
+}
+
+# Convert the list of results to a dataframe
+results_df <- data.frame(ID_pair_statistic = names(results), value = unlist(results))
+
+# Filter to only the rows that contain (Skeptical) AND (Concerned)
+results_df_cross_camp <- results_df %>%
+  filter(grepl("Skeptical", ID_pair_statistic) & grepl("Concerned", ID_pair_statistic))
+
+# Extract ID, stat, and value
+results_df_cross_camp <- results_df_cross_camp %>%
+  mutate(
+    ID = gsub("_.+$", "", ID_pair_statistic),
+    pair = gsub("^[^_]+_", "", gsub("_[^_]+$", "", ID_pair_statistic)),
+    stat = gsub("^.+_", "", ID_pair_statistic)
+  ) %>%
+  select(-ID_pair_statistic)
+
+# Reshape the data frame to have VoD and maxVOD columns
+results_df_cross_camp <- results_df_cross_camp %>%
+  pivot_wider(names_from = stat, values_from = value)
+
+# Add percent of max VOD
+results_df_cross_camp <- results_df_cross_camp %>%
+  mutate(percent_max_VoD = VoD / maxVOD)
+
+results_df_cross_camp_agg <- results_df_cross_camp %>%
+  group_by(ID) %>%
+  summarize(
+    median_VoD = quantile50(VoD),
+    median_VoD_pom = quantile50(percent_max_VoD)
+  ) %>%
+  arrange(desc(median_VoD))
+
+write.csv(results_df_cross_camp_agg, "P8_results_df_cross_camp_VoD_agg.csv", row.names = FALSE)
+```
+
+```{r}
+VoD_quantiles <- results_df_cross_camp %>%
+  group_by(ID) %>%
+  summarize(
+    median = quantile50(VoD),
+    # Give me two more columns: 25th quantile and 75th quantile
+    quantile_25 = quantile(VoD, 0.25, na.rm = TRUE),
+    quantile_75 = quantile(VoD, 0.75, na.rm = TRUE)
+  ) %>%
+  mutate(
+    IQR = quantile_75 - quantile_25,
+    platform = grepl("Platform", ID)
+  ) %>%
+  arrange(desc(median)) %>%
+  select(ID, median, quantile_25, quantile_75, IQR, platform)
+```
+
 ```{r}
 # NOW VOD: Make a nice heatmap of that comparison_matrix
-library(ggplot2)
 
 # Convert the matrix to a tidy format for ggplot2
 comparison_df_VoD <- as.data.frame(as.table(comparison_matrix_VoD))
@@ -761,52 +922,6 @@ VoD_between_medians <- arjj %>%
 ```
 
 ```{r}
-# AVERAGE RANK METHOD: FOR Log VOI
-# First, rank questions by person. Then take average rank of each question
-df <- reshapedData %>%
-  group_by(person) %>%
-  mutate(
-    rank_KL = rank(-VoI_log, ties.method = "min", na.last = "keep"),
-    rank_naive = rank(-VoI_naive, ties.method = "min", na.last = "keep")
-  )
-
-df_skeptic <- reshapedData %>%
-  filter(Camp == "Skeptical") %>%
-  group_by(person) %>%
-  mutate(
-    rank_skeptic_KL = rank(-VoI_log, ties.method = "min", na.last = "keep"),
-    rank_skeptic_naive = rank(-VoI_naive, ties.method = "min", na.last = "keep")
-  ) %>%
-  select(person, ID, rank_skeptic_KL, rank_skeptic_naive)
-
-df_concerned <- reshapedData %>%
-  filter(Camp == "Concerned") %>%
-  group_by(person) %>%
-  mutate(
-    rank_concerned_KL = rank(-VoI_log, ties.method = "min", na.last = "keep"),
-    rank_concerned_naive = rank(-VoI_naive, ties.method = "min", na.last = "keep")
-  ) %>%
-  select(person, ID, rank_concerned_KL, rank_concerned_naive)
-
-df <- merge(df, df_skeptic, by = c("ID", "person"), all.x = TRUE)
-df <- merge(df, df_concerned, by = c("ID", "person"), all.x = TRUE)
-
-# Take average rank per question
-avg_ranks <- df %>%
-  group_by(ID) %>%
-  summarize(
-    avg_rank_KL = mean(rank_KL, na.rm = TRUE),
-    avg_rank_skeptic_KL = mean(rank_skeptic_KL, na.rm = TRUE),
-    avg_rank_concerned_KL = mean(rank_concerned_naive, na.rm = TRUE),
-    avg_rank_naive = mean(rank_naive, na.rm = TRUE),
-    avg_rank_skeptic_naive = mean(rank_skeptic_naive, na.rm = TRUE),
-    avg_rank_concerned_naive = mean(rank_concerned_naive, na.rm = TRUE)
-  )
-
-write.csv(avg_ranks, "mean_ranks_KL_and_naive.csv", row.names = FALSE)
-```
-
-```{r}
 # What's the max VoI_log for just the skeptic camp?
 max(reshapedData$VoI_log[reshapedData$Camp == "Skeptical"], na.rm = TRUE)
 
@@ -816,10 +931,10 @@ reshapedData$ID <- factor(reshapedData$ID, levels = central_tendency$ID[order(ce
 # create the plot
 plotMe <- function(reshapedData) {
   ggplot(reshapedData, aes(x = ID, y = VoI_log, color = Camp)) +
-    geom_point() +
+    geom_point(alpha = 0.5) +
     scale_y_continuous(
       trans = log10_trans(),
-      breaks = trans_breaks("log10", function(x) 10^x),
+      breaks = 10^seq(-34, -1, by = 3), # Breaks at 10^-14, 10^-12, ..., 10^-2
       labels = trans_format("log10", math_format(10^.x))
     ) +
     geom_point(data = central_tendency, aes(x = ID, y = q50_KL_concerned), color = "#0072c4", shape = 5, size = 3, show.legend = FALSE) +
@@ -841,12 +956,12 @@ ggsave("figures/VoI_log.png", width = 10, height = 8)
 reshapedData$ID <- factor(reshapedData$ID, levels = central_tendency$ID[order(central_tendency$q50_KL_concerned)])
 
 plotMe(reshapedData)
-ggsave("figures/VoI_log_ordered_concerned.png", width = 10, height = 9)
+ggsave("figures/VoI_log_ordered_concerned.png", width = 10, height = 7)
 
 reshapedData$ID <- factor(reshapedData$ID, levels = central_tendency$ID[order(central_tendency$q50_KL_skeptic)])
 
 plotMe(reshapedData)
-ggsave("figures/VoI_log_ordered_skeptic.png", width = 10, height = 9)
+ggsave("figures/VoI_log_ordered_skeptic.png", width = 10, height = 7)
 ```
 
 ```{r}
@@ -940,70 +1055,6 @@ for (question in uniqueIDs) {
 }
 ```
 
-```{r}
-# PAIRWISE LOG gmod VOD
-
-# For each question (ID) in reshapedData, for each pair of people (person), calculate the VoD (log, gmod)
-
-results <- list()
-
-# Split dataframe by ID
-split_data <- split(reshapedData, reshapedData$ID)
-
-for (id in unique(reshapedData$ID)) {
-  dt_subset <- split_data[[as.character(id)]]
-
-  # Identify all unique person combinations
-  people <- unique(dt_subset$person)
-  combinations <- combn(people, 2) # Gets all combinations of people taken 2 at a time
-
-  # For each combination, compute the statistic
-  for (col in seq(1, ncol(combinations))) {
-    id1 <- combinations[1, col]
-    id2 <- combinations[2, col]
-
-    statistic_value_1 <- VoD_log_gmod_easy(dt_subset, id1, id2)
-    statistical_value_2 <- maxVOD_easy(dt_subset, id1, id2)
-
-    results[[paste(id, id1, id2, "VoD", sep = "_")]] <- statistic_value_1
-    results[[paste(id, id1, id2, "maxVOD", sep = "_")]] <- statistical_value_2
-  }
-}
-
-# Convert the list of results to a dataframe
-results_df <- data.frame(ID_pair_statistic = names(results), value = unlist(results))
-
-# Filter to only the rows that contain (Skeptical) AND (Concerned)
-results_df_cross_camp <- results_df %>%
-  filter(grepl("Skeptical", ID_pair_statistic) & grepl("Concerned", ID_pair_statistic))
-
-# Extract ID, stat, and value
-results_df_cross_camp <- results_df_cross_camp %>%
-  mutate(
-    ID = gsub("_.+$", "", ID_pair_statistic),
-    pair = gsub("^[^_]+_", "", gsub("_[^_]+$", "", ID_pair_statistic)),
-    stat = gsub("^.+_", "", ID_pair_statistic)
-  ) %>%
-  select(-ID_pair_statistic)
-
-# Reshape the data frame to have VoD and maxVOD columns
-results_df_cross_camp <- results_df_cross_camp %>%
-  pivot_wider(names_from = stat, values_from = value)
-
-# Add percent of max VOD
-results_df_cross_camp <- results_df_cross_camp %>%
-  mutate(percent_max_VoD = VoD / maxVOD)
-
-results_df_cross_camp_agg <- results_df_cross_camp %>%
-  group_by(ID) %>%
-  summarize(
-    median_VoD = quantile50(VoD),
-    median_VoD_pom = quantile50(percent_max_VoD)
-  ) %>%
-  arrange(desc(median_VoD))
-
-write.csv(results_df_cross_camp_agg, "P8_results_df_cross_camp_VoD_agg.csv", row.names = FALSE)
-```
 
 ```{r}
 options(pillar.sigfig = 5)
@@ -1068,8 +1119,8 @@ results_df_cross_camp <- results_df_cross_camp %>%
 results_df_cross_camp_agg <- results_df_cross_camp %>%
   group_by(ID) %>%
   summarize(
-    median_VoD = quantile50(VoD, na.rm = TRUE),
-    median_VoD_pom = quantile50(percent_max_VoD, na.rm = TRUE)
+    median_VoD = quantile50(VoD),
+    median_VoD_pom = quantile50(percent_max_VoD)
   ) %>%
   arrange(desc(median_VoD))
 
@@ -1078,9 +1129,9 @@ write.csv(results_df_cross_camp_agg, "P8_results_df_cross_camp_VoD_LEVEL_agg.csv
 
 ```{r}
 results_df_cross_camp_f <- results_df_cross_camp %>%
-  select(ID, value) %>%
+  select(ID, VoD) %>%
   group_by(ID) %>%
-  summarize(median_cross_camp_pairs = quantile(value, type = 1, p = 0.5, na.rm = TRUE))
+  summarize(median_cross_camp_pairs = quantile50(VoD))
 
 median_forecasters_f <- arjj %>%
   select(ID, VoD_log_gmod)
@@ -1137,11 +1188,11 @@ reshapedData %>%
 directions <- reshapedData %>%
   group_by(ID, Camp) %>%
   summarize(numUp = sum(direction == "up"), numDown = sum(direction == "down"), numNoChange = sum(direction == "no change"), total = n()) %>%
-  # Determine ***REMOVED*** direction
+  # Determine majority direction
   mutate(
-    ***REMOVED***Direction =
+    majorityDirection =
       ifelse(numUp > 0.67 * total, "up",
-        ifelse(numDown > 0.67 * total, "down", "no ***REMOVED***")
+        ifelse(numDown > 0.67 * total, "down", "no majority")
       )
   )
 
@@ -1151,11 +1202,7 @@ M <- reshapedData %>%
 
 directions2 <- merge(M, directions, by = c("ID", "Camp")) %>%
   arrange(desc(median_KL))
-write.csv(directions2, "directions2.csv", row.names = FALSE)
-
-print(directions %>% select(ID, Camp, ***REMOVED***Direction), n = 60)
-
-write.csv(directions %>% select(ID, Camp, numUp, numDown, numNoChange, total), "directions.csv", row.names = FALSE)
+write.csv(directions2, "directions.csv", row.names = FALSE)
 ```
 
 ```{r}
@@ -1218,32 +1265,6 @@ dog <- ggplot(dogData, aes(x = InitFinal, y = Value, color = Camp)) +
   labs(x = "", y = "P(AI Extinction by 2100)", color = "Camp")
 
 ggsave("init-final-box-and-dots-p8.png", dog, width = 7, height = 7)
-```
-
-```{r}
-VoI_log(0.01, 0.0001, 0.08)
-VoI_log(0.01, 0.1, 0.08)
-```
-
-```{r}
-VoI_log(0.01, 0.001, 0.08)
-VoI_log(0.01, 0.0001, 0.08)
-```
-
-```{r}
-ss <- "(C2*log(C2/D2)+(1-C2)*log((1-C2)/(1-D2)))*B2 + (E2*log(E2/D2)+(1-E2)*log((1-E2)/(1-D2)))*(1-B2)"
-
-# In that string, replace C2 with PUc, D2 with PU, E2 with punotc, and B2 with Pc
-ss <- gsub("C2", "PUc", ss)
-ss <- gsub("D2", "PU", ss)
-ss <- gsub("E2", "punotc", ss)
-ss <- gsub("B2", "Pc", ss)
-
-CQ30 <- VoI_log(1e-8, 1e-7, 1e-6)
-JC50 <- VoI_log(1e-8, 4e-8, 1e-6)
-LR70 <- VoI_log(1e-8, 1e-6, 1e-5)
-CQ40 <- VoI_log(1e-8, 1e-7, 1e-8)
-HN50 <- VoI_log(1e-8, 1e-8, 1e-1)
 ```
 
 ```{r}
@@ -1350,8 +1371,6 @@ for (i in 1:(numpeople - 1)) {
     }
   }
 }
-
-make_fiedler_ordered_heatmap(vod_matrix, "Best Of VoD for Each Pair (without Transformative Growth)")
 ```
 
 ```{r}

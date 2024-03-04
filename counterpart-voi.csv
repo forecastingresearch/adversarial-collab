@@ -1,0 +1,635 @@
+"ID","Camp","person","PU","Pc","PUc","punotc","PC_alt","VoI_log"
+"6 month pause","Concerned","Pascal (Concerned)",0.09,0.55,0.09,0.09,0.03,0
+"6 month pause","Concerned","Zoe (Concerned)",0.21,0.2,0.18,0.2175,0.03,0.000107486524955894
+"6 month pause","Concerned","Ume (Concerned)",0.6,0.01,0.05,0.605555555555556,0.03,0.0091147711659705
+"6 month pause","Concerned","Yael (Concerned)",0.235,0.3,0.2,0.25,0.03,0.000305928589751329
+"6 month pause","Concerned","Stella (Concerned)",0.1,0.03,0.05,0.101546391752577,0.03,0.000223237372800499
+"6 month pause","Concerned","Wesley (Concerned)",0.25,0.03,0.1,0.254639175257732,0.03,0.000968152203903047
+"6 month pause","Concerned","Quentin (Concerned)",0.04,0.3,0.03,0.0442857142857143,0.03,0.000115994539021228
+"6 month pause","Concerned","Riley (Concerned)",0.3,0.05,0.1,0.310526315789474,0.03,0.00162594826523156
+"6 month pause","Skeptical","Blake (Skeptical)",0.002,0.03,0.0025,0.00198453608247423,0.05,1.28388839200494e-06
+"6 month pause","Skeptical","Claire (Skeptical)",1e-08,0.04,1e-08,1e-08,0.05,0
+"6 month pause","Skeptical","Kim (Skeptical)",1e-04,0.06,2e-04,9.36170212765957e-05,0.05,9.2483962343751e-07
+"6 month pause","Skeptical","Hank (Skeptical)",0.001,0.05,9e-04,0.00100526315789474,0.05,1.18204135193557e-07
+"6 month pause","Skeptical","Ash (Skeptical)",0.001,0.01,0.001,0.001,0.05,0
+"6 month pause","Skeptical","Gus (Skeptical)",0.005,0.005,1e-04,0.00502462311557789,0.05,9.8193963625201e-05
+"6 month pause","Skeptical","Dean (Skeptical)",0.01,1e-04,0.01,0.01,0.05,0
+"6 month pause","Skeptical","Flint (Skeptical)",0.009,0.05,0.009,0.009,0.05,0
+"6 month pause","Skeptical","James (Skeptical)",1e-08,0.03,1e-08,1e-08,0.05,0
+"AI articles and apps","Concerned","Ume (Concerned)",0.6,0.3,0.65,0.578571428571429,0.05,0.000507391374850235
+"AI articles and apps","Concerned","Yael (Concerned)",0.235,0.2,0.25,0.23125,0.05,2.95919664081552e-05
+"AI articles and apps","Concerned","Stella (Concerned)",0.1,0.4,0.1,0.1,0.05,0
+"AI articles and apps","Concerned","Zoe (Concerned)",0.21,0.2,0.21,0.21,0.05,0
+"AI articles and apps","Concerned","Quentin (Concerned)",0.04,0.1,0.06,0.0377777777777778,0.05,0.000125548355678782
+"AI articles and apps","Concerned","Wesley (Concerned)",0.25,5e-04,0.3,0.249974987493747,0.05,0.000139006560840196
+"AI articles and apps","Concerned","Riley (Concerned)",0.3,0.3,0.3,0.3,0.05,0
+"AI articles and apps","Concerned","Pascal (Concerned)",0.09,0.35,0.09,0.09,0.05,0
+"AI articles and apps","Skeptical","Blake (Skeptical)",0.002,0.1,0.002,0.002,0.2,0
+"AI articles and apps","Skeptical","Hank (Skeptical)",0.001,0.65,0.0011,0.000814285714285714,0.2,6.82815304053728e-06
+"AI articles and apps","Skeptical","Flint (Skeptical)",0.009,0.7,0.009,0.009,0.2,0
+"AI articles and apps","Skeptical","Dean (Skeptical)",0.01,0.005,0.008,0.0100100502512563,0.2,1.88388982397078e-05
+"AI articles and apps","Skeptical","Claire (Skeptical)",1e-08,0.11,1e-08,1e-08,0.2,0
+"AI articles and apps","Skeptical","Ash (Skeptical)",0.001,0.05,0.001,0.001,0.2,0
+"AI articles and apps","Skeptical","Gus (Skeptical)",0.005,0.05,0.005,0.005,0.2,0
+"AI articles and apps","Skeptical","James (Skeptical)",1e-08,0.01,2e-08,9.8989898989899e-09,0.2,3.35708944985744e-10
+"AI articles and apps","Skeptical","Kim (Skeptical)",1e-04,0.005,0.002,9.04522613065327e-05,0.2,0.00035570066158037
+"AI coding","Concerned","Yael (Concerned)",0.175,0.25,0.22,0.16,0.7,0.00210894839322898
+"AI coding","Concerned","Ume (Concerned)",0.3,0.92,0.3,0.3,0.7,0
+"AI coding","Concerned","Quentin (Concerned)",0.024,0.65,0.025,0.0221428571428571,0.7,1.62461162561879e-05
+"AI coding","Concerned","Zoe (Concerned)",0.21,0.75,0.25,0.09,0.7,0.00823479627074546
+"AI coding","Concerned","Teshi (Concerned)",0.55,0.55,0.8,0.244444444444444,0.7,0.0670072310197099
+"AI coding","Skeptical","Dean (Skeptical)",0.01,0.5,0.01,0.01,0.65,0
+"AI coding","Skeptical","Gus (Skeptical)",0.005,0.66,0.005,0.005,0.65,0
+"AI coding","Skeptical","Blake (Skeptical)",0.002,0.75,0.002,0.002,0.65,0
+"AI coding","Skeptical","James (Skeptical)",1e-07,0.6,1e-07,1e-07,0.65,0
+"AI coding","Skeptical","Hank (Skeptical)",0.0012,0.7,0.0012,0.0012,0.65,0
+"AI coding","Skeptical","Flint (Skeptical)",0.011,0.8,0.011,0.011,0.65,0
+"AI coding","Skeptical","Ike (Skeptical)",7e-04,0.65,8e-04,0.000514285714285714,0.65,6.0590036053922e-06
+"AI coding","Skeptical","Eve (Skeptical)",0.05,0.8,0.05,0.05,0.65,0
+"AI coding","Skeptical","Ash (Skeptical)",0.001,0.7,0.001,0.001,0.65,0
+"AI coding","Skeptical","Kim (Skeptical)",2e-04,0.38,0.00029,0.000144838709677419,0.65,6.29323646567179e-06
+"AI coding","Skeptical","Claire (Skeptical)",1e-06,0.82,1e-06,1e-06,0.65,0
+"AI Forecasting skill","Concerned","Ume (Concerned)",0.6,0.5,0.65,0.55,0.19,0.00224694620483938
+"AI Forecasting skill","Concerned","Quentin (Concerned)",0.04,0.2,0.042,0.0395,0.19,5.38044493980353e-06
+"AI Forecasting skill","Concerned","Pascal (Concerned)",0.09,0.35,0.09,0.09,0.19,0
+"AI Forecasting skill","Concerned","Vincent (Concerned)",0.3,0.5,0.35,0.25,0.19,0.00264560899122045
+"AI Forecasting skill","Concerned","Xander (Concerned)",0.4,0.33,0.55,0.326119402985075,0.19,0.00787187230120126
+"AI Forecasting skill","Concerned","Wesley (Concerned)",0.25,0.8,0.26,0.21,0.19,0.00158159295419268
+"AI Forecasting skill","Concerned","Stella (Concerned)",0.1,0.1,0.2,0.0888888888888889,0.19,0.0039136539337573
+"AI Forecasting skill","Concerned","Riley (Concerned)",0.3,0.2,0.32,0.295,0.19,9.86375572141762e-05
+"AI Forecasting skill","Skeptical","Claire (Skeptical)",1e-09,0.08,1e-09,1e-09,0.33,0
+"AI Forecasting skill","Skeptical","Blake (Skeptical)",0.001,0.35,0.001,0.001,0.33,0
+"AI Forecasting skill","Skeptical","Dean (Skeptical)",0.015,0.19,0.014,0.0152345679012346,0.33,5.49885235637884e-06
+"AI Forecasting skill","Skeptical","James (Skeptical)",1e-08,0.08,1e-08,1e-08,0.33,0
+"AI Forecasting skill","Skeptical","Hank (Skeptical)",0.001,0.3,0.003,0.000142857142857143,0.33,0.000354630924581652
+"AI Forecasting skill","Skeptical","Kim (Skeptical)",1e-05,0.07,1e-05,1e-05,0.33,0
+"AI Forecasting skill","Skeptical","Flint (Skeptical)",0.004,0.036,0.007,0.00388796680497925,0.33,0.000132577202967555
+"AI Forecasting skill","Skeptical","Ash (Skeptical)",0.002,0.5,0.002,0.002,0.33,0
+"AI Forecasting skill","Skeptical","Gus (Skeptical)",0.005,0.25,0.007,0.00433333333333333,0.33,6.48234236705242e-05
+"AI Robotics","Concerned","Teshi (Concerned)",0.55,0.1,0.75,0.527777777777778,0.05,0.00227080155107328
+"AI Robotics","Concerned","Zoe (Concerned)",0.21,0.2,0.25,0.2,0.05,0.000226124287877092
+"AI Robotics","Concerned","Quentin (Concerned)",0.024,0.1,0.04,0.0222222222222222,0.05,0.000127655551196288
+"AI Robotics","Concerned","Ume (Concerned)",0.3,0.5,0.4,0.2,0.05,0.0111069115257101
+"AI Robotics","Concerned","Yael (Concerned)",0.175,0.33,0.21,0.157761194029851,0.05,0.000523955002636222
+"AI Robotics","Skeptical","Ash (Skeptical)",0.001,0.03,0.0015,0.000984536082474227,0.2,9.45059856917179e-06
+"AI Robotics","Skeptical","Gus (Skeptical)",0.005,0.1,0.0055,0.00494444444444444,0.2,2.22159067066951e-06
+"AI Robotics","Skeptical","Ike (Skeptical)",7e-04,0.6,0.00077,0.000595,0.2,3.18062535907645e-06
+"AI Robotics","Skeptical","Eve (Skeptical)",0.05,0.7,0.05,0.05,0.2,0
+"AI Robotics","Skeptical","Dean (Skeptical)",0.01,0.05,0.01,0.01,0.2,0
+"AI Robotics","Skeptical","Claire (Skeptical)",1e-06,0.04,1e-06,1e-06,0.2,0
+"AI Robotics","Skeptical","Flint (Skeptical)",0.011,0.75,0.011,0.011,0.2,0
+"AI Robotics","Skeptical","James (Skeptical)",1e-07,0.01,1e-07,1e-07,0.2,0
+"AI Robotics","Skeptical","Blake (Skeptical)",0.002,0.33,0.002,0.002,0.2,0
+"AI Robotics","Skeptical","Kim (Skeptical)",2e-04,0.005,0.006,0.000170854271356784,0.2,0.00127100469667592
+"AI Robotics","Skeptical","Hank (Skeptical)",0.0012,0.05,0.002,0.00115789473684211,0.2,1.95402290562775e-05
+"AI solving novel math problems","Concerned","Ume (Concerned)",0.6,0.3,0.15,0.792857142857143,0.2,0.0670060136677803
+"AI solving novel math problems","Concerned","Quentin (Concerned)",0.04,0.1,0.044,0.0395555555555556,0.2,1.84416749977147e-05
+"AI solving novel math problems","Concerned","Wesley (Concerned)",0.25,0.2,0.3,0.2375,0.2,0.000702445117441764
+"AI solving novel math problems","Concerned","Xander (Concerned)",0.4,0.09,0.6,0.38021978021978,0.2,0.00732849924210471
+"AI solving novel math problems","Concerned","Pascal (Concerned)",0.09,0.04,0.18,0.08625,0.2,0.00344997257965241
+"AI solving novel math problems","Concerned","Vincent (Concerned)",0.3,0.2,0.32,0.295,0.2,0.000102464068638989
+"AI solving novel math problems","Concerned","Riley (Concerned)",0.3,0.2,0.35,0.2875,0.2,0.000632575466023639
+"AI solving novel math problems","Concerned","Stella (Concerned)",0.1,0.05,0.2,0.0947368421052632,0.2,0.00391112109963735
+"AI solving novel math problems","Skeptical","Kim (Skeptical)",1e-05,0.2,1e-05,1e-05,0.1,0
+"AI solving novel math problems","Skeptical","Dean (Skeptical)",0.015,0.2,0.015,0.015,0.1,0
+"AI solving novel math problems","Skeptical","Ash (Skeptical)",0.002,0.2,0.002,0.002,0.1,0
+"AI solving novel math problems","Skeptical","Gus (Skeptical)",0.005,0.075,0.05,0.00135135135135135,0.1,0.00382823446360209
+"AI solving novel math problems","Skeptical","Hank (Skeptical)",0.001,0.2,0.0012,0.00095,0.1,1.3141526738913e-06
+"AI solving novel math problems","Skeptical","Blake (Skeptical)",0.001,0.55,0.001,0.001,0.1,0
+"AI solving novel math problems","Skeptical","Flint (Skeptical)",0.004,0.08,0.0045,0.00395652173913043,0.1,1.4024291960534e-06
+"AI solving novel math problems","Skeptical","Claire (Skeptical)",1e-09,0.04,1e-09,1e-09,0.1,0
+"AI solving novel math problems","Skeptical","James (Skeptical)",1e-08,0.04,1e-08,1e-08,0.1,0
+"AI writes AI","Concerned","Pascal (Concerned)",0.09,0.75,0.1,0.0599999999999999,0.02,0.00262741718662646
+"AI writes AI","Concerned","Wesley (Concerned)",0.25,0.02,0.9,0.236734693877551,0.02,0.00846546897678428
+"AI writes AI","Concerned","Riley (Concerned)",0.3,0.2,0.35,0.2875,0.02,0.00020985520553559
+"AI writes AI","Concerned","Ume (Concerned)",0.6,0.1,0.95,0.561111111111111,0.02,0.0042168613834561
+"AI writes AI","Concerned","Quentin (Concerned)",0.04,0.15,0.05,0.0382352941176471,0.02,2.80119623521533e-05
+"AI writes AI","Concerned","Stella (Concerned)",0.1,0.01,0.2,0.098989898989899,0.02,0.000388099381998654
+"AI writes AI","Concerned","Zoe (Concerned)",0.21,0.01,0.5,0.207070707070707,0.02,0.00179198085263829
+"AI writes AI","Concerned","Yael (Concerned)",0.235,0.25,0.3,0.213333333333333,0.02,0.000664613101412902
+"AI writes AI","Skeptical","James (Skeptical)",1e-08,0.02,1e-07,8.16326530612245e-09,0.1,6.16173478518873e-09
+"AI writes AI","Skeptical","Blake (Skeptical)",0.002,0.05,0.0021,0.00199473684210526,0.1,1.09740198905177e-07
+"AI writes AI","Skeptical","Dean (Skeptical)",0.01,5e-04,0.012,0.00999899949974987,0.1,8.24641403795814e-06
+"AI writes AI","Skeptical","Flint (Skeptical)",0.009,0.02,0.012,0.00893877551020408,0.1,1.99178667496231e-05
+"AI writes AI","Skeptical","Ash (Skeptical)",0.001,0.1,0.0012,0.000977777777777778,0.1,9.14058833463199e-07
+"AI writes AI","Skeptical","Eve (Skeptical)",0.03,0.001,0.3,0.0297297297297297,0.1,0.0200833334057761
+"AI writes AI","Skeptical","Gus (Skeptical)",0.005,0.001,0.07,0.00493493493493494,0.1,0.00529443098112739
+"AI writes AI","Skeptical","Hank (Skeptical)",0.001,0.4,0.002,0.000333333333333333,0.1,0.000134325533893481
+"AI writes AI","Skeptical","Kim (Skeptical)",1e-04,0.01,0.004,6.06060606060606e-05,0.1,0.00047531514903481
+"AI writes AI","Skeptical","Claire (Skeptical)",1e-08,0.08,1e-08,1e-08,0.1,0
+"Alignment researchers changing minds","Concerned","Vincent (Concerned)",0.3,0.35,0.18,0.364615384615385,0.03,0.00453034117851198
+"Alignment researchers changing minds","Concerned","Stella (Concerned)",0.1,0.2,0.05,0.1125,0.03,0.000570603338551582
+"Alignment researchers changing minds","Concerned","Riley (Concerned)",0.3,0.2,0.15,0.3375,0.03,0.00217505448842202
+"Alignment researchers changing minds","Concerned","Wesley (Concerned)",0.25,0.33,0.1,0.323880597014925,0.03,0.00673279582121632
+"Alignment researchers changing minds","Concerned","Ume (Concerned)",0.6,0.1,0.02,0.664444444444444,0.03,0.0142784809680466
+"Alignment researchers changing minds","Concerned","Xander (Concerned)",0.4,0.4,0.06,0.626666666666667,0.03,0.0479158857801435
+"Alignment researchers changing minds","Concerned","Quentin (Concerned)",0.04,0.1,0.0267,0.0414777777777778,0.03,4.57037928538159e-05
+"Alignment researchers changing minds","Concerned","Pascal (Concerned)",0.09,0.15,0.06,0.0952941176470588,0.03,0.000151119340840531
+"Alignment researchers changing minds","Skeptical","Blake (Skeptical)",0.001,0.03,0.00025,0.00102319587628866,0.2,3.51584678827696e-05
+"Alignment researchers changing minds","Skeptical","Kim (Skeptical)",1e-05,0.3,1e-05,1e-05,0.2,0
+"Alignment researchers changing minds","Skeptical","Gus (Skeptical)",0.005,0.1,0.005,0.005,0.2,0
+"Alignment researchers changing minds","Skeptical","Flint (Skeptical)",0.004,0.02,0.005,0.00397959183673469,0.2,1.01129266411768e-05
+"Alignment researchers changing minds","Skeptical","Hank (Skeptical)",0.001,0.1,0.001,0.001,0.2,0
+"Alignment researchers changing minds","Skeptical","Dean (Skeptical)",0.015,0.01,0.015,0.015,0.2,0
+"Alignment researchers changing minds","Skeptical","James (Skeptical)",1e-08,0.01,1e-10,1.01e-08,0.2,8.20076260774047e-10
+"Alignment researchers changing minds","Skeptical","Claire (Skeptical)",1e-09,0.01,1e-09,1e-09,0.2,0
+"Alignment researchers changing minds","Skeptical","Ash (Skeptical)",0.002,0.05,0.002,0.002,0.2,0
+"Alignment solution","Concerned","Pascal (Concerned)",0.09,0.1,0.02,0.0977777777777778,0.05,0.0010724180293731
+"Alignment solution","Concerned","Ume (Concerned)",0.6,0.05,0.1,0.626315789473684,0.05,0.0125574010820385
+"Alignment solution","Concerned","Yael (Concerned)",0.235,0.07,0.05,0.248924731182796,0.05,0.00300725895071224
+"Alignment solution","Concerned","Wesley (Concerned)",0.25,0.01,0.002,0.252505050505051,0.05,0.00598825482202197
+"Alignment solution","Concerned","Quentin (Concerned)",0.04,0.2,0.01,0.0475,0.05,0.00064609884201048
+"Alignment solution","Concerned","Riley (Concerned)",0.3,0.05,0.07,0.312105263157895,0.05,0.00366818798313146
+"Alignment solution","Concerned","Stella (Concerned)",0.1,0.05,0.01,0.104736842105263,0.05,0.00159966256225458
+"Alignment solution","Concerned","Zoe (Concerned)",0.21,0.15,0.05,0.238235294117647,0.05,0.00320739768442216
+"Alignment solution","Skeptical","Flint (Skeptical)",0.009,0.03,0.0075,0.00904639175257732,0.05,2.95345150712216e-06
+"Alignment solution","Skeptical","Hank (Skeptical)",0.001,0.15,9e-04,0.00101764705882353,0.05,1.76426245287755e-07
+"Alignment solution","Skeptical","Dean (Skeptical)",0.01,0.01,0.001,0.0100909090909091,0.05,0.000146489862098929
+"Alignment solution","Skeptical","Claire (Skeptical)",1e-08,0.22,1e-08,1e-08,0.05,0
+"Alignment solution","Skeptical","Kim (Skeptical)",1e-04,0.07,1e-05,0.000106774193548387,0.05,1.54702036193458e-06
+"Alignment solution","Skeptical","Eve (Skeptical)",0.03,0.01,0.01,0.0302020202020202,0.05,0.00020046934920277
+"Alignment solution","Skeptical","James (Skeptical)",1e-08,0.1,5e-09,1.05555555555556e-08,0.05,3.95683887012986e-11
+"Alignment solution","Skeptical","Gus (Skeptical)",0.005,0.01,0.005,0.005,0.05,0
+"Alignment solution","Skeptical","Ash (Skeptical)",0.001,0.05,0.001,0.001,0.05,0
+"Alignment solution","Skeptical","Blake (Skeptical)",0.002,0.05,0.0015,0.00202631578947368,0.05,1.56093804445461e-06
+"Cyberattacks","Concerned","Yael (Concerned)",0.235,0.1,0.23,0.235555555555556,0.1,3.37006784495133e-06
+"Cyberattacks","Concerned","Wesley (Concerned)",0.25,0.25,0.3,0.233333333333333,0.1,0.000572004191043646
+"Cyberattacks","Concerned","Zoe (Concerned)",0.21,0.2,0.21,0.21,0.1,0
+"Cyberattacks","Concerned","Stella (Concerned)",0.1,0.5,0.1,0.1,0.1,0
+"Cyberattacks","Concerned","Ume (Concerned)",0.6,0.7,0.45,0.95,0.1,0.131979719281084
+"Cyberattacks","Concerned","Quentin (Concerned)",0.04,0.4,0.04,0.04,0.1,0
+"Cyberattacks","Concerned","Pascal (Concerned)",0.09,0.07,0.08,0.090752688172043,0.1,2.88003564104242e-05
+"Cyberattacks","Concerned","Riley (Concerned)",0.3,0.07,0.32,0.298494623655914,0.1,4.2969477594252e-05
+"Cyberattacks","Skeptical","Eve (Skeptical)",0.03,0.15,0.03,0.03,0.2,0
+"Cyberattacks","Skeptical","Dean (Skeptical)",0.01,0.05,0.01,0.01,0.2,0
+"Cyberattacks","Skeptical","Flint (Skeptical)",0.009,0.1,0.01,0.00888888888888889,0.2,4.9413701648853e-06
+"Cyberattacks","Skeptical","Claire (Skeptical)",1e-08,0.05,1e-07,5.26315789473684e-09,0.2,1.26547478637636e-08
+"Cyberattacks","Skeptical","Ash (Skeptical)",0.001,0.001,0.0012,0.0009997997997998,0.2,1.63346577825927e-06
+"Cyberattacks","Skeptical","Kim (Skeptical)",1e-04,0.14,1e-04,1e-04,0.2,0
+"Cyberattacks","Skeptical","James (Skeptical)",1e-08,0.75,1e-08,1e-08,0.2,0
+"Cyberattacks","Skeptical","Hank (Skeptical)",0.001,0.3,0.0012,0.000914285714285714,0.2,2.94914394861461e-06
+"Cyberattacks","Skeptical","Blake (Skeptical)",0.002,0.5,0.002,0.002,0.2,0
+"Cyberattacks","Skeptical","Gus (Skeptical)",0.005,0.035,0.005,0.005,0.2,0
+"Democratic influence","Concerned","Ume (Concerned)",0.6,0.01,0.2,0.604040404040404,0.003,0.000450942062607957
+"Democratic influence","Concerned","Quentin (Concerned)",0.04,0.05,0.06,0.0389473684210526,0.003,1.2212308184256e-05
+"Democratic influence","Concerned","Zoe (Concerned)",0.21,0.005,0.4,0.209045226130653,0.003,0.000121943257927818
+"Democratic influence","Concerned","Stella (Concerned)",0.1,0.02,0.15,0.0989795918367347,0.003,1.84532350580855e-05
+"Democratic influence","Concerned","Yael (Concerned)",0.235,0.1,0.33,0.224444444444444,0.003,0.000165829116770232
+"Democratic influence","Concerned","Pascal (Concerned)",0.09,0.02,0.1,0.0897959183673469,0.003,8.80434934931366e-07
+"Democratic influence","Concerned","Riley (Concerned)",0.3,0.02,0.2,0.302040816326531,0.003,3.78141410628817e-05
+"Democratic influence","Concerned","Wesley (Concerned)",0.25,5e-04,0.2,0.250025012506253,0.003,9.12365119456116e-06
+"Democratic influence","Skeptical","Dean (Skeptical)",0.01,1e-04,0.04,0.00999699969997,0.02,0.000225060124665457
+"Democratic influence","Skeptical","Blake (Skeptical)",0.002,0.001,0.0021,0.0019998998998999,0.02,2.14061833805492e-08
+"Democratic influence","Skeptical","Eve (Skeptical)",0.03,1e-04,0.2,0.02998299829983,0.02,0.0019567291216155
+"Democratic influence","Skeptical","Gus (Skeptical)",0.005,0.005,0.03,0.00487437185929648,0.02,0.000253175415104847
+"Democratic influence","Skeptical","James (Skeptical)",1e-08,0.01,1e-07,9.09090909090909e-09,0.02,1.23641572126448e-09
+"Democratic influence","Skeptical","Ash (Skeptical)",0.001,0.02,0.002,0.000979591836734694,0.02,3.44898834281403e-06
+"Democratic influence","Skeptical","Claire (Skeptical)",1e-08,0.04,1e-08,1e-08,0.02,0
+"Democratic influence","Skeptical","Kim (Skeptical)",1e-04,9e-04,0.04,6.4057651886698e-05,0.02,0.00174524440718808
+"Democratic influence","Skeptical","Hank (Skeptical)",0.001,0.01,0.01,0.000909090909090909,0.02,0.000123996517278659
+"Democratic influence","Skeptical","Flint (Skeptical)",0.009,0.003,0.02,0.00896690070210632,0.02,4.37286217353326e-05
+"Escalating warning shots","Concerned","Xander (Concerned)",0.4,0.13,0.8,0.340229885057471,0.002,0.00358012464386347
+"Escalating warning shots","Concerned","Vincent (Concerned)",0.3,0.09,0.37,0.293076923076923,0.002,5.94269894520585e-05
+"Escalating warning shots","Concerned","Pascal (Concerned)",0.09,0.22,0.05,0.101282051282051,0.002,0.00033483899555685
+"Escalating warning shots","Concerned","Riley (Concerned)",0.3,0.03,0.2,0.303092783505155,0.002,3.22024377273498e-05
+"Escalating warning shots","Concerned","Stella (Concerned)",0.1,1e-04,0.5,0.0999599959996,0.002,0.000443701353134825
+"Escalating warning shots","Concerned","Wesley (Concerned)",0.25,0.1,0.4,0.233333333333333,0.002,0.000373008927341581
+"Escalating warning shots","Concerned","Ume (Concerned)",0.6,0.39,0.9,0.408196721311475,0.002,0.0325239314545997
+"Escalating warning shots","Concerned","Quentin (Concerned)",0.04,0.04,0.052,0.0395,0.002,2.909019278495e-06
+"Escalating warning shots","Skeptical","Hank (Skeptical)",0.001,0.05,0.005,0.000789473684210526,0.09,0.000167959570276407
+"Escalating warning shots","Skeptical","Ash (Skeptical)",0.002,0.002,0.003,0.00199799599198397,0.09,8.47812325542362e-06
+"Escalating warning shots","Skeptical","James (Skeptical)",1e-08,0.001,4e-08,9.96996996996997e-09,0.09,9.94838791842857e-10
+"Escalating warning shots","Skeptical","Dean (Skeptical)",0.015,1e-04,0.04,0.014997499749975,0.09,0.000568831739415395
+"Escalating warning shots","Skeptical","Kim (Skeptical)",1e-05,0.02,1e-05,1e-05,0.09,0
+"Escalating warning shots","Skeptical","Blake (Skeptical)",0.001,0.005,0.01,0.000954773869346734,0.09,0.000550221656859273
+"Escalating warning shots","Skeptical","Flint (Skeptical)",0.004,0.07,0.0032,0.00406021505376344,0.09,3.5506215080031e-06
+"Escalating warning shots","Skeptical","Gus (Skeptical)",0.005,1e-05,0.035,0.00499969999699997,0.09,0.00150732143076191
+"Evidence of misalignment","Concerned","Vincent (Concerned)",0.3,0.55,0.36,0.226666666666667,0.01,0.00584546694045622
+"Evidence of misalignment","Concerned","Stella (Concerned)",0.1,0.5,0.1,0.1,0.01,0
+"Evidence of misalignment","Concerned","Wesley (Concerned)",0.25,0.1,0.2,0.255555555555556,0.01,6.56242071058282e-05
+"Evidence of misalignment","Concerned","Pascal (Concerned)",0.09,0.25,0.15,0.07,0.01,0.00121011125068666
+"Evidence of misalignment","Concerned","Xander (Concerned)",0.4,0.8,0.47,0.12,0.01,0.0828335781585997
+"Evidence of misalignment","Concerned","Quentin (Concerned)",0.04,0.4,0.048,0.0346666666666667,0.01,0.000169925202420721
+"Evidence of misalignment","Concerned","Riley (Concerned)",0.3,0.35,0.4,0.246153846153846,0.01,0.00318101684917624
+"Evidence of misalignment","Concerned","Ume (Concerned)",0.6,0.8,0.55,0.8,0.01,0.0393698895184267
+"Evidence of misalignment","Skeptical","Flint (Skeptical)",0.004,0.01,0.0041,0.0039989898989899,0.4,2.16265442508468e-07
+"Evidence of misalignment","Skeptical","Ash (Skeptical)",0.002,0.1,0.0025,0.00194444444444444,0.4,1.02762316690771e-05
+"Evidence of misalignment","Skeptical","Blake (Skeptical)",0.001,0.5,0.001,0.001,0.4,0
+"Evidence of misalignment","Skeptical","Dean (Skeptical)",0.015,0.01,0.015,0.015,0.4,0
+"Evidence of misalignment","Skeptical","Kim (Skeptical)",1e-05,0.01,5e-04,5.05050505050505e-06,0.4,0.000255083881624525
+"Evidence of misalignment","Skeptical","James (Skeptical)",1e-08,1e-06,1e-04,9.9000099000099e-09,0.4,0.000142630826476758
+"Evidence of misalignment","Skeptical","Gus (Skeptical)",0.005,0.06,0.06,0.00148936170212766,0.4,0.0170613313405463
+"Fast AI efficiency gains","Concerned","Ume (Concerned)",0.6,0.6,0.6,0.6,0.02,0
+"Fast AI efficiency gains","Concerned","Wesley (Concerned)",0.25,0.15,0.36,0.230588235294118,0.02,0.000693929113256467
+"Fast AI efficiency gains","Concerned","Pascal (Concerned)",0.09,0.18,0.2,0.0658536585365854,0.02,0.00214877233152523
+"Fast AI efficiency gains","Concerned","Riley (Concerned)",0.3,0.15,0.4,0.282352941176471,0.02,0.000515403557785061
+"Fast AI efficiency gains","Concerned","Quentin (Concerned)",0.04,0.02,0.06,0.0395918367346939,0.02,4.03402473902082e-05
+"Fast AI efficiency gains","Concerned","Stella (Concerned)",0.1,0.001,0.2,0.0998998998998999,0.02,0.000385703322811007
+"Fast AI efficiency gains","Concerned","Vincent (Concerned)",0.3,0.2,0.32,0.295,0.02,3.35868629923651e-05
+"Fast AI efficiency gains","Concerned","Xander (Concerned)",0.4,0.2,0.6,0.35,0.02,0.00295658890999415
+"Fast AI efficiency gains","Skeptical","Hank (Skeptical)",0.001,0.01,0.006,0.00094949494949495,0.15,0.00037591115517882
+"Fast AI efficiency gains","Skeptical","Ash (Skeptical)",0.002,0.05,0.003,0.00194736842105263,0.15,1.43879715938927e-05
+"Fast AI efficiency gains","Skeptical","James (Skeptical)",1e-08,1e-08,1e-07,9.99999909999999e-09,0.15,9.13702484321626e-09
+"Fast AI efficiency gains","Skeptical","Kim (Skeptical)",1e-05,0.5,1e-05,1e-05,0.15,0
+"Fast AI efficiency gains","Skeptical","Claire (Skeptical)",1e-09,0.01,1e-08,9.09090909090909e-10,0.15,9.1527629772391e-10
+"Fast AI efficiency gains","Skeptical","Blake (Skeptical)",0.001,0.5,0.001,0.001,0.15,0
+"Fast AI efficiency gains","Skeptical","Gus (Skeptical)",0.005,0.001,0.005,0.005,0.15,0
+"Fast AI efficiency gains","Skeptical","Flint (Skeptical)",0.004,0.045,0.01,0.003717277486911,0.15,0.000211017938761795
+"Fast AI efficiency gains","Skeptical","Dean (Skeptical)",0.015,0.02,0.015,0.015,0.15,0
+"IC demonstration","Concerned","Zoe (Concerned)",0.21,0.8,0.21,0.21,0.14,0
+"IC demonstration","Concerned","Riley (Concerned)",0.3,0.2,0.3,0.3,0.14,0
+"IC demonstration","Concerned","Ume (Concerned)",0.6,0.8,0.58,0.68,0.14,0.00516912767790614
+"IC demonstration","Concerned","Pascal (Concerned)",0.09,0.4,0.08,0.0966666666666667,0.14,0.000137599917557361
+"IC demonstration","Concerned","Yael (Concerned)",0.235,0.65,0.23,0.244285714285714,0.14,9.30174856595825e-05
+"IC demonstration","Concerned","Stella (Concerned)",0.1,0.9,0.1,0.1,0.14,0
+"IC demonstration","Concerned","Wesley (Concerned)",0.25,0.9,0.25,0.25,0.14,0
+"IC demonstration","Concerned","Quentin (Concerned)",0.04,0.3,0.04,0.04,0.14,0
+"IC demonstration","Skeptical","Blake (Skeptical)",0.002,0.25,0.002,0.002,0.65,0
+"IC demonstration","Skeptical","James (Skeptical)",1e-08,0.1,1e-08,1e-08,0.65,0
+"IC demonstration","Skeptical","Hank (Skeptical)",0.001,0.2,0.0012,0.00095,0.65,5.50218350935306e-06
+"IC demonstration","Skeptical","Dean (Skeptical)",0.01,5e-05,0.015,0.00999974998749937,0.65,0.000309003011287299
+"IC demonstration","Skeptical","Gus (Skeptical)",0.005,0.35,0.005,0.005,0.65,0
+"IC demonstration","Skeptical","Eve (Skeptical)",0.03,0.7,0.03,0.03,0.65,0
+"IC demonstration","Skeptical","Ash (Skeptical)",0.001,0.01,0.0015,0.000994949494949495,0.65,3.05805424327865e-05
+"IC demonstration","Skeptical","Flint (Skeptical)",0.009,0.1,0.01,0.00888888888888889,0.65,1.53803838738586e-05
+"IC demonstration","Skeptical","Kim (Skeptical)",1e-04,0.5,1e-04,1e-04,0.65,0
+"IC demonstration","Skeptical","Claire (Skeptical)",1e-08,0.14,1e-08,1e-08,0.65,0
+"Intergovernmental AI safety","Concerned","Ume (Concerned)",0.3,0.7,0.25,0.416666666666667,0.15,0.0116689389184882
+"Intergovernmental AI safety","Concerned","Zoe (Concerned)",0.21,0.1,0.1,0.222222222222222,0.15,0.00297369639319841
+"Intergovernmental AI safety","Concerned","Yael (Concerned)",0.175,0.25,0.17,0.176666666666667,0.15,9.22555164806354e-06
+"Intergovernmental AI safety","Concerned","Quentin (Concerned)",0.024,0.3,0.015,0.0278571428571429,0.15,0.000241277661114589
+"Intergovernmental AI safety","Concerned","Teshi (Concerned)",0.55,0.03,0.5,0.551546391752577,0.15,0.000329144131648921
+"Intergovernmental AI safety","Skeptical","Ike (Skeptical)",7e-04,0.45,0.00055,0.000822727272727273,0.25,5.20436138069482e-06
+"Intergovernmental AI safety","Skeptical","Ash (Skeptical)",0.001,0.05,8e-04,0.00101052631578947,0.25,2.35289554896522e-06
+"Intergovernmental AI safety","Skeptical","Blake (Skeptical)",0.002,0.15,0.0015,0.00208823529411765,0.25,8.07450067447717e-06
+"Intergovernmental AI safety","Skeptical","Hank (Skeptical)",0.0012,0.15,0.001,0.00123529411764706,0.25,2.08921541580784e-06
+"Intergovernmental AI safety","Skeptical","Eve (Skeptical)",0.05,0.001,0.1,0.04994994994995,0.25,0.00224251191694381
+"Intergovernmental AI safety","Skeptical","Kim (Skeptical)",2e-04,0.23,2e-04,2e-04,0.25,0
+"Intergovernmental AI safety","Skeptical","Claire (Skeptical)",1e-06,0.01,2e-06,9.8989898989899e-07,0.25,4.19581046328321e-08
+"Intergovernmental AI safety","Skeptical","Dean (Skeptical)",0.01,0.001,0.007,0.010003003003003,0.25,5.51355984983171e-05
+"Intergovernmental AI safety","Skeptical","Gus (Skeptical)",0.005,0.175,0.004,0.00521212121212121,0.25,1.31708116259324e-05
+"Intergovernmental AI safety","Skeptical","Flint (Skeptical)",0.011,0.05,0.009,0.0111052631578947,0.25,2.14441138378536e-05
+"Intergovernmental AI safety","Skeptical","James (Skeptical)",1e-07,0.25,8e-08,1.06666666666667e-07,0.25,3.04097632703139e-10
+"IT progress","Concerned","Quentin (Concerned)",0.04,0.1,0.06,0.0377777777777778,0.01,4.78578077131186e-05
+"IT progress","Concerned","Yael (Concerned)",0.235,0.25,0.24,0.233333333333333,0.01,3.62764663592062e-06
+"IT progress","Concerned","Stella (Concerned)",0.1,0.5,0.1,0.1,0.01,0
+"IT progress","Concerned","Wesley (Concerned)",0.25,0.07,0.35,0.24247311827957,0.01,0.00017288496148889
+"IT progress","Concerned","Zoe (Concerned)",0.21,0.3,0.3,0.171428571428571,0.01,0.00212131133681723
+"IT progress","Concerned","Riley (Concerned)",0.3,0.55,0.35,0.238888888888889,0.01,0.00401902047450203
+"IT progress","Concerned","Ume (Concerned)",0.6,0.2,0.6,0.6,0.01,0
+"IT progress","Concerned","Pascal (Concerned)",0.09,0.15,0.11,0.0864705882352941,0.01,4.30579987946556e-05
+"IT progress","Skeptical","Ash (Skeptical)",0.001,0.15,0.001,0.001,0.2,0
+"IT progress","Skeptical","James (Skeptical)",1e-08,0.01,1e-08,1e-08,0.2,0
+"IT progress","Skeptical","Flint (Skeptical)",0.009,0.01,0.009,0.009,0.2,0
+"IT progress","Skeptical","Hank (Skeptical)",0.001,0.05,0.0012,0.000989473684210526,0.2,1.65279448118328e-06
+"IT progress","Skeptical","Gus (Skeptical)",0.005,0.05,0.005,0.005,0.2,0
+"IT progress","Skeptical","Blake (Skeptical)",0.002,5e-04,0.002,0.002,0.2,0
+"IT progress","Skeptical","Claire (Skeptical)",1e-08,0.13,1e-08,1e-08,0.2,0
+"IT progress","Skeptical","Kim (Skeptical)",1e-04,0.33,2e-04,5.07462686567164e-05,0.2,8.50895142470154e-06
+"IT progress","Skeptical","Dean (Skeptical)",0.01,0.001,0.01,0.01,0.2,0
+"IT progress","Skeptical","Eve (Skeptical)",0.03,0.01,0.04,0.0298989898989899,0.2,0.000135474632625939
+"Major powers war","Concerned","Yael (Concerned)",0.175,0.115,0.16,0.176949152542373,0.02,1.25114714092205e-05
+"Major powers war","Concerned","Teshi (Concerned)",0.55,0.15,0.75,0.514705882352941,0.02,0.00181099621492427
+"Major powers war","Concerned","Quentin (Concerned)",0.024,0.21,0.04,0.019746835443038,0.02,0.000214400387370471
+"Major powers war","Concerned","Zoe (Concerned)",0.21,0.1,0.4,0.188888888888889,0.02,0.00139158825348997
+"Major powers war","Concerned","Ume (Concerned)",0.3,0.1,0.7,0.255555555555556,0.02,0.00500800592576852
+"Major powers war","Skeptical","Dean (Skeptical)",0.01,0.005,0.012,0.00998994974874372,0.115,9.48531479188412e-06
+"Major powers war","Skeptical","Hank (Skeptical)",0.0012,0.02,0.001,0.00120408163265306,0.115,8.86597974437869e-07
+"Major powers war","Skeptical","Blake (Skeptical)",0.002,0.01,0.002,0.002,0.115,0
+"Major powers war","Skeptical","Eve (Skeptical)",0.05,0.05,0.04,0.0505263157894737,0.115,5.73890571051057e-05
+"Major powers war","Skeptical","Kim (Skeptical)",2e-04,0.05,1e-04,0.000205263157894737,0.115,1.55918329723458e-06
+"Major powers war","Skeptical","Flint (Skeptical)",0.011,0.66,0.014,0.00517647058823529,0.115,0.000764184795240323
+"Major powers war","Skeptical","Gus (Skeptical)",0.005,0.025,0.005,0.005,0.115,0
+"Major powers war","Skeptical","Ike (Skeptical)",7e-04,0.07,0.00055,0.000711290322580645,0.115,9.02464498984475e-07
+"Major powers war","Skeptical","Claire (Skeptical)",1e-06,1e-07,3e-06,9.9999979999998e-07,0.115,6.47192019572405e-08
+"Major powers war","Skeptical","Ash (Skeptical)",0.001,0.008,0.12,4.03225806451613e-05,0.115,0.0234375882435975
+"Major powers war","Skeptical","James (Skeptical)",1e-07,0.005,1e-07,1e-07,0.115,0
+"Muehlhauser policies","Concerned","Ume (Concerned)",0.6,0.3,0.2,0.771428571428572,0.15,0.0461587287591882
+"Muehlhauser policies","Concerned","Wesley (Concerned)",0.25,0.9,0.24,0.34,0.15,0.00746505347801835
+"Muehlhauser policies","Concerned","Stella (Concerned)",0.1,0.1,0.08,0.102222222222222,0.15,0.00016439535318128
+"Muehlhauser policies","Concerned","Zoe (Concerned)",0.21,0.65,0.2,0.228571428571429,0.15,0.000395669376853369
+"Muehlhauser policies","Concerned","Pascal (Concerned)",0.09,0.35,0.08,0.0953846153846154,0.15,0.000105380740467569
+"Muehlhauser policies","Concerned","Quentin (Concerned)",0.04,0.7,0.03,0.0633333333333333,0.15,0.00232827307959437
+"Muehlhauser policies","Concerned","Yael (Concerned)",0.235,0.65,0.211,0.279571428571429,0.15,0.00206598248651122
+"Muehlhauser policies","Skeptical","Gus (Skeptical)",0.005,0.2,0.00475,0.0050625,0.65,1.86277854421924e-06
+"Muehlhauser policies","Skeptical","Eve (Skeptical)",0.03,0.15,0.02,0.0317647058823529,0.65,0.000556212405152719
+"Muehlhauser policies","Skeptical","Claire (Skeptical)",1e-08,0.08,1e-08,1e-08,0.65,0
+"Muehlhauser policies","Skeptical","Blake (Skeptical)",0.002,0.5,0.0019,0.0021,0.65,1.09379760745791e-06
+"Muehlhauser policies","Skeptical","James (Skeptical)",1e-08,0.08,5e-09,1.04347826086957e-08,0.65,4.34525955785719e-10
+"Muehlhauser policies","Skeptical","Ash (Skeptical)",0.001,0.5,0.001,0.001,0.65,0
+"Muehlhauser policies","Skeptical","Dean (Skeptical)",0.01,0.08,0.007,0.0102608695652174,0.65,0.000143870168218506
+"Muehlhauser policies","Skeptical","Flint (Skeptical)",0.009,0.1,0.009,0.009,0.65,0
+"Muehlhauser policies","Skeptical","Hank (Skeptical)",0.001,0.3,9e-04,0.00104285714285714,0.65,1.60020401515154e-06
+"Muehlhauser policies","Skeptical","Kim (Skeptical)",1e-04,0.8,1e-04,1e-04,0.65,0
+"No violence LLM","Concerned","Stella (Concerned)",0.1,0.1,0.08,0.102222222222222,0.05,6.26899320158525e-05
+"No violence LLM","Concerned","Zoe (Concerned)",0.21,0.2,0.1,0.2375,0.05,0.00184883752373609
+"No violence LLM","Concerned","Quentin (Concerned)",0.04,0.6,0.03,0.055,0.05,0.00111708881168783
+"No violence LLM","Concerned","Yael (Concerned)",0.235,0.2,0.22,0.23875,0.05,2.98741737941129e-05
+"No violence LLM","Concerned","Ume (Concerned)",0.6,0.03,0.1,0.615463917525773,0.05,0.0121639248393184
+"No violence LLM","Concerned","Wesley (Concerned)",0.25,0.01,0.002,0.252505050505051,0.05,0.00598825482202197
+"No violence LLM","Concerned","Pascal (Concerned)",0.09,0.15,0.065,0.0944117647058824,0.05,0.000139258632262389
+"No violence LLM","Concerned","Riley (Concerned)",0.3,0.05,0.15,0.307894736842105,0.05,0.00138683676669502
+"No violence LLM","Skeptical","Dean (Skeptical)",0.01,1e-09,1e-08,0.01000000001,0.1,0.000436474101585708
+"No violence LLM","Skeptical","Eve (Skeptical)",0.03,0.6,0.03,0.03,0.1,0
+"No violence LLM","Skeptical","Kim (Skeptical)",1e-04,0.03,5e-05,0.000101546391752577,0.1,6.71026716071482e-07
+"No violence LLM","Skeptical","Blake (Skeptical)",0.002,0.05,0.002,0.002,0.1,0
+"No violence LLM","Skeptical","Claire (Skeptical)",1e-08,0.11,1e-08,1e-08,0.1,0
+"No violence LLM","Skeptical","Hank (Skeptical)",0.001,0.1,0.001,0.001,0.1,0
+"No violence LLM","Skeptical","Gus (Skeptical)",0.005,0.33,0.005,0.005,0.1,0
+"No violence LLM","Skeptical","James (Skeptical)",1e-08,0.01,1e-08,1e-08,0.1,0
+"No violence LLM","Skeptical","Ash (Skeptical)",0.001,1e-04,0.001,0.001,0.1,0
+"Non-democracy AI","Concerned","Yael (Concerned)",0.235,0.12,0.238,0.234590909090909,0.2,2.32960819891985e-06
+"Non-democracy AI","Concerned","Quentin (Concerned)",0.04,0.4,0.05,0.0333333333333333,0.2,0.000317812137561157
+"Non-democracy AI","Concerned","Riley (Concerned)",0.3,0.3,0.3,0.3,0.2,0
+"Non-democracy AI","Concerned","Ume (Concerned)",0.6,0.02,0.7,0.597959183673469,0.2,0.00187923933072664
+"Non-democracy AI","Concerned","Stella (Concerned)",0.1,0.1,0.1,0.1,0.2,0
+"Non-democracy AI","Concerned","Zoe (Concerned)",0.21,0.1,0.35,0.194444444444444,0.2,0.00477479321311311
+"Non-democracy AI","Concerned","Pascal (Concerned)",0.09,0.25,0.12,0.08,0.2,0.000655809669887779
+"Non-democracy AI","Concerned","Wesley (Concerned)",0.25,0.1,0.35,0.238888888888889,0.2,0.00226527646099058
+"Non-democracy AI","Skeptical","Hank (Skeptical)",0.001,0.75,0.0011,7e-04,0.1,1.9899348014018e-05
+"Non-democracy AI","Skeptical","Flint (Skeptical)",0.009,0.99999,0.009,0.00899999999998751,0.1,0
+"Non-democracy AI","Skeptical","Claire (Skeptical)",1e-08,0.04,1e-08,1e-08,0.1,0
+"Non-democracy AI","Skeptical","Eve (Skeptical)",0.03,0.01,0.05,0.0297979797979798,0.1,0.000249946183616276
+"Non-democracy AI","Skeptical","Ash (Skeptical)",0.001,0.8,0.001,0.001,0.1,0
+"Non-democracy AI","Skeptical","Dean (Skeptical)",0.01,0.03,0.011,0.00996907216494845,0.1,2.14334878841064e-06
+"Non-democracy AI","Skeptical","Kim (Skeptical)",1e-04,0.2,1e-04,1e-04,0.1,0
+"Non-democracy AI","Skeptical","Blake (Skeptical)",0.002,0.2,0.0018,0.00205,0.1,6.9318113941901e-07
+"Non-democracy AI","Skeptical","Gus (Skeptical)",0.005,0.175,0.005,0.005,0.1,0
+"Other fields IC","Concerned","Zoe (Concerned)",0.21,0.5,0.21,0.21,0.3,0
+"Other fields IC","Concerned","Quentin (Concerned)",0.024,0.3,0.024,0.024,0.3,0
+"Other fields IC","Concerned","Yael (Concerned)",0.175,0.6,0.185,0.16,0.3,0.000286939202374606
+"Other fields IC","Concerned","Ume (Concerned)",0.3,0.9,0.28,0.479999999999999,0.3,0.0217195765126373
+"Other fields IC","Concerned","Teshi (Concerned)",0.55,0.3,0.55,0.55,0.3,0
+"Other fields IC","Skeptical","Gus (Skeptical)",0.005,0.25,0.005,0.005,0.5,0
+"Other fields IC","Skeptical","Blake (Skeptical)",0.002,0.1,0.0022,0.00197777777777778,0.5,2.13381929288091e-06
+"Other fields IC","Skeptical","James (Skeptical)",1e-07,0.08,1e-07,1e-07,0.5,0
+"Other fields IC","Skeptical","Kim (Skeptical)",2e-04,0.5,2e-04,2e-04,0.5,0
+"Other fields IC","Skeptical","Flint (Skeptical)",0.011,0.7,0.012,0.00866666666666666,0.5,6.82921681348289e-05
+"Other fields IC","Skeptical","Claire (Skeptical)",1e-06,0.03,5e-06,8.76288659793814e-07,0.5,8.80572554211394e-07
+"Other fields IC","Skeptical","Hank (Skeptical)",0.0012,0.5,0.0013,0.0011,0.5,1.81383466062863e-06
+"Other fields IC","Skeptical","Ash (Skeptical)",0.001,0.3,0.001,0.001,0.5,0
+"Other fields IC","Skeptical","Ike (Skeptical)",7e-04,0.35,0.00085,0.000619230769230769,0.5,4.32062974804669e-06
+"Other fields IC","Skeptical","Dean (Skeptical)",0.01,0.55,0.01,0.01,0.5,0
+"Other fields IC","Skeptical","Eve (Skeptical)",0.05,0.3,0.05,0.05,0.5,0
+"Platform: AI regulation","Concerned","Zoe (Concerned)",0.21,0.53,0.15,0.277659574468085,0.5001,0.00534684422747963
+"Platform: AI regulation","Concerned","Pascal (Concerned)",0.09,0.28,0.07,0.0977777777777778,0.5001,0.000648566188541903
+"Platform: AI regulation","Concerned","Xander (Concerned)",0.35,0.2,0.3,0.3625,0.5001,0.00129702221122187
+"Platform: AI regulation","Concerned","Riley (Concerned)",0.3,0.49,0.25,0.348039215686274,0.5001,0.00249890347636686
+"Platform: AI regulation","Concerned","Quentin (Concerned)",0.024,0.6,0.02,0.03,0.5001,0.000233318472916546
+"Platform: AI regulation","Concerned","Teshi (Concerned)",0.65,0.17,0.62,0.656144578313253,0.5001,0.00044238756928837
+"Platform: AI regulation","Concerned","Vincent (Concerned)",0.3,0.65,0.24,0.411428571428571,0.5001,0.00800099046745395
+"Platform: AI regulation","Concerned","Ume (Concerned)",0.6,0.25,0.18,0.74,0.5001,0.0901527822769002
+"Platform: AI regulation","Concerned","Yael (Concerned)",0.229,0.68,0.213,0.263,0.5001,0.000848048692729375
+"Platform: AI regulation","Concerned","Wesley (Concerned)",0.2,0.36,0.12,0.245,0.5001,0.00620775084531025
+"Platform: AI regulation","Concerned","Stella (Concerned)",0.1,0.15,0.09,0.101764705882353,0.5001,0.000128166172221579
+"Platform: AI regulation","Skeptical","Eve (Skeptical)",0.06,0.15,0.01,0.0688235294117647,0.36,0.00540390633948054
+"Platform: AI regulation","Skeptical","Ash (Skeptical)",0.001,0.35,0.001,0.001,0.36,0
+"Platform: AI regulation","Skeptical","Claire (Skeptical)",1e-06,0.24,1e-06,1e-06,0.36,0
+"Platform: AI regulation","Skeptical","Flint (Skeptical)",0.011,0.6,0.009,0.014,0.36,0.000136490710305
+"Platform: AI regulation","Skeptical","Dean (Skeptical)",0.01,0.4,0.01,0.01,0.36,0
+"Platform: AI regulation","Skeptical","Gus (Skeptical)",0.005,0.5001,0.005,0.005,0.36,0
+"Platform: AI regulation","Skeptical","Kim (Skeptical)",2e-04,0.65,8e-05,0.000422857142857143,0.36,3.33646587470546e-05
+"Platform: AI regulation","Skeptical","James (Skeptical)",1e-06,0.55,1e-06,1e-06,0.36,0
+"Platform: AI regulation","Skeptical","Ike (Skeptical)",5e-04,0.35,0.00038,0.000564615384615385,0.36,3.5720134403836e-06
+"Platform: AI regulation","Skeptical","Blake (Skeptical)",0.002,0.51,0.0019,0.00210408163265306,0.36,1.13986375573877e-06
+"Platform: AI regulation","Skeptical","Hank (Skeptical)",0.0012,0.52,0.001,0.00141666666666667,0.36,7.90981135960253e-06
+"Platform: ARC Evals","Concerned","Zoe (Concerned)",0.21,0.03,0.19,0.210618556701031,0.01,5.85983348242697e-06
+"Platform: ARC Evals","Concerned","Xander (Concerned)",0.35,0.55,0.45,0.227777777777778,0.01,0.0152303107209283
+"Platform: ARC Evals","Concerned","Pascal (Concerned)",0.09,0.12,0.25,0.0681818181818182,0.01,0.00183298177395574
+"Platform: ARC Evals","Concerned","Quentin (Concerned)",0.024,0.2,0.03,0.0225,0.01,2.41784182861382e-05
+"Platform: ARC Evals","Concerned","Ume (Concerned)",0.6,0.06,0.03,0.636382978723404,0.01,0.0045403963758145
+"Platform: ARC Evals","Concerned","Yael (Concerned)",0.229,0.315,0.305,0.194051094890511,0.01,0.00161177764744053
+"Platform: ARC Evals","Concerned","Wesley (Concerned)",0.25,0.4,0.17,0.303333333333333,0.01,0.00320444833905503
+"Platform: ARC Evals","Concerned","Stella (Concerned)",0.1,0.1,0.11,0.0988888888888889,0.01,5.30335535964228e-06
+"Platform: ARC Evals","Concerned","Riley (Concerned)",0.3,0.55,0.35,0.238888888888889,0.01,0.00401902047450203
+"Platform: ARC Evals","Concerned","Vincent (Concerned)",0.3,0.6,0.31,0.285,0.01,0.000233626908295633
+"Platform: ARC Evals","Concerned","Teshi (Concerned)",0.65,0.25,0.85,0.583333333333333,0.01,0.00453261171312003
+"Platform: ARC Evals","Skeptical","Dean (Skeptical)",0.01,0.001,0.015,0.009994994994995,0.25,0.000118847724004547
+"Platform: ARC Evals","Skeptical","Gus (Skeptical)",0.005,0.035,0.05,0.00336787564766839,0.25,0.00782494645415214
+"Platform: ARC Evals","Skeptical","Eve (Skeptical)",0.06,0.25,0.06,0.06,0.25,0
+"Platform: ARC Evals","Skeptical","Blake (Skeptical)",0.002,0.15,0.0022,0.00196470588235294,0.25,1.15566954993305e-06
+"Platform: ARC Evals","Skeptical","Ike (Skeptical)",5e-04,0.04,0.0025,0.000416666666666667,0.25,0.000222326809920745
+"Platform: ARC Evals","Skeptical","Ash (Skeptical)",0.001,0.1,0.0025,0.000833333333333333,0.25,9.07774631735074e-05
+"Platform: ARC Evals","Skeptical","James (Skeptical)",1e-06,1e-06,1e-06,1e-06,0.25,0
+"Platform: ARC Evals","Skeptical","Hank (Skeptical)",0.001,0.005,0.01,0.000954773869346734,0.25,0.00152759091417666
+"Platform: ARC Evals","Skeptical","Claire (Skeptical)",1e-06,0.001,1e-04,9.00900900900901e-07,0.25,3.92533986672161e-05
+"Platform: ARC Evals","Skeptical","Flint (Skeptical)",0.011,0.01,0.013,0.010979797979798,0.25,1.8868251212065e-05
+"Platform: ARC Evals","Skeptical","Kim (Skeptical)",2e-04,0.001,0.05,0.00015015015015015,0.25,0.0247064542103449
+"Platform: Escalating warning shots","Concerned","Riley (Concerned)",0.3,0.05,0.2,0.305263157894737,0.0025,5.64158875317999e-05
+"Platform: Escalating warning shots","Concerned","Quentin (Concerned)",0.04,0.01,0.06,0.0397979797979798,0.0025,5.15733027792261e-06
+"Platform: Escalating warning shots","Concerned","Pascal (Concerned)",0.09,0.07,0.08,0.090752688172043,0.0025,2.18089879417962e-06
+"Platform: Escalating warning shots","Concerned","Ume (Concerned)",0.6,0.31,0.9,0.465217391304348,0.0025,0.0162465787748279
+"Platform: Escalating warning shots","Concerned","Zoe (Concerned)",0.21,0.05,0.13,0.214210526315789,0.0025,4.64603674195795e-05
+"Platform: Escalating warning shots","Concerned","Wesley (Concerned)",0.25,0.046,0.45,0.240356394129979,0.0025,0.000210347930635711
+"Platform: Escalating warning shots","Concerned","Yael (Concerned)",0.229,0.075,0.17,0.233783783783784,0.0025,3.93991294398246e-05
+"Platform: Escalating warning shots","Skeptical","Claire (Skeptical)",1e-06,0.001,1e-05,9.90990990990991e-07,0.05,3.04585156050311e-07
+"Platform: Escalating warning shots","Skeptical","Hank (Skeptical)",0.001,0.01,0.0015,0.000994949494949495,0.05,2.35747600069232e-06
+"Platform: Escalating warning shots","Skeptical","Ash (Skeptical)",0.001,0.0025,0.003,0.000994987468671679,0.05,2.81874389793111e-05
+"Platform: Escalating warning shots","Skeptical","Flint (Skeptical)",0.011,0.005,0.013,0.0109899497487437,0.05,3.77434347579355e-06
+"Platform: Escalating warning shots","Skeptical","Eve (Skeptical)",0.06,0.001,0.02,0.06004004004004,0.05,0.00040969749052375
+"Platform: Escalating warning shots","Skeptical","Ike (Skeptical)",5e-04,0.004,0.02,0.000421686746987952,0.05,0.0011854557174957
+"Platform: Escalating warning shots","Skeptical","Dean (Skeptical)",0.01,2e-05,0.04,0.00999939998799976,0.05,0.00056264983537473
+"Platform: Escalating warning shots","Skeptical","Gus (Skeptical)",0.005,8e-04,0.035,0.0049759807846277,0.05,0.00083742475336172
+"Platform: Escalating warning shots","Skeptical","James (Skeptical)",1e-06,1e-04,5e-07,1.0000500050005e-06,0.05,3.33161540939567e-09
+"Platform: Escalating warning shots","Skeptical","Kim (Skeptical)",2e-04,0.09,2e-04,2e-04,0.05,0
+"Platform: Escalating warning shots","Skeptical","Blake (Skeptical)",0.002,0.005,0.015,0.00193467336683417,0.05,0.000376297073793581
+"Platform: Transformative growth","Concerned","Teshi (Concerned)",0.65,0.15,0.45,0.685294117647059,0.02,0.00190677995275636
+"Platform: Transformative growth","Concerned","Ume (Concerned)",0.6,0.43,0.26,0.856491228070175,0.02,0.0691974021057566
+"Platform: Transformative growth","Concerned","Yael (Concerned)",0.229,0.268,0.274,0.212524590163934,0.02,0.000380655536300001
+"Platform: Transformative growth","Concerned","Stella (Concerned)",0.1,0.52,0.01,0.1975,0.02,0.0186633683702492
+"Platform: Transformative growth","Concerned","Riley (Concerned)",0.3,0.51,0.15,0.456122448979592,0.02,0.0234514199551143
+"Platform: Transformative growth","Concerned","Quentin (Concerned)",0.04,0.32,0.00075,0.0584705882352941,0.02,0.00198444014662121
+"Platform: Transformative growth","Concerned","Pascal (Concerned)",0.09,0.55,0.15,0.0166666666666667,0.02,0.0206359447721061
+"Platform: Transformative growth","Concerned","Vincent (Concerned)",0.3,0.35,0.6,0.138461538461538,0.02,0.0322404730137911
+"Platform: Transformative growth","Concerned","Xander (Concerned)",0.35,0.45,0.25,0.431818181818182,0.02,0.00627700179943466
+"Platform: Transformative growth","Concerned","Zoe (Concerned)",0.21,0.28,0.26,0.190555555555556,0.02,0.00055863057631495
+"Platform: Transformative growth","Concerned","Wesley (Concerned)",0.25,0.75,0.32,0.04,0.02,0.0697720746012508
+"Platform: Transformative growth","Skeptical","Claire (Skeptical)",1e-06,0.001,1e-06,1e-06,0.43,0
+"Platform: Transformative growth","Skeptical","Flint (Skeptical)",0.011,0.011,0.011,0.011,0.43,0
+"Platform: Transformative growth","Skeptical","Dean (Skeptical)",0.01,0.112,0.007,0.0103783783783784,0.43,9.66010130556502e-05
+"Platform: Transformative growth","Skeptical","Blake (Skeptical)",0.002,0.02,0.002,0.002,0.43,0
+"Platform: Transformative growth","Skeptical","Ash (Skeptical)",0.001,0.02,0.005,0.000918367346938775,0.43,0.000758145517867557
+"Platform: Transformative growth","Skeptical","Eve (Skeptical)",0.06,0.001,0.07,0.05998998998999,0.43,0.000157601059988983
+"Platform: Transformative growth","Skeptical","Hank (Skeptical)",0.001,0.001,0.005,0.000995995995995996,0.43,0.000757298457884199
+"Platform: Transformative growth","Skeptical","Gus (Skeptical)",0.005,0.01,0.011,0.00493939393939394,0.43,0.000502656412287237
+"Platform: Transformative growth","Skeptical","Kim (Skeptical)",2e-04,0.05,4e-04,0.000189473684210526,0.43,1.45013919962592e-05
+"Platform: Transformative growth","Skeptical","Ike (Skeptical)",7e-04,0.02,0.00045,0.000705102040816327,0.43,9.56724175961312e-06
+"Platform: Transformative growth","Skeptical","James (Skeptical)",1e-06,0.03,1e-06,1e-06,0.43,0
+"Politicization","Concerned","Quentin (Concerned)",0.024,0.1,0.024,0.024,0.2,0
+"Politicization","Concerned","Zoe (Concerned)",0.21,0.2,0.4,0.1625,0.2,0.01056225935459
+"Politicization","Concerned","Ume (Concerned)",0.3,0.5,0.3,0.3,0.2,0
+"Politicization","Concerned","Teshi (Concerned)",0.55,0.1,0.55,0.55,0.2,0
+"Politicization","Concerned","Yael (Concerned)",0.175,0.2,0.2,0.16875,0.2,0.000228894951316074
+"Politicization","Skeptical","Kim (Skeptical)",2e-04,0.35,2e-04,2e-04,0.2,0
+"Politicization","Skeptical","Dean (Skeptical)",0.01,0.15,0.01,0.01,0.2,0
+"Politicization","Skeptical","Gus (Skeptical)",0.005,0.05,0.005,0.005,0.2,0
+"Politicization","Skeptical","Ike (Skeptical)",7e-04,0.4,0.00063,0.000746666666666667,0.2,8.44100713518672e-07
+"Politicization","Skeptical","James (Skeptical)",1e-07,0.1,1e-07,1e-07,0.2,0
+"Politicization","Skeptical","Claire (Skeptical)",1e-06,0.01,1e-06,1e-06,0.2,0
+"Politicization","Skeptical","Flint (Skeptical)",0.011,0.6,0.011,0.011,0.2,0
+"Politicization","Skeptical","Eve (Skeptical)",0.05,0.6,0.05,0.05,0.2,0
+"Politicization","Skeptical","Hank (Skeptical)",0.0012,0.3,0.0012,0.0012,0.2,0
+"Politicization","Skeptical","Ash (Skeptical)",0.001,0.2,0.001,0.001,0.2,0
+"Politicization","Skeptical","Blake (Skeptical)",0.002,0.1,0.0025,0.00194444444444444,0.2,5.30757680664615e-06
+"Power-seeking","Concerned","Riley (Concerned)",0.3,0.25,0.35,0.283333333333333,0.05,0.000401433617508673
+"Power-seeking","Concerned","Pascal (Concerned)",0.09,0.75,0.1,0.0599999999999999,0.05,0.0025548458787443
+"Power-seeking","Concerned","Quentin (Concerned)",0.04,0.3,0.045,0.0378571428571429,0.05,3.19045958590718e-05
+"Power-seeking","Concerned","Stella (Concerned)",0.1,0.1,0.1,0.1,0.05,0
+"Power-seeking","Concerned","Zoe (Concerned)",0.21,0.1,0.18,0.213333333333333,0.05,7.48991043993458e-05
+"Power-seeking","Concerned","Yael (Concerned)",0.235,0.15,0.26,0.230588235294118,0.05,5.93040672288942e-05
+"Power-seeking","Concerned","Ume (Concerned)",0.6,0.05,0.7,0.594736842105263,0.05,0.000492832314272924
+"Power-seeking","Skeptical","Blake (Skeptical)",0.002,0.1,0.0022,0.00197777777777778,0.15,6.77892406319713e-07
+"Power-seeking","Skeptical","Claire (Skeptical)",1e-08,0.01,1e-08,1e-08,0.15,0
+"Power-seeking","Skeptical","Hank (Skeptical)",0.001,0.2,0.002,0.00075,0.15,3.78481213372526e-05
+"Power-seeking","Skeptical","Eve (Skeptical)",0.03,0.8,0.02,0.07,0.15,0.0075638480319392
+"Power-seeking","Skeptical","Flint (Skeptical)",0.009,0.05,0.014,0.00873684210526316,0.15,7.95090181227205e-05
+"Power-seeking","Skeptical","Gus (Skeptical)",0.005,0.1,0.03,0.00222222222222222,0.15,0.00225532361297888
+"Power-seeking","Skeptical","Dean (Skeptical)",0.01,0.0015,0.013,0.00999549323985979,0.15,2.70538083023739e-05
+"Power-seeking","Skeptical","James (Skeptical)",1e-08,0.02,8e-08,8.57142857142857e-09,0.15,6.3165903706363e-09
+"Power-seeking","Skeptical","Kim (Skeptical)",1e-04,0.001,0.03,7.00700700700701e-05,0.15,0.00923050107773524
+"Power-seeking","Skeptical","Ash (Skeptical)",0.001,0.2,0.001,0.001,0.15,0
+"Power-seeking shutdown","Concerned","Zoe (Concerned)",0.21,0.1,0.5,0.177777777777778,0.05,0.00579635477421189
+"Power-seeking shutdown","Concerned","Teshi (Concerned)",0.55,0.35,0.45,0.603846153846154,0.05,0.0028749779342192
+"Power-seeking shutdown","Concerned","Quentin (Concerned)",0.024,0.3,0.03,0.0214285714285714,0.05,7.58553885454525e-05
+"Power-seeking shutdown","Concerned","Ume (Concerned)",0.3,0.9,0.3,0.3,0.05,0
+"Power-seeking shutdown","Concerned","Yael (Concerned)",0.175,0.3,0.21,0.16,0.05,0.000416815519675658
+"Power-seeking shutdown","Skeptical","Hank (Skeptical)",0.0012,0.1,0.0015,0.00116666666666667,0.3,4.67110735353194e-06
+"Power-seeking shutdown","Skeptical","Gus (Skeptical)",0.005,0.005,0.03,0.00487437185929648,0.3,0.00378790570405007
+"Power-seeking shutdown","Skeptical","Ike (Skeptical)",7e-04,0.55,8e-04,0.000577777777777778,0.3,4.34319266342598e-06
+"Power-seeking shutdown","Skeptical","Dean (Skeptical)",0.01,1e-04,0.015,0.009999499949995,0.3,0.000142616778058079
+"Power-seeking shutdown","Skeptical","Ash (Skeptical)",0.001,0.2,0.0015,0.000875,0.3,1.65962763243612e-05
+"Power-seeking shutdown","Skeptical","Claire (Skeptical)",1e-06,1e-05,4e-06,9.99969999699997e-07,0.3,3.31607542349394e-07
+"Power-seeking shutdown","Skeptical","Eve (Skeptical)",0.05,0.4,0.08,0.03,0.3,0.00253746070510264
+"Power-seeking shutdown","Skeptical","James (Skeptical)",1e-07,0.02,1e-07,1e-07,0.3,0
+"Power-seeking shutdown","Skeptical","Kim (Skeptical)",2e-04,0.002,0.02,0.000160320641282565,0.3,0.00944729023278547
+"Power-seeking shutdown","Skeptical","Flint (Skeptical)",0.011,0.05,0.012,0.0109473684210526,0.3,5.85513078873476e-06
+"Power-seeking shutdown","Skeptical","Blake (Skeptical)",0.002,0.5,0.002,0.002,0.3,0
+"Progress in lethal technologies","Concerned","Riley (Concerned)",0.3,0.5,0.35,0.25,0.2,0.00264395125280173
+"Progress in lethal technologies","Concerned","Xander (Concerned)",0.4,0.4,0.45,0.366666666666667,0.2,0.00125942935863135
+"Progress in lethal technologies","Concerned","Pascal (Concerned)",0.09,0.1,0.09,0.09,0.2,0
+"Progress in lethal technologies","Concerned","Ume (Concerned)",0.6,0.4,0.5,0.666666666666667,0.2,0.00506187271570328
+"Progress in lethal technologies","Concerned","Quentin (Concerned)",0.04,0.99,0.04,0.0399999999999997,0.2,0
+"Progress in lethal technologies","Concerned","Vincent (Concerned)",0.3,0.3,0.4,0.257142857142857,0.2,0.00352646124928541
+"Progress in lethal technologies","Concerned","Wesley (Concerned)",0.25,0.5,0.25,0.25,0.2,0
+"Progress in lethal technologies","Concerned","Stella (Concerned)",0.1,0.5,0.1,0.1,0.2,0
+"Progress in lethal technologies","Skeptical","Gus (Skeptical)",0.005,0.2,0.0075,0.004375,0.4,0.000105208057693349
+"Progress in lethal technologies","Skeptical","Blake (Skeptical)",0.001,0.05,0.01,0.000526315789473684,0.4,0.00247903659179788
+"Progress in lethal technologies","Skeptical","Flint (Skeptical)",0.004,0.9,0.004,0.004,0.4,0
+"Progress in lethal technologies","Skeptical","Dean (Skeptical)",0.015,0.5,0.015,0.015,0.4,0
+"Progress in lethal technologies","Skeptical","Ash (Skeptical)",0.002,0.07,0.003,0.0019247311827957,0.4,3.80533062226781e-05
+"Progress in lethal technologies","Skeptical","Kim (Skeptical)",1e-05,0.25,2e-05,6.66666666666667e-06,0.4,8.35296098913946e-07
+"Progress in lethal technologies","Skeptical","Hank (Skeptical)",0.001,0.1,0.009,0.000111111111111111,0.4,0.00221922071192585
+"Public concern","Concerned","Quentin (Concerned)",0.024,0.03,0.04,0.0235051546391753,0.05,0.000101296577002294
+"Public concern","Concerned","Yael (Concerned)",0.175,0.25,0.16,0.18,0.05,5.27767810919218e-05
+"Public concern","Concerned","Ume (Concerned)",0.3,0.3,0.25,0.321428571428571,0.05,0.00057906848289131
+"Public concern","Concerned","Teshi (Concerned)",0.55,0.02,0.45,0.552040816326531,0.05,0.000439223290034975
+"Public concern","Concerned","Zoe (Concerned)",0.21,0.05,0.3,0.205263157894737,0.05,0.00051306887904489
+"Public concern","Skeptical","Blake (Skeptical)",0.002,0.05,0.003,0.00194736842105263,0.05,4.99867997213604e-06
+"Public concern","Skeptical","Ash (Skeptical)",0.001,0.05,0.0011,0.000994736842105263,0.05,1.10964133003847e-07
+"Public concern","Skeptical","James (Skeptical)",1e-07,0.3,5e-08,1.21428571428571e-07,0.05,1.21918298092496e-09
+"Public concern","Skeptical","Hank (Skeptical)",0.0012,0.1,0.0013,0.00118888888888889,0.05,1.09487750773664e-07
+"Public concern","Skeptical","Dean (Skeptical)",0.01,0.01,0.01,0.01,0.05,0
+"Public concern","Skeptical","Kim (Skeptical)",2e-04,0.22,0.00025,0.000185897435897436,0.05,3.35843322519876e-07
+"Public concern","Skeptical","Ike (Skeptical)",7e-04,0.25,0.0011,0.000566666666666667,0.05,7.72330763768915e-06
+"Public concern","Skeptical","Flint (Skeptical)",0.011,0.65,0.013,0.00728571428571429,0.05,0.000300699744049571
+"Public concern","Skeptical","Eve (Skeptical)",0.05,0.02,0.05,0.05,0.05,0
+"Public concern","Skeptical","Claire (Skeptical)",1e-06,0.01,2e-06,9.8989898989899e-07,0.05,8.40940543678458e-09
+"Public concern","Skeptical","Gus (Skeptical)",0.005,0.05,0.005,0.005,0.05,0
+"Reduction in AI investment","Concerned","Stella (Concerned)",0.1,0.03,0.1,0.1,0.05,0
+"Reduction in AI investment","Concerned","Wesley (Concerned)",0.25,0.05,0.1,0.257894736842105,0.05,0.00164155633682635
+"Reduction in AI investment","Concerned","Riley (Concerned)",0.3,0.15,0.25,0.308823529411765,0.05,0.000209914237158468
+"Reduction in AI investment","Concerned","Pascal (Concerned)",0.09,0.17,0.05,0.0981927710843373,0.05,0.000413868663170975
+"Reduction in AI investment","Concerned","Quentin (Concerned)",0.04,0.15,0.029,0.0419411764705882,0.05,5.76520399789687e-05
+"Reduction in AI investment","Concerned","Xander (Concerned)",0.4,0.17,0.6,0.359036144578313,0.05,0.00322171017432946
+"Reduction in AI investment","Concerned","Ume (Concerned)",0.6,0.01,0.05,0.605555555555556,0.05,0.0151726392029703
+"Reduction in AI investment","Concerned","Vincent (Concerned)",0.3,0.12,0.15,0.320454545454545,0.05,0.0017318037583344
+"Reduction in AI investment","Skeptical","Ash (Skeptical)",0.002,0.05,0.002,0.002,0.12,0
+"Reduction in AI investment","Skeptical","Blake (Skeptical)",0.001,0.98,0.001,0.001,0.12,0
+"Reduction in AI investment","Skeptical","Gus (Skeptical)",0.005,0.05,1e-04,0.00525789473684211,0.12,0.000238117301500804
+"Reduction in AI investment","Skeptical","Claire (Skeptical)",1e-09,0.02,1e-08,8.16326530612245e-10,0.12,7.37844058741236e-10
+"Reduction in AI investment","Skeptical","Dean (Skeptical)",0.015,0.005,0.009,0.0150301507537688,0.12,7.40575605300447e-05
+"Reduction in AI investment","Skeptical","Kim (Skeptical)",1e-05,0.07,1e-05,1e-05,0.12,0
+"Reduction in AI investment","Skeptical","Hank (Skeptical)",0.001,0.1,5e-04,0.00105555555555556,0.12,8.58213377157195e-06
+"Reduction in AI investment","Skeptical","James (Skeptical)",1e-08,1e-05,1e-10,1.000009900099e-08,0.12,4.91941880676282e-10
+"Reduction in AI investment","Skeptical","Flint (Skeptical)",0.004,0.01,0.003,0.00401010101010101,0.12,7.16843593037946e-06
+"Req testing","Concerned","Quentin (Concerned)",0.04,0.8,0.037,0.052,0.1,0.000676822394954959
+"Req testing","Concerned","Yael (Concerned)",0.235,0.85,0.23,0.263333333333333,0.1,0.000852988703724063
+"Req testing","Concerned","Wesley (Concerned)",0.25,0.95,0.25,0.25,0.1,0
+"Req testing","Concerned","Stella (Concerned)",0.1,0.2,0.1,0.1,0.1,0
+"Req testing","Concerned","Pascal (Concerned)",0.09,0.65,0.09,0.09,0.1,0
+"Req testing","Concerned","Riley (Concerned)",0.3,0.9,0.3,0.3,0.1,0
+"Req testing","Concerned","Zoe (Concerned)",0.21,0.7,0.21,0.21,0.1,0
+"Req testing","Skeptical","Claire (Skeptical)",1e-08,0.62,1e-08,1e-08,0.8,0
+"Req testing","Skeptical","Blake (Skeptical)",0.002,0.2,0.0018,0.00205,0.8,3.65724165369573e-06
+"Req testing","Skeptical","Kim (Skeptical)",1e-04,0.09,1e-04,1e-04,0.8,0
+"Req testing","Skeptical","Flint (Skeptical)",0.009,0.8,0.009,0.009,0.8,0
+"Req testing","Skeptical","Eve (Skeptical)",0.03,0.05,0.03,0.03,0.8,0
+"Req testing","Skeptical","James (Skeptical)",1e-08,0.04,5e-09,1.02083333333333e-08,0.8,5.33245207182764e-10
+"Req testing","Skeptical","Gus (Skeptical)",0.005,0.05,0.005,0.005,0.8,0
+"Req testing","Skeptical","Dean (Skeptical)",0.01,0.18,0.01,0.01,0.8,0
+"Req testing","Skeptical","Hank (Skeptical)",0.001,0.1,0.00095,0.00100555555555556,0.8,4.43493299036676e-07
+"Req testing","Skeptical","Ash (Skeptical)",0.001,0.1,0.001,0.001,0.8,0
+"Short-term GDP change","Concerned","Pascal (Concerned)",0.09,0.4,0.1,0.0833333333333333,0.1,0.000134182386069279
+"Short-term GDP change","Concerned","Riley (Concerned)",0.3,0.15,0.3,0.3,0.1,0
+"Short-term GDP change","Concerned","Stella (Concerned)",0.1,0.35,0.1,0.1,0.1,0
+"Short-term GDP change","Concerned","Ume (Concerned)",0.6,0.5,0.6,0.6,0.1,0
+"Short-term GDP change","Concerned","Vincent (Concerned)",0.3,0.18,0.31,0.29780487804878,0.1,1.4766694495332e-05
+"Short-term GDP change","Concerned","Quentin (Concerned)",0.04,0.0828308,0.0412,0.0398916263651243,0.1,8.66439504377297e-07
+"Short-term GDP change","Concerned","Wesley (Concerned)",0.25,0.66,0.25,0.25,0.1,0
+"Short-term GDP change","Concerned","Xander (Concerned)",0.4,0.25,0.55,0.35,0.1,0.00405277411543962
+"Short-term GDP change","Skeptical","James (Skeptical)",1e-08,0.1,1e-08,1e-08,0.25,0
+"Short-term GDP change","Skeptical","Dean (Skeptical)",0.015,0.01,0.015,0.015,0.25,0
+"Short-term GDP change","Skeptical","Flint (Skeptical)",0.004,0.03,0.004,0.004,0.25,0
+"Short-term GDP change","Skeptical","Gus (Skeptical)",0.005,0.125,0.007,0.00471428571428571,0.25,4.15196575702844e-05
+"Short-term GDP change","Skeptical","Ash (Skeptical)",0.002,0.1,0.002,0.002,0.25,0
+"Short-term GDP change","Skeptical","Hank (Skeptical)",0.001,0.1,0.001,0.001,0.25,0
+"Short-term GDP change","Skeptical","Claire (Skeptical)",1e-09,0.14,1e-09,1e-09,0.25,0
+"Short-term GDP change","Skeptical","Blake (Skeptical)",0.001,0.05,0.001,0.001,0.25,0
+"Short-term GDP change","Skeptical","Kim (Skeptical)",1e-05,0.01,2e-05,9.8989898989899e-06,0.25,4.19585933425046e-07
+"Supers changing minds","Concerned","Xander (Concerned)",0.4,0.7,0.5,0.166666666666667,0.05,0.053188212894919
+"Supers changing minds","Concerned","Quentin (Concerned)",0.04,0.1,0.064,0.0373333333333333,0.05,0.000177643651148403
+"Supers changing minds","Concerned","Wesley (Concerned)",0.25,0.2,0.28,0.2425,0.05,0.000113123596727326
+"Supers changing minds","Concerned","Stella (Concerned)",0.1,0.25,0.1,0.1,0.05,0
+"Supers changing minds","Concerned","Riley (Concerned)",0.3,0.35,0.35,0.273076923076923,0.05,0.000850543132867261
+"Supers changing minds","Concerned","Pascal (Concerned)",0.09,0.3,0.09,0.09,0.05,0
+"Supers changing minds","Concerned","Vincent (Concerned)",0.3,0.6,0.34,0.24,0.05,0.00377194058249635
+"Supers changing minds","Skeptical","Gus (Skeptical)",0.005,0.15,0.01,0.00411764705882353,0.3,0.000278604858523391
+"Supers changing minds","Skeptical","Flint (Skeptical)",0.004,0.02,0.04,0.00326530612244898,0.3,0.0074174055369076
+"Supers changing minds","Skeptical","Kim (Skeptical)",1e-05,0.06,1e-05,1e-05,0.3,0
+"Supers changing minds","Skeptical","Dean (Skeptical)",0.015,0.05,0.015,0.015,0.3,0
+"Supers changing minds","Skeptical","Blake (Skeptical)",0.001,0.02,0.04,0.000204081632653061,0.3,0.0143874353933568
+"Supers changing minds","Skeptical","Hank (Skeptical)",0.001,0.12,0.008,4.54545454545455e-05,0.3,0.00150621312658724
+"Taiwan-China","Concerned","Yael (Concerned)",0.235,0.28,0.225,0.238888888888889,0.25,4.41498489989196e-05
+"Taiwan-China","Concerned","Quentin (Concerned)",0.04,0.35,0.05,0.0346153846153846,0.25,0.000259958156607929
+"Taiwan-China","Concerned","Riley (Concerned)",0.3,0.5,0.3,0.3,0.25,0
+"Taiwan-China","Concerned","Ume (Concerned)",0.6,0.05,0.65,0.597368421052632,0.25,0.0005792428406762
+"Taiwan-China","Concerned","Zoe (Concerned)",0.21,0.3,0.5,0.0857142857142857,0.25,0.0407557752446834
+"Taiwan-China","Concerned","Wesley (Concerned)",0.25,0.1,0.22,0.253333333333333,0.25,0.000277670745216949
+"Taiwan-China","Concerned","Pascal (Concerned)",0.09,0.3,0.12,0.0771428571428572,0.25,0.000889179406504247
+"Taiwan-China","Concerned","Stella (Concerned)",0.1,0.3,0.1,0.1,0.25,0
+"Taiwan-China","Skeptical","Hank (Skeptical)",0.001,0.1,0.001,0.001,0.3,0
+"Taiwan-China","Skeptical","Eve (Skeptical)",0.03,0.4,0.03,0.03,0.3,0
+"Taiwan-China","Skeptical","Flint (Skeptical)",0.009,0.6,0.011,0.006,0.3,0.000201096195736496
+"Taiwan-China","Skeptical","James (Skeptical)",1e-08,0.8,1e-08,1e-08,0.3,0
+"Taiwan-China","Skeptical","Claire (Skeptical)",1e-08,0.09,1e-07,1.0989010989011e-09,0.3,2.02423140838482e-08
+"Taiwan-China","Skeptical","Ash (Skeptical)",0.001,0.25,0.002,0.000666666666666667,0.3,6.95712464522316e-05
+"Taiwan-China","Skeptical","Gus (Skeptical)",0.005,0.2,0.005,0.005,0.3,0
+"Taiwan-China","Skeptical","Blake (Skeptical)",0.002,0.55,0.002,0.002,0.3,0
+"Taiwan-China","Skeptical","Kim (Skeptical)",1e-04,0.26,8e-05,0.000107027027027027,0.3,3.53319080092214e-07
+"Taiwan-China","Skeptical","Dean (Skeptical)",0.01,0.04,0.01,0.01,0.3,0
+"Warning shot","Concerned","Stella (Concerned)",0.1,0.005,0.5,0.0979899497487437,0.03,0.00666497516541654
+"Warning shot","Concerned","Wesley (Concerned)",0.25,0.5,0.28,0.22,0.03,0.00107051677438741
+"Warning shot","Concerned","Vincent (Concerned)",0.3,0.2,0.32,0.295,0.03,3.74133744171775e-05
+"Warning shot","Concerned","Quentin (Concerned)",0.04,0.3,0.042,0.0391428571428571,0.03,4.72586095850175e-06
+"Warning shot","Concerned","Ume (Concerned)",0.6,0.4,0.5,0.666666666666667,0.03,0.00425383917824437
+"Warning shot","Concerned","Riley (Concerned)",0.3,0.1,0.4,0.288888888888889,0.03,0.000418946832345593
+"Warning shot","Concerned","Pascal (Concerned)",0.09,0.15,0.12,0.0847058823529412,0.03,0.000138824504318786
+"Warning shot","Concerned","Xander (Concerned)",0.4,0.17,0.65,0.348795180722892,0.03,0.0039927529533414
+"Warning shot","Skeptical","Hank (Skeptical)",0.001,0.2,0.004,0.00025,0.17,0.000333765833078389
+"Warning shot","Skeptical","Kim (Skeptical)",1e-05,0.04,2e-05,9.58333333333333e-06,0.17,2.88378507732737e-07
+"Warning shot","Skeptical","Blake (Skeptical)",0.001,0.02,0.0011,0.000997959183673469,0.17,3.58547381694172e-07
+"Warning shot","Skeptical","Gus (Skeptical)",0.005,0.001,0.0025,0.0050025025025025,0.17,5.68693178657718e-05
+"Warning shot","Skeptical","Dean (Skeptical)",0.015,0.03,0.02,0.0148453608247423,0.17,5.68726112783025e-05
+"Warning shot","Skeptical","Flint (Skeptical)",0.004,0.15,0.0035,0.00408823529411765,0.17,2.76874231760007e-06
+"Warning shot","Skeptical","James (Skeptical)",1e-08,0.01,1e-08,1e-08,0.17,0
+"Warning shot","Skeptical","Ash (Skeptical)",0.002,0.03,0.0025,0.00198453608247423,0.17,4.30262201697736e-06
