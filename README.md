@@ -39,4 +39,4 @@ In this example, Eve, who belongs to the skeptics camp, provides a conditional f
 
 ## Questions
 
-Please feel free to contact molly@forecastingresearch.org with any questions about the project or the analysis herein.
+Please feel free to contact zach@forecastingresearch.org with any questions about the project or the analysis herein.
